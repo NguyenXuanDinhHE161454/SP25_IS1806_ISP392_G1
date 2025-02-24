@@ -1,14 +1,15 @@
-package model;
+package dto;
 
 import lombok.Data;
 import java.util.Date;
 
 @Data
-public class Transaction {
+public class TransactionDTO {
     private int transactionId;
     private String transactionType;
-    private int riceId;
-    private int customerId;
+    private String riceName;
+    private String customerName;
+    private String phoneNumber;
     private int quantity;
     private Date transactionDate;
     private boolean porterService;
