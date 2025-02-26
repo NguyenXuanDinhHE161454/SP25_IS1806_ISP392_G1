@@ -29,7 +29,7 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Admin Dashboard</h1>
-                        <a href="createOwner.jsp" class="btn btn-primary btn-info mb-4">Create Owner</a>
+
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -60,30 +60,31 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <c:forEach var="user" items="${users}">
-                                            <tr>
-                                                <td>${user.userId}</td>
-                                                <td>${user.fullName}</td>
-                                                <td>${user.username}</td>
-                                                <td>${user.phoneNumber}</td>
-                                                <td>${user.email}</td>
-                                                <td>${user.role}</td>
-                                                <td>
-                                                    <a href="editUser?userId=${user.userId}" class="btn btn-primary btn-sm">Edit</a>
-                                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" 
-                                                            onclick="setDeleteUser(${user.userId}, '${user.fullName}')">
-                                                        Delete
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
+                                    
+                                    <c:forEach var="user" items="${users}">
+                                        <tr>
+                                            <td>${user.userId}</td>
+                                            <td>${user.fullName}</td>
+                                            <td>${user.username}</td>
+                                            <td>${user.phoneNumber}</td>
+                                            <td>${user.email}</td>
+                                            <td>${user.role}</td>
+                                            <td>
+                                                <a href="editUser?userId=${user.userId}" class="btn btn-primary btn-sm">Edit</a>
+                                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" 
+                                                        onclick="setDeleteUser(${user.userId}, '${user.fullName}')">
+                                                    Delete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2"></script>
                                     <script>
                                                                 document.addEventListener("DOMContentLoaded", function () {
                                                                     new simpleDatatables.DataTable("#datatablesSimple", {
                                                                         perPage: 5, // Đặt số dòng mặc định là 5
                                                                         perPageSelect: false, // Ẩn menu chọn số entries
-                                                                        labels: { info: "" }
+                                                                        labels: {info: ""}
                                                                     });
                                                                 });
                                     </script>

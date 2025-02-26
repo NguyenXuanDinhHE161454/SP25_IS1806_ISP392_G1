@@ -21,7 +21,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <a href="owner" class="btn btn-secondary mb-3">Back to List</a> 
+                        <a href="admin" class="btn btn-secondary mb-3">Back to List</a> 
                         <h1 class="mt-4">Edit User</h1>
                         <p class="text-danger">
                             <c:if test="${not empty errorMessage}">

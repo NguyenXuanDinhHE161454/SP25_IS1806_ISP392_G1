@@ -12,15 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import model.User;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "AdminServlet", urlPatterns = {"/admin"})
-public class AdminServlet extends HttpServlet {
+@WebServlet(name = "CreateOwnerServlet", urlPatterns = {"/createOwner"})
+public class CreateOwnerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +38,10 @@ public class AdminServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdminServlet</title>");
+            out.println("<title>Servlet createUserServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AdminServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet createUserServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,10 +59,7 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UserDAO userDAO = new UserDAO();
-        List<User> users = userDAO.getAllUsersByRoleOwner();
-        request.setAttribute("users", users);
-        request.getRequestDispatcher("admin.jsp").forward(request, response);
+        request.getRequestDispatcher("createOwner.jsp").forward(request, response);
     }
 
     /**
@@ -77,19 +73,42 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        if ("delete".equals(action)) {
-            int userId = Integer.parseInt(request.getParameter("userId"));
-            UserDAO userDAO = new UserDAO();
-            boolean deleted = userDAO.deleteUser(userId);
-            if (deleted) {
-                response.sendRedirect("admin");
-            } else {
-                request.setAttribute("errorMessage", "Error deleting user.");
-                request.getRequestDispatcher("admin.jsp").forward(request, response);
-            }
+        String fullName = request.getParameter("fullName");
+        String phoneNumber = request.getParameter("phoneNumber");
+        String address = request.getParameter("address");
+        String storeName = request.getParameter("storeName");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        String role = request.getParameter("role");
+        boolean isBanned = Boolean.parseBoolean(request.getParameter("status"));
+
+        UserDAO userDAO = new UserDAO();
+        if (userDAO.checkUsernameExists(username)) {
+            request.setAttribute("errorMessage", "Username already exists. Please choose a different one.");
+            request.getRequestDispatcher("createOwner.jsp").forward(request, response);
+            return;
         }
-        
+
+        User user = new User();
+        user.setFullName(fullName);
+        user.setPhoneNumber(phoneNumber);
+        user.setAddress(address);
+        user.setStoreName(storeName);
+        user.setUsername(username);
+        user.setPasswordHash(password);
+        user.setRole(role);
+        user.setEmail(email);
+        user.setBanned(isBanned);
+
+        boolean success = userDAO.insertUser(user);
+
+        if (success) {
+            response.sendRedirect("login");
+        } else {
+            request.setAttribute("errorMessage", "Failed to create user.");
+            request.getRequestDispatcher("createUser.jsp").forward(request, response);
+        }
     }
 
     /**
