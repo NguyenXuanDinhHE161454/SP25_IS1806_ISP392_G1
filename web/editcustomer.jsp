@@ -23,7 +23,7 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-user me-1"></i>
-                                Edit Customer Information
+                                Edit Customer
                             </div>
                             <div class="card-body">
                                 <form method="post" action="editCustomer">
