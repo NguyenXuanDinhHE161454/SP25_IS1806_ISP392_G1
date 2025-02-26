@@ -66,7 +66,7 @@
                                             <th>Amount</th>
                                             <th>Note</th>
                                             <th>Date</th>
-                                            <th>Actions</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -79,10 +79,7 @@
                                                 <td>${debt.amount}</td>
                                                 <td>${debt.note}</td>
                                                 <td>${debt.debtDate}</td>
-                                                <td>
-                                                    <a href="DebtController?action=edit&debtId=${debt.debtId}" class="btn btn-warning btn-sm">Edit</a>
-                                                    <button class="btn btn-danger btn-sm" onclick="confirmDelete(${debt.debtId})">Delete</button>
-                                                </td>
+                                                
                                             </tr>
                                         </c:forEach>
 

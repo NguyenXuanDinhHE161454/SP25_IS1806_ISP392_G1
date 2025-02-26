@@ -21,7 +21,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                         <a href="admin" class="btn btn-secondary mb-3">Back to List</a>
+                        
                         <h1 class="mt-4">Create Owner</h1>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -92,11 +92,10 @@
                                             <option value="true">Banned</option>
                                         </select>
                                     </div>
-
-
                                     <!-- Submit Button -->
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Create Owner</button>
+                                         <a href="login" class="btn btn-secondary">Back to Login</a>
                                     </div>
                                 </form>
                             </div>
