@@ -27,7 +27,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Personnel</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="admin">Seller</a></li>
+                            <li><a class="dropdown-item" href="owner">Seller</a></li>
                             <li><a class="dropdown-item" href="index.html">Porter</a></li>
                         </ul>
                     </li>
