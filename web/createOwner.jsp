@@ -22,10 +22,10 @@
                 <main>
                     <div class="container-fluid px-4">
                         
-                        <h1 class="mt-4">Create Owner</h1>
+                        <h1 class="mt-4">Sign up</h1>
                         <div class="card mb-4">
                             <div class="card-header">
-                                <i class="fas fa-user me-1"></i>
+                                <i class=""></i>
                                 Create Owner Information
                             </div>
                             <p class="text-danger">
@@ -94,7 +94,7 @@
                                     </div>
                                     <!-- Submit Button -->
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary">Create Owner</button>
+                                        <button type="submit" class="btn btn-primary">Create</button>
                                          <a href="login" class="btn btn-secondary">Back to Login</a>
                                     </div>
                                 </form>
