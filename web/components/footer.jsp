@@ -5,9 +5,7 @@
     <div class="container-fluid px-4">
         <div class="row">
             <!-- Thông tin bản quyền -->
-            <div class="col-md-4 text-center text-md-start mb-3 mb-md-0">
-                <p class="text-muted mb-0">&copy; 2025 Warehouse Rice. All Rights Reserved.</p>
-                <p class="text-muted small">Designed & Developed by xAI Team</p>
+            <div 
             </div>
             <!-- Liên kết chính sách -->
             <div class="col-md-4 text-center mb-3 mb-md-0">
