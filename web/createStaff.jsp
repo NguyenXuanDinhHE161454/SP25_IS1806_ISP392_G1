@@ -1,5 +1,4 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,12 +7,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Edit User</title>
+        <title>Create Staff</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body>
+
         <%@include file="/components/header.jsp"%>
 
         <div id="layoutSidenav">
@@ -21,52 +21,57 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <a href="admin" class="btn btn-secondary mb-3">Back to List</a> 
-                        <h1 class="mt-4">Edit User</h1>
-                        <p class="text-danger">
-                            <c:if test="${not empty errorMessage}">
-                                ${errorMessage}
-                            </c:if>
-                        </p>
+                        <h1 class="mt-4">Create Staff</h1>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-user me-1"></i>
-                                Edit User Information
+                                Create Staff Information
                             </div>
+                            <p class="text-danger">
+                                <c:if test="${not empty errorMessage}">
+                                    ${errorMessage}
+                                </c:if>
+                            </p>
                             <div class="card-body">
-                                <form method="post" action="editUser">
-                                    <input type="hidden" name="userId" value="${user.userId}"/>
+                                <form method="post" action="createStaff">
 
+                                    <!-- Full Name -->
                                     <div class="mb-3">
                                         <label for="fullName" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="fullName" name="fullName" value="${user.fullName}" required>
+                                        <input type="text" class="form-control" id="fullName" name="fullName" required>
                                     </div>
 
+                                    <!-- Phone Number -->
                                     <div class="mb-3">
                                         <label for="phoneNumber" class="form-label">Phone Number</label>
-                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${user.phoneNumber}" required>
+                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
                                     </div>
 
+                                    <!-- Address -->
                                     <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="${user.email}" required>
+                                        <label for="address" class="form-label">Address</label>
+                                        <input type="text" class="form-control" id="address" name="address" required>
                                     </div>
 
+                                    <!-- Username -->
                                     <div class="mb-3">
-                                        <label for="role" class="form-label">Role</label>
-                                        <input type="text" class="form-control" id="role" name="role" value="${user.role}" required>
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="username" name="username" required>
                                     </div>
 
+                                    <!-- Password -->
                                     <div class="mb-3">
-                                        <label for="status" class="form-label">Status</label>
-                                        <select class="form-control" id="status" name="status" required>
-                                            <option value="false">Active</option>
-                                            <option value="true">Banned</option>
-                                        </select>
+                                        <label for="password" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
                                     </div>
 
+                                    <!-- Owner ID (Assumed to be passed from session or context) -->
+                                    <input type="hidden" name="ownerId" value="${sessionScope.user.userId}">  <!-- Assuming the owner ID is stored in the session -->
+
+                                    <!-- Submit Button -->
                                     <div class="mb-3">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <button type="submit" class="btn btn-primary">Create Staff</button>
+                                        <a href="owner" class="btn btn-secondary">Back to List</a>
                                     </div>
                                 </form>
                             </div>
@@ -75,6 +80,8 @@
                 </main>
             </div>
         </div>
+
+
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>

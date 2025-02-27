@@ -3,7 +3,7 @@
     Created on : Feb 23, 2025, 9:26:52 AM
     Author     : Admin
 --%>
-
+<!--abc-->
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -46,12 +46,14 @@
                                                 <input class="form-check-input" id="inputRememberPassword" type="checkbox" name="rememberPassword" value="on"/>
                                                 <label class="form-check-label" for="inputRememberPassword">Remember Password</label>
                                             </div>
-                                            <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small" href="password.html">Forgot Password?</a>
+                                            <div class="d-flex align-items-center justify-content-between mt-4 mb-3">
+                                                
                                                 <input type="submit" value="Login" class="btn btn-primary"/>
                                             </div>
                                         </form>
-
+                                        <div class="card-footer text-center py-3">
+                                            <div class="small"><a href="createOwner">Sign up</a></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
