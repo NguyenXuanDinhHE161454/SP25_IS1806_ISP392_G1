@@ -20,14 +20,14 @@
                 <i class="fas fa-bars"></i>
             </button>
             <a class="navbar-brand ps-3" href="home">
-                <i class=""></i>Warehouse Rice
+                <i class="fas fa-warehouse me-2"></i>Warehouse Rice
             </a>
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class=""></i> Personnel
+                            <i class="fas fa-users me-1"></i> Personnel
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="admin">Owner Manage</a></li>
@@ -38,7 +38,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class=""></i> Warehouse
+                            <i class="fas fa-box me-1"></i> Warehouse
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="warehouserice">Warehouse Rice</a></li>
@@ -47,7 +47,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class=""></i> Finance
+                            <i class="fas fa-dollar-sign me-1"></i> Finance
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="DebtController">Debt</a></li>
