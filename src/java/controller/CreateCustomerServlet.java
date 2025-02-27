@@ -5,7 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
-import dao.StaffDAO;
+import model.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,15 +13,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Customer;
 
 /**
  *
- * @author Admin
+ * @author dinhx
  */
-@WebServlet(name = "CustomerManagerServlet", urlPatterns = {"/customer"})
-public class CustomerManagerServlet extends HttpServlet {
+@WebServlet("/CreateCustomerServlet")
+public class CreateCustomerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +38,10 @@ public class CustomerManagerServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CustomerManagerServlet</title>");
+            out.println("<title>Servlet CreateCustomerServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CustomerManagerServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CreateCustomerServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,12 +59,7 @@ public class CustomerManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CustomerDAO customerDAO = new CustomerDAO();
-        List<Customer> customers = customerDAO.getAllCustomers();
-
-        request.setAttribute("customers", customers);
-
-        request.getRequestDispatcher("customer.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -80,50 +73,39 @@ public class CustomerManagerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
+        String fullName = request.getParameter("fullName");
+        String gender = request.getParameter("gender");
+        int age = Integer.parseInt(request.getParameter("age"));
+        String address = request.getParameter("address");
+        String phoneNumber = request.getParameter("phoneNumber");
 
-        if ("create".equals(action)) {
-            // Lấy thông tin từ form
-            String fullName = request.getParameter("fullName");
-            String gender = request.getParameter("gender");
-            int age = Integer.parseInt(request.getParameter("age"));
-            String address = request.getParameter("address");
-            String phoneNumber = request.getParameter("phoneNumber");
+        CustomerDAO customerDAO = new CustomerDAO();
 
-            // Tạo đối tượng Customer
-            Customer customer = new Customer();
-            customer.setFullName(fullName);
-            customer.setGender(gender);
-            customer.setAge(age);
-            customer.setAddress(address);
-            customer.setPhoneNumber(phoneNumber);
-
-            CustomerDAO customerDAO = new CustomerDAO();
-            boolean created = customerDAO.addCustomer(customer);
-
-            if (created) {
-                response.sendRedirect("customer");
-            } else {
-                request.setAttribute("fullName", fullName);
-                request.setAttribute("gender", gender);
-                request.setAttribute("age", age);
-                request.setAttribute("address", address);
-                request.setAttribute("phoneNumber", phoneNumber);
-                request.setAttribute("errorMessage", "Error creating customer.");
-                request.getRequestDispatcher("customer.jsp").forward(request, response);
-            }
-        } else if ("delete".equals(action)) {
-            int cusId = Integer.parseInt(request.getParameter("customerId"));
-            CustomerDAO customerDAO = new CustomerDAO();
-            boolean deleted = customerDAO.deleteCustomer(cusId);
-
-            if (deleted) {
-                response.sendRedirect("customer");
-            } else {
-                request.setAttribute("errorMessage", "Error deleting user.");
-                request.getRequestDispatcher("customer.jsp").forward(request, response);
-            }
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        if (customerDAO.checkPhoneNumberExists(phoneNumber)) {
+            request.setAttribute("errorMessage", "Phone number already exists. Please use another one.");
+            request.getRequestDispatcher("createCustomer.jsp").forward(request, response);
+            return;
         }
+
+        // Tạo đối tượng khách hàng
+        Customer customer = new Customer();
+        customer.setFullName(fullName);
+        customer.setGender(gender);
+        customer.setAge(age);
+        customer.setAddress(address);
+        customer.setPhoneNumber(phoneNumber);
+
+        // Thêm khách hàng vào DB
+        boolean success = customerDAO.addCustomer(customer);
+
+        if (success) {
+            response.sendRedirect("customer"); // Điều hướng đến danh sách khách hàng
+        } else {
+            request.setAttribute("errorMessage", "Failed to create customer.");
+            request.getRequestDispatcher("createCustomer.jsp").forward(request, response);
+        }
+
     }
 
     /**
