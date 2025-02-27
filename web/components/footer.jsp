@@ -10,12 +10,7 @@
                 <p class="text-muted small">Designed & Developed by xAI Team</p>
             </div>
             <!-- Liên kết chính sách -->
-            <div class="col-md-4 text-center mb-3 mb-md-0">
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <span class="mx-2">·</span>
-                <a href="#" class="footer-link">Terms & Conditions</a>
-                <span class="mx-2">·</span>
-                <a href="#" class="footer-link">Contact Us</a>
+            <div
             </div>
             <!-- Mạng xã hội -->
             <div class="col-md-4 text-center text-md-end">
