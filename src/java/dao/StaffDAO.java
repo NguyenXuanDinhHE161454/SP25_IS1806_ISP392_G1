@@ -66,6 +66,20 @@ public class StaffDAO extends GenericDAO<Staff> {
         return null;
     }
 
+    public boolean checkPhoneNumberExists(String phoneNumber) {
+        String query = "SELECT COUNT(*) FROM Staff WHERE phoneNumber = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, phoneNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu có số điện thoại tồn tại
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
         // Test: Get all staff members
