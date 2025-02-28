@@ -10,7 +10,7 @@ public class DatabaseConnection {
     private static final String DB_NAME = "RiceWareHouse";
     private static final String PORT_NUMBER = "1433";
     private static final String USER_ID = "sa";
-    private static final String PASSWORD = "123";
+    private static final String PASSWORD = "123456";
 
     private static final String URL = "jdbc:sqlserver://" + SERVER_NAME + ":" + PORT_NUMBER 
             + ";databaseName=" + DB_NAME;

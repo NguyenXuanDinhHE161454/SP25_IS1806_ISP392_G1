@@ -73,12 +73,7 @@ public class CreateStaffServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String fullName = request.getParameter("fullName");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String ownerId = request.getParameter("ownerId");
+        
 
         Staff staff = new Staff();
         staff.setFullName(fullName);
