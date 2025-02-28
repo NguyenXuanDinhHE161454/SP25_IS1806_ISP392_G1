@@ -5,7 +5,6 @@
 package controller;
 
 import dao.CustomerDAO;
-import dao.StaffDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -81,17 +80,45 @@ public class CustomerManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        if ("delete".equals(action)) {
+        CustomerDAO customerDAO = new CustomerDAO();
+
+        if ("create".equals(action)) {
+            // Lấy thông tin từ form
+            String fullName = request.getParameter("fullName");
+            String gender = request.getParameter("gender");
+            int age = Integer.parseInt(request.getParameter("age"));
+            String address = request.getParameter("address");
+            String phoneNumber = request.getParameter("phoneNumber");
+
+            // Tạo đối tượng Customer
+            Customer customer = new Customer();
+            customer.setFullName(fullName);
+            customer.setGender(gender);
+            customer.setAge(age);
+            customer.setAddress(address);
+            customer.setPhoneNumber(phoneNumber);
+
+            boolean created = customerDAO.addCustomer(customer);
+
+            if (created) {
+                request.setAttribute("successMessage", "Customer added successfully!");
+                request.getRequestDispatcher("createCustomer.jsp").forward(request, response);
+            } else {
+                request.setAttribute("errorMessage", "Phone number has already registed!");
+                request.getRequestDispatcher("createCustomer.jsp").forward(request, response);
+            }
+        } else if ("delete".equals(action)) {
             int cusId = Integer.parseInt(request.getParameter("customerId"));
-            CustomerDAO customerDAO = new CustomerDAO();
             boolean deleted = customerDAO.deleteCustomer(cusId);
+
             if (deleted) {
                 response.sendRedirect("customer");
             } else {
-                request.setAttribute("errorMessage", "Error deleting user.");
+                request.setAttribute("errorMessage", "Create customer failed!");
                 request.getRequestDispatcher("customer.jsp").forward(request, response);
             }
         }
+
     }
 
     /**

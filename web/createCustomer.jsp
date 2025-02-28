@@ -76,6 +76,16 @@
                                         <button type="submit" class="btn btn-primary">Create Customer</button>
                                         <a href="customer" class="btn btn-secondary">Back to Customer</a>
                                     </div>
+                                    <c:if test="${not empty successMessage}">
+                                        <div class="alert alert-success" role="alert">
+                                            ${successMessage}
+                                        </div>
+                                        <div class="mb-3">
+                                            <a href="export_rice.jsp" class="btn btn-success">Go to Export Rice</a>
+                                            <a href="import_rice.jsp" class="btn btn-info">Go to Import Rice</a>
+                                            <a href="add_debt.jsp" class="btn btn-warning">Go to Add Debt</a>
+                                        </div>
+                                    </c:if>
                                 </form>
                             </div>
                         </div>
