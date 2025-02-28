@@ -42,7 +42,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="warehouserice">Warehouse Rice</a></li>
-                            <li><a class="dropdown-item" href="index.html">Rice</a></li>
+                            <li><a class="dropdown-item" href="RiceController">Rice</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

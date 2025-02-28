@@ -5,7 +5,6 @@
 package controller;
 
 import dao.CustomerDAO;
-import dao.StaffDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -81,6 +80,7 @@ public class CustomerManagerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        CustomerDAO customerDAO = new CustomerDAO();
 
         if ("create".equals(action)) {
             // Lấy thông tin từ form
@@ -98,32 +98,27 @@ public class CustomerManagerServlet extends HttpServlet {
             customer.setAddress(address);
             customer.setPhoneNumber(phoneNumber);
 
-            CustomerDAO customerDAO = new CustomerDAO();
             boolean created = customerDAO.addCustomer(customer);
 
             if (created) {
-                response.sendRedirect("customer");
+                request.setAttribute("successMessage", "Customer added successfully!");
+                request.getRequestDispatcher("createCustomer.jsp").forward(request, response);
             } else {
-                request.setAttribute("fullName", fullName);
-                request.setAttribute("gender", gender);
-                request.setAttribute("age", age);
-                request.setAttribute("address", address);
-                request.setAttribute("phoneNumber", phoneNumber);
-                request.setAttribute("errorMessage", "Error creating customer.");
-                request.getRequestDispatcher("customer.jsp").forward(request, response);
+                request.setAttribute("errorMessage", "Phone number has already registed!");
+                request.getRequestDispatcher("createCustomer.jsp").forward(request, response);
             }
         } else if ("delete".equals(action)) {
             int cusId = Integer.parseInt(request.getParameter("customerId"));
-            CustomerDAO customerDAO = new CustomerDAO();
             boolean deleted = customerDAO.deleteCustomer(cusId);
 
             if (deleted) {
                 response.sendRedirect("customer");
             } else {
-                request.setAttribute("errorMessage", "Error deleting user.");
+                request.setAttribute("errorMessage", "Create customer failed!");
                 request.getRequestDispatcher("customer.jsp").forward(request, response);
             }
         }
+
     }
 
     /**

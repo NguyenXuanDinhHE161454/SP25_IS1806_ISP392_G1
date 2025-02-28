@@ -80,6 +80,15 @@ public class CreateStaffServlet extends HttpServlet {
         String password = request.getParameter("password");
         String ownerId = request.getParameter("ownerId");
 
+        Staff staff = new Staff();
+        staff.setFullName(fullName);
+        staff.setPhoneNumber(phoneNumber);
+        staff.setAddress(address);
+        staff.setUsername(username);
+        staff.setPasswordHash(password);
+        staff.setOwnerId(Integer.parseInt(ownerId));
+        
+        
         StaffDAO staffDAO = new StaffDAO();
         boolean usernameExists = staffDAO.checkUsernameExists(username);
         if (usernameExists) {
@@ -94,14 +103,6 @@ public class CreateStaffServlet extends HttpServlet {
             request.getRequestDispatcher("createStaff.jsp").forward(request, response);
             return;
         }
-
-        Staff staff = new Staff();
-        staff.setFullName(fullName);
-        staff.setPhoneNumber(phoneNumber);
-        staff.setAddress(address);
-        staff.setUsername(username);
-        staff.setPasswordHash(password);
-        staff.setOwnerId(Integer.parseInt(ownerId));
 
         boolean success = staffDAO.insertStaff(staff);
 

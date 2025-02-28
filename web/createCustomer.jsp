@@ -18,6 +18,7 @@
         <%@include file="/components/header.jsp"%>
 
         <div id="layoutSidenav">
+
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
@@ -28,15 +29,13 @@
                                 <i class="fas fa-user me-1"></i>
                                 Create Customer Information
                             </div>
-
-                            <!-- Hiển thị thông báo lỗi -->
-                            <c:if test="${not empty errorMessage}">
-                                <p class="text-danger">${errorMessage}</p>
-                            </c:if>
-
+                            <p class="text-danger">
+                                <c:if test="${not empty errorMessage}">
+                                    ${errorMessage}
+                                </c:if>
+                            </p>
                             <div class="card-body">
-                                <form method="post" action="CreateCustomerServlet">
-                                    <input type="hidden" name="redirectTo" value="exportRice.jsp">
+                                <form method="post" action="customer?action=create">
 
                                     <!-- Customer Full Name -->
                                     <div class="mb-3">
@@ -75,13 +74,17 @@
                                     <!-- Submit Button -->
                                     <div class="mb-3">
                                         <button type="submit" class="btn btn-primary">Create Customer</button>
-                                        <c:if test="${not empty addSuccess}">
-                                            <div class="alert alert-success" role="alert">
-                                                Customer added successfully!
-                                            </div>
-                                            <a href="ExportRiceController?customerId=${newCustomerId}" class="btn btn-success">Go to Export Rice</a>
-                                        </c:if>
+                                        <a href="customer" class="btn btn-secondary">Back to Customer</a>
                                     </div>
+                                    <c:if test="${not empty successMessage}">
+                                        <div class="alert alert-success" role="alert">
+                                            ${successMessage}
+                                        </div>
+                                        <div class="mb-3">
+                                            <a href="export_rice.jsp" class="btn btn-success">Go to Export Rice</a>
+                                            <a href="import_rice.jsp" class="btn btn-info">Go to Import Rice</a>
+                                        </div>
+                                    </c:if>
                                 </form>
                             </div>
                         </div>
