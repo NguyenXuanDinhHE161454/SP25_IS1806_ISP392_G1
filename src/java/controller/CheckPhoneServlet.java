@@ -8,18 +8,15 @@ import dao.StaffDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.Staff;
 
 /**
  *
- * @author Admin
+ * @author dinhx
  */
-@WebServlet(name = "CreateStaffServlet", urlPatterns = {"/createStaff"})
-public class CreateStaffServlet extends HttpServlet {
+public class CheckPhoneServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,10 +35,10 @@ public class CreateStaffServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreateStaffServlet</title>");
+            out.println("<title>Servlet CheckPhoneServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreateStaffServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CheckPhoneServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +56,12 @@ public class CreateStaffServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("createStaff.jsp").forward(request, response);
+        String phoneNumber = request.getParameter("phoneNumber");
+        StaffDAO staffDAO = new StaffDAO();
+
+        boolean phoneExists = staffDAO.checkPhoneNumberExists(phoneNumber);
+        response.setContentType("text/plain");
+        response.getWriter().write(phoneExists ? "exists" : "available");
     }
 
     /**
@@ -73,45 +75,7 @@ public class CreateStaffServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String fullName = request.getParameter("fullName");
-        String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String ownerId = request.getParameter("ownerId");
-
-        Staff staff = new Staff();
-        staff.setFullName(fullName);
-        staff.setPhoneNumber(phoneNumber);
-        staff.setAddress(address);
-        staff.setUsername(username);
-        staff.setPasswordHash(password);
-        staff.setOwnerId(Integer.parseInt(ownerId));
-        
-        
-        StaffDAO staffDAO = new StaffDAO();
-        boolean usernameExists = staffDAO.checkUsernameExists(username);
-        if (usernameExists) {
-            request.setAttribute("errorMessage", "Username already exists. Please choose another one.");
-            request.getRequestDispatcher("createStaff.jsp").forward(request, response);
-            return;
-        }
-
-        boolean phoneExists = staffDAO.checkPhoneNumberExists(phoneNumber);
-        if (phoneExists) {
-            request.setAttribute("errorMessage", "Phone number already exists. Please enter a different number.");
-            request.getRequestDispatcher("createStaff.jsp").forward(request, response);
-            return;
-        }
-
-        boolean success = staffDAO.insertStaff(staff);
-
-        if (success) {
-            response.sendRedirect("owner");
-        } else {
-            request.setAttribute("errorMessage", "Failed to create staff.");
-            request.getRequestDispatcher("createStaff.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**

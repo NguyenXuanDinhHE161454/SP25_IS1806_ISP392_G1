@@ -8,6 +8,10 @@
         <servlet-name>xyz</servlet-name>
         <servlet-class>dao.NewServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CheckPhoneServlet</servlet-name>
+        <servlet-class>controller.CheckPhoneServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -15,5 +19,9 @@
     <servlet-mapping>
         <servlet-name>xyz</servlet-name>
         <url-pattern>/xyz</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckPhoneServlet</servlet-name>
+        <url-pattern>/checkPhone</url-pattern>
     </servlet-mapping>
 </web-app>

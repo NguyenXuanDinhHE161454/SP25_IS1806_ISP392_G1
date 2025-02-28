@@ -24,13 +24,33 @@ public class StaffDAO extends GenericDAO<Staff> {
         return getAll("SELECT * FROM Staff");
     }
 
+//    public boolean checkUsernameExists(String username) {
+//        String query = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
+//        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+//            stmt.setString(1, username);
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                return rs.getInt(1) > 0;
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
     public boolean checkUsernameExists(String username) {
-        String query = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
+        String query = "SELECT COUNT(*) FROM ( "
+                + "SELECT Username FROM Staff WHERE Username = ? "
+                + "UNION "
+                + "SELECT Username FROM Users WHERE Username = ? "
+                + ") AS Combined";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, username);
+            stmt.setString(2, username);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0;
+                int count = rs.getInt(1);
+                System.out.println("Username check: " + username + " -> Count: " + count);
+                return count > 0;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -64,6 +84,43 @@ public class StaffDAO extends GenericDAO<Staff> {
             e.printStackTrace();
         }
         return null;
+    }
+
+//    public boolean checkPhoneNumberExists(String phoneNumber) {
+//        String query = "SELECT COUNT(*) FROM Staff WHERE phoneNumber = ?";
+//        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+//            stmt.setString(1, phoneNumber);
+//            ResultSet rs = stmt.executeQuery();
+//            if (rs.next()) {
+//                return rs.getInt(1) > 0; // Trả về true nếu có số điện thoại tồn tại
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
+    public boolean checkPhoneNumberExists(String phoneNumber) {
+        String query = "SELECT COUNT(*) FROM ( "
+                + "SELECT PhoneNumber FROM Staff WHERE PhoneNumber = ? "
+                + "UNION "
+                + "SELECT PhoneNumber FROM Users WHERE PhoneNumber = ? "
+                + "UNION "
+                + "SELECT PhoneNumber FROM Customers WHERE PhoneNumber = ? "
+                + ") AS Combined";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, phoneNumber);
+            stmt.setString(2, phoneNumber);
+            stmt.setString(3, phoneNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                System.out.println("Phone number check: " + phoneNumber + " -> Count: " + count);
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void main(String[] args) {
