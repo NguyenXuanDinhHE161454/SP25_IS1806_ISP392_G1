@@ -83,6 +83,7 @@
                                         <div class="mb-3">
                                             <a href="export_rice.jsp" class="btn btn-success">Go to Export Rice</a>
                                             <a href="import_rice.jsp" class="btn btn-info">Go to Import Rice</a>
+                                            <a href="add_debt.jsp" class="btn btn-warning">Go to Add Debt</a>
                                         </div>
                                     </c:if>
                                 </form>
