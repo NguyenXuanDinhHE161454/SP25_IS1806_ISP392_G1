@@ -45,6 +45,7 @@
                                     <div class="mb-3">
                                         <label for="phoneNumber" class="form-label">Phone Number</label>
                                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                                        <span id="phoneError" style="color: red;"></span>
                                     </div>
 
                                     <!-- Address -->
@@ -85,5 +86,31 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("phoneNumber").addEventListener("input", function () {
+                    let phoneNumber = this.value;
+                    let message = document.getElementById("phoneError");
+
+                    if (phoneNumber.length >= 10) { // Chỉ kiểm tra khi số điện thoại đủ dài
+                        fetch(`/checkPhone?phoneNumber=` + phoneNumber)
+                                .then(response => response.text())
+                                .then(data => {
+                                    if (data === "exists") {
+                                        message.innerText = "Số điện thoại này đã được đăng ký!";
+                                        message.style.color = "red";
+                                        this.setCustomValidity("Số điện thoại đã tồn tại");
+                                    } else {
+                                        message.innerText = "";
+                                        this.setCustomValidity("");
+                                    }
+                                });
+                    } else {
+                        message.innerText = "";
+                        this.setCustomValidity("");
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
