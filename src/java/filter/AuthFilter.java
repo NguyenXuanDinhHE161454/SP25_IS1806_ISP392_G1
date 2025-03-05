@@ -29,22 +29,29 @@ public class AuthFilter implements Filter {
 
     static {
         roleAccessMap.put("Admin", List.of(
-                "/admin", "/admin/", "/admin/dashboard", "/admin/reports", "/manageUsers"
-        ));
+                "/DebtController",
+                "/manageUsers",
+                "/admin",
+                "/reports",
+                "/dashboard"));
 
         roleAccessMap.put("Owner", List.of(
-                "/home","/owner", "/owner/", "/owner/manageBusiness", "/owner/finance", "/customer", "/owner/owner",
+                "/owner",
+                "/manageBusiness",
+                "/finance",
+                "/staff", "/home","/owner", "/owner/", "/owner/manageBusiness", "/owner/finance", "/customer", "/owner/owner",
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController"
-        ));
+                "/DebtController", "/PaymentController"));
 
         roleAccessMap.put("Staff", List.of(
-                "/staff", "/staff/", "/staff/tasks", "/customer", "/owner/owner",
+                "/staff",
+                "/tasks",
+                "/customerSupport",
+                "/inventory", "/staff/", "/staff/tasks", "/customer", "/owner/owner",
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController"
-        ));
+                "/DebtController", "/PaymentController"));
     }
 
     @Override
@@ -54,8 +61,14 @@ public class AuthFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
 
+        // Lấy đường dẫn yêu cầu
         String path = req.getServletPath();
-        System.out.println("Requested Path: " + path);
+
+        // Bỏ qua các tài nguyên tĩnh
+        if (path.matches(".*(\\.css|\\.js|\\.png|\\.jpg|\\.jpeg|\\.gif|\\.ico|\\.woff|\\.woff2|\\.ttf|\\.svg)$")) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         // Kiểm tra xem trang có thuộc danh sách công khai không
         if (publicPages.contains(path)) {
@@ -65,7 +78,6 @@ public class AuthFilter implements Filter {
 
         // Kiểm tra session có tồn tại không
         if (session == null) {
-            System.out.println("Session is null, redirecting to login.");
             res.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
@@ -73,18 +85,15 @@ public class AuthFilter implements Filter {
         // Lấy user từ session
         User userCheck = (User) session.getAttribute("user");
         if (userCheck == null) {
-            System.out.println("User is null, redirecting to login.");
             res.sendRedirect(req.getContextPath() + "/login.jsp");
             return;
         }
 
         // Lấy role của user
         String role = userCheck.getRole();
-        System.out.println("User role: " + role);
 
         // Kiểm tra quyền truy cập theo role
         if (!isAuthorized(role, path)) {
-            System.out.println("Access Denied: " + role + " cannot access " + path);
             res.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền truy cập!");
             return;
         }
@@ -95,14 +104,6 @@ public class AuthFilter implements Filter {
 
     private boolean isAuthorized(String role, String path) {
         List<String> allowedPaths = roleAccessMap.get(role);
-        if (allowedPaths == null) return false;
-
-        // Kiểm tra nếu `path` bắt đầu với bất kỳ đường dẫn nào trong danh sách quyền
-        for (String allowedPath : allowedPaths) {
-            if (path.startsWith(allowedPath)) {
-                return true;
-            }
-        }
-        return false;
+        return allowedPaths != null && allowedPaths.contains(path);
     }
 }
