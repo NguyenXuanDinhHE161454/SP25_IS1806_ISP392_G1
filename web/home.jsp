@@ -24,6 +24,7 @@
                 height: 100%;
                 object-fit: cover;
                 object-position: center;
+                transition: transform 0.5s ease;
             }
             .banner-overlay {
                 position: absolute;
@@ -37,16 +38,21 @@
                 justify-content: center;
                 color: #fff;
                 text-align: center;
-                opacity: 1;
+                opacity: 0;
+                animation: fadeIn 1.5s ease forwards;
             }
             .banner-overlay h1 {
                 font-size: 2.5rem;
                 font-weight: bold;
                 text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+                transform: translateY(20px);
+                animation: slideUp 1s ease 0.5s forwards;
             }
             .banner-overlay p {
                 font-size: 1.1rem;
                 max-width: 500px;
+                transform: translateY(30px);
+                animation: slideUp 1s ease 0.7s forwards;
             }
             .cta-button {
                 display: inline-block;
@@ -57,6 +63,14 @@
                 text-decoration: none;
                 border-radius: 25px;
                 font-weight: 500;
+                transition: all 0.3s ease;
+                transform: translateY(40px);
+                animation: slideUp 1s ease 0.9s forwards;
+            }
+            .cta-button:hover {
+                background-color: #2980b9;
+                transform: scale(1.1);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             }
 
             /* Main Content Styling */
@@ -73,6 +87,11 @@
                 padding: 20px;
                 margin-bottom: 20px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .feature-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
             }
             .feature-icon {
                 font-size: 2rem;
@@ -90,6 +109,17 @@
                 margin-bottom: 20px;
             }
 
+            /* Keyframes cho animation */
+            @keyframes fadeIn {
+                to {
+                    opacity: 1;
+                }
+            }
+            @keyframes slideUp {
+                to {
+                    transform: translateY(0);
+                }
+            }
         </style>
     </head>
     <body>

@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<!--abcd-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -13,18 +12,21 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        
     </head>
     <body>
         <nav class="sb-topnav navbar navbar-expand navbar-dark">
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!">
                 <i class="fas fa-bars"></i>
             </button>
             <a class="navbar-brand ps-3" href="home">
                 <i class="fas fa-warehouse me-2"></i>Warehouse Rice
             </a>
 
+            <!-- Menu phân loại -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
+                    <!-- Nhóm Quản lý Nhân sự -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-users me-1"></i> Personnel
@@ -33,9 +35,10 @@
                             <li><a class="dropdown-item" href="admin">Owner Manage</a></li>
                             <li><a class="dropdown-item" href="owner">Staff Manage</a></li>
                             <li><a class="dropdown-item" href="customer">Customer Manage</a></li>
-                            <li><a class="dropdown-item" href="index.html">Porter</a></li>
+                            <li><a class="dropdown-item" href="index.html">Porter Manage</a></li>
                         </ul>
                     </li>
+                    <!-- Nhóm Quản lý Kho -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-box me-1"></i> Warehouse
@@ -45,6 +48,7 @@
                             <li><a class="dropdown-item" href="RiceController">Rice</a></li>
                         </ul>
                     </li>
+                    <!-- Nhóm Giao dịch Tài chính -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-dollar-sign me-1"></i> Finance
@@ -56,21 +60,22 @@
                     </li>
                 </ul>
 
+                <!-- User Dropdown -->
                 <ul class="navbar-nav ms-auto me-3 me-lg-4">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user fa-fw"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                             <c:choose>
                                 <c:when test="${not empty sessionScope.user}">
                                     <li><a class="dropdown-item" href="#!">Welcome, ${sessionScope.user.fullName}</a></li>
                                     <li><a class="dropdown-item" href="login">Logout</a></li>
-                                </c:when>
-                                <c:otherwise>
+                                    </c:when>
+                                    <c:otherwise>
                                     <li><a class="dropdown-item" href="login">Login</a></li>
-                                </c:otherwise>
-                            </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
                         </ul>
                     </li>
                 </ul>
@@ -78,49 +83,42 @@
         </nav>
 
         <style>
-            /* Bỏ hiệu ứng nổi và đổi màu khi click */
             .sb-topnav {
                 background: linear-gradient(90deg, #2c3e50 0%, #3498db 100%);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
                 padding: 1rem;
-                box-shadow: none;
             }
-
             .navbar-brand {
                 font-size: 1.5rem;
                 color: #fff;
                 font-weight: bold;
+                transition: transform 0.3s ease;
             }
-
-            .navbar-brand:hover, .navbar-brand:active {
-                transform: none;
-                color: #fff;
+            .navbar-brand:hover {
+                transform: scale(1.05);
+                color: #ecf0f1;
             }
-
             .nav-link {
                 color: #ecf0f1;
                 font-weight: 500;
                 padding: 0.75rem 1.25rem;
+                transition: all 0.3s ease;
             }
-
-            .nav-link:hover, .nav-link:active {
-                color: #ecf0f1 !important;
-                background: none !important;
+            .nav-link:hover {
+                color: #f1c40f;
             }
-
             .dropdown-menu {
                 background-color: #2c3e50;
                 border: none;
-                box-shadow: none;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             }
-
             .dropdown-item {
                 color: #ecf0f1;
                 padding: 0.5rem 1.5rem;
             }
-
-            .dropdown-item:hover, .dropdown-item:active {
-                background-color: transparent !important;
-                color: #ecf0f1 !important;
+            .dropdown-item:hover {
+                background-color: #3498db;
+                color: #fff;
             }
         </style>
 
