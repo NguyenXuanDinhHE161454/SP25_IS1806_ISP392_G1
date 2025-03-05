@@ -41,58 +41,7 @@ public class DebtController extends HttpServlet {
             return;
         }
 
-        // Chỉnh sửa phiếu nợ
-        if ("edit".equals(action)) {
-            try {
-                int debtId = Integer.parseInt(request.getParameter("debtId"));
-                DebtDTO debt = debtDAO.getDebtByIdDTO(debtId);
-
-                if (debt == null) {
-                    request.setAttribute("error", "Debt record not found.");
-                    request.getRequestDispatcher("manage_debt.jsp").forward(request, response);
-                    return;
-                }
-
-                request.setAttribute("debt", debt);
-                request.getRequestDispatcher("edit_debt.jsp").forward(request, response);
-                return;
-            } catch (NumberFormatException e) {
-                request.setAttribute("error", "Invalid debt ID format.");
-                request.getRequestDispatcher("manage_debt.jsp").forward(request, response);
-                return;
-            }
-        }
-
-        // Hiển thị danh sách công nợ
-//        try {
-//            String phoneNumber = request.getParameter("phoneNumber");
-//            String debtDate = request.getParameter("debtDate");
-//            int page = 1;
-//            int pageSize = 10;
-//
-//            if (request.getParameter("page") != null) {
-//                page = Integer.parseInt(request.getParameter("page"));
-//            }
-//            if (request.getParameter("pageSize") != null) {
-//                pageSize = Integer.parseInt(request.getParameter("pageSize"));
-//            }
-//
-//            // Lấy tổng số phiếu nợ để tính tổng trang
-//            int totalRecords = debtDAO.getTotalDebtCount(phoneNumber, debtDate);
-//            int totalPages = (totalRecords > 0) ? (int) Math.ceil((double) totalRecords / pageSize) : 1;
-//
-//            // Lấy danh sách phiếu nợ theo điều kiện tìm kiếm
-//            List<DebtDTO> debts = debtDAO.searchDebts(phoneNumber, debtDate, page, pageSize);
-//
-//            // Gửi danh sách và thông tin phân trang lên UI
-//            request.setAttribute("debtList", debts);
-//            request.setAttribute("currentPage", page);
-//            request.setAttribute("totalPages", totalPages);
-//            request.setAttribute("pageSize", pageSize);
-//            request.setAttribute("phoneNumber", phoneNumber);
-//            request.setAttribute("debtDate", debtDate);
-//
-//        }
+        
         try {
             String phoneNumber = request.getParameter("phoneNumber");
             String debtDate = request.getParameter("debtDate");
