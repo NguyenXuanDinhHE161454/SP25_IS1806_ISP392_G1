@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
+import java.util.UUID;
 
 /**
  *
@@ -75,6 +76,36 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        String username = request.getParameter("username");
+//        String password = request.getParameter("password");
+//
+//        UserDAO userDAO = new UserDAO();
+//        User user = userDAO.login(username, password);
+//
+//        if (user != null) {
+//            HttpSession session = request.getSession();
+//            session.setAttribute("user", user);
+//
+//            if ("on".equals(request.getParameter("rememberPassword"))) {
+//                Cookie usernameCookie = new Cookie("username", username);
+//                usernameCookie.setMaxAge(60 * 60 * 24 * 7);
+//                response.addCookie(usernameCookie);
+//
+//                Cookie passwordCookie = new Cookie("password", password);
+//                passwordCookie.setMaxAge(60 * 60 * 24 * 7);
+//                response.addCookie(passwordCookie);
+//            }
+//
+//            if ("Admin".equals(user.getRole())) {
+//                response.sendRedirect("admin.jsp");
+//            } else {
+//                response.sendRedirect("owner.jsp");
+//            }
+//
+//        } else {
+//            request.setAttribute("errorMessage", "Invalid username or password");
+//            request.getRequestDispatcher("/login.jsp").forward(request, response);
+//        }
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -95,12 +126,19 @@ public class LoginServlet extends HttpServlet {
                 response.addCookie(passwordCookie);
             }
 
-            if ("Admin".equals(user.getRole())) {
-                response.sendRedirect("admin");
-            } else {
-                response.sendRedirect("owner");
+            // Điều hướng theo role
+            switch (user.getRole()) {
+                case "Admin":
+                    response.sendRedirect("admin.jsp");
+                    break;
+                case "Owner":
+                case "Staff":
+                    response.sendRedirect("home"); // Chuyển Owner & Staff đến /home
+                    break;
+                default:
+                    response.sendRedirect("home.jsp"); // Trang mặc định nếu không xác định role
+                    break;
             }
-
         } else {
             request.setAttribute("errorMessage", "Invalid username or password");
             request.getRequestDispatcher("/login.jsp").forward(request, response);

@@ -54,24 +54,11 @@ public class RiceController extends HttpServlet {
         Double price = request.getParameter("price") != null && !request.getParameter("price").trim().isEmpty()
                 ? Double.parseDouble(request.getParameter("price")) : null;
 
-        int page = 1;
-        int pageSize = 5;
+        int page = request.getParameter("page") != null ? Integer.parseInt(request.getParameter("page")) : 1;
+        int pageSize = 5; // Mặc định hiển thị 5 bản ghi mỗi trang
 
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-
-        if (request.getParameter("pageSize") != null) {
-            pageSize = Integer.parseInt(request.getParameter("pageSize"));
-        }
-
-        // If no search criteria are provided, use an empty or null value for filtering
-        if (riceName == null || riceName.trim().isEmpty()) {
-            riceName = null;  // Treat as empty filter
-        }
-        if (description == null || description.trim().isEmpty()) {
-            description = null;  // Treat as empty filter
-        }
+        if (riceName == null || riceName.trim().isEmpty()) riceName = null;
+        if (description == null || description.trim().isEmpty()) description = null;
 
         // Get total rice count
         int totalRecords = riceDAO.getTotalRiceCount(riceName, description, price);

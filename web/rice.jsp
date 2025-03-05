@@ -13,10 +13,11 @@
         <%@include file="/components/header.jsp"%>
 
         <div id="layoutSidenav">
-            <%@include file="/components/sidebar.jsp"%>
+            
 
             <div id="layoutSidenav_content">
                 <main>
+
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Rice Management</h1>
 
@@ -35,16 +36,14 @@
                                 <button type="submit" class="btn btn-primary w-100">Search</button>
                             </div>
                         </form>
+                        <!-- Add Rice Button -->
+                        <div class="mb-3">
+                            <a href="add_rice.jsp" class="btn btn-success">Add Rice</a>
+                        </div>
 
                         <!-- Dropdown for selecting number of records per page -->
                         <form method="get" action="RiceController" class="mb-3">
-                            <label for="pageSize">Records per page:</label>
-                            <select name="pageSize" id="pageSize" class="form-select w-auto d-inline" onchange="this.form.submit()">
-                                <option value="2" ${pageSize == 2 ? 'selected' : ''}>2</option>
-                                <option value="5" ${pageSize == 5 ? 'selected' : ''}>5</option>
-                                <option value="10" ${pageSize == 10 ? 'selected' : ''}>10</option>
-                                <option value="20" ${pageSize == 20 ? 'selected' : ''}>20</option>
-                            </select>
+
                             <input type="hidden" name="riceName" value="${riceName}">
                             <input type="hidden" name="description" value="${description}">
                             <input type="hidden" name="price" value="${price}">
@@ -82,34 +81,7 @@
                             </div>
                         </div>
 
-                        <!-- Pagination -->
-                        <c:if test="${totalPages > 1}">
-                            <nav>
-                                <ul class="pagination">
-                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="RiceController?page=1&pageSize=${pageSize}&riceName=${riceName}&description=${description}&price=${price}">First</a>
-                                    </li>
 
-                                    <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="RiceController?page=${currentPage - 1}&pageSize=${pageSize}&riceName=${riceName}&description=${description}&price=${price}">Previous</a>
-                                    </li>
-
-                                    <c:forEach var="i" begin="1" end="${totalPages}">
-                                        <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                            <a class="page-link" href="RiceController?page=${i}&pageSize=${pageSize}&riceName=${riceName}&description=${description}&price=${price}">${i}</a>
-                                        </li>
-                                    </c:forEach>
-
-                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="RiceController?page=${currentPage + 1}&pageSize=${pageSize}&riceName=${riceName}&description=${description}&price=${price}">Next</a>
-                                    </li>
-
-                                    <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="RiceController?page=${totalPages}&pageSize=${pageSize}&riceName=${riceName}&description=${description}&price=${price}">Last</a>
-                                    </li>
-                                </ul>
-                            </nav>
-                        </c:if>
 
                     </div>
                 </main>
