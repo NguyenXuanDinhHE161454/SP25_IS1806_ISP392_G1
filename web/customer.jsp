@@ -18,7 +18,7 @@
         <%@include file="/components/header.jsp"%>
 
         <div id="layoutSidenav">
-            <%@include file="/components/sidebar.jsp"%>
+            
 
             <div id="layoutSidenav_content">
                 <main>
