@@ -114,7 +114,7 @@
                         </c:if>
 
                         <!-- Back to Home -->
-                        <a href="home.jsp" class="btn btn-secondary mt-3">Back to Home</a>
+                        <a href="DebtController?action=viewAllCustomers" class="btn btn-secondary mt-3">Back to Manage Debt</a>
 
                     </div>
                 </main>
@@ -131,6 +131,6 @@
                 }
             }
         </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     </body>
 </html>
