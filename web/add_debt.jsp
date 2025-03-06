@@ -23,30 +23,31 @@
                             <div class="alert alert-danger">${error}</div>
                         </c:if>
 
-                        <form method="post" action="DebtController">
-                            <input type="hidden" name="action" value="add">
+                        <!-- Nhập số điện thoại để tìm khách hàng -->
+                        <div class="mb-3">
+                            <label for="phoneNumber">Customer Phone Number:</label>
+                            <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                            <button type="button" class="btn btn-info mt-2" onclick="fetchCustomer()">Verify</button>
+                            <button type="button" class="btn btn-success" onclick="addCustomer()">Add Customer</button>
+                        </div>
 
-                            <!-- Nhập số điện thoại để tìm khách hàng -->
-                            <div class="mb-3">
-                                <label for="phoneNumber">Customer Phone Number:</label>
-                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-                                <button type="button" class="btn btn-info mt-2" onclick="fetchCustomer()">Verify</button>
-                                <button type="button" class="btn btn-success" onclick="addCustomer()">Add Customer</button>
-                            </div>
+                        <!-- Form nhập thông tin nợ (Ẩn ban đầu) -->
+                        <form method="post" action="DebtController" id="debtForm" style="display: none;">
+                            <input type="hidden" name="action" value="add">
+                            <input type="hidden" id="customerId" name="customerId">
 
                             <!-- Hiển thị thông tin khách hàng -->
-                            <div id="customerInfo" class="mb-3" style="display: none;">
+                            <div class="mb-3">
                                 <label>Customer Name:</label>
                                 <input type="text" class="form-control" id="customerName" disabled>
-                                <input type="hidden" id="customerId" name="customerId">
                             </div>
 
                             <!-- Chọn loại nợ -->
                             <div class="mb-3">
                                 <label for="debtType">Debt Type:</label>
                                 <select class="form-control" id="debtType" name="debtType">
-                                    <option value="+">Owner Owes Customer</option>
-                                    <option value="-">Customer Owes Owner</option>
+                                    <option value="+">Customer Owes Owner (+)</option>
+                                    <option value="-">Owner Owes Customer (-)</option>
                                 </select>
                             </div>
 
@@ -82,23 +83,24 @@
                 }
 
                 fetch("DebtController?action=getCustomerByPhone&phoneNumber=" + phoneNumber)
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.customerId) {
-                                document.getElementById("customerName").value = data.customerName;
-                                document.getElementById("customerId").value = data.customerId;
-                                document.getElementById("customerInfo").style.display = "block";
-                            } else {
-                                alert("Customer not found.");
-                            }
-                        })
-                        .catch(error => console.error("Error fetching customer:", error));
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.customerId) {
+                            document.getElementById("customerName").value = data.customerName;
+                            document.getElementById("customerId").value = data.customerId;
+                            document.getElementById("debtForm").style.display = "block";
+                        } else {
+                            alert("Customer not found. Please add a new customer.");
+                            document.getElementById("debtForm").style.display = "none";
+                        }
+                    })
+                    .catch(error => console.error("Error fetching customer:", error));
             }
-        </script>
-        <script>
+
             function addCustomer() {
                 window.location.href = "createCustomer.jsp"; 
             }
         </script>
     </body>
 </html>
+

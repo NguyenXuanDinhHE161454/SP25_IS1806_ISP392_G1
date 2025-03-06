@@ -5,7 +5,9 @@ import dto.DebtDTO;
 import model.Debt;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DebtDAO extends GenericDAO<Debt> {
 
@@ -169,6 +171,29 @@ public class DebtDAO extends GenericDAO<Debt> {
                 new java.sql.Timestamp(debt.getDebtDate().getTime()),
                 debt.getDebtId()
         );
+    }
+
+    //Tính tổng nợ của 1 khách hàng
+    public Map<Integer, Double> getTotalDebtByCustomer() {
+        Map<Integer, Double> debtTotals = new HashMap<>();
+
+        // Truy vấn lấy tổng số nợ của mỗi khách hàng từ bảng debts
+        String sql = "SELECT d.CustomerID, COALESCE(SUM(d.Amount), 0) AS totalDebt "
+                + "FROM debts d "
+                + "GROUP BY d.CustomerID";
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int customerId = rs.getInt("CustomerID");
+                double totalDebt = rs.getDouble("totalDebt");
+                debtTotals.put(customerId, totalDebt);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return debtTotals;
     }
 
     public static void main(String[] args) {
