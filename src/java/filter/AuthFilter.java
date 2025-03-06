@@ -30,7 +30,6 @@ public class AuthFilter implements Filter {
 
     static {
         roleAccessMap.put("Admin", List.of(
-                "/DebtController",
                 "/manageUsers",
                 "/admin",
                 "/reports",
