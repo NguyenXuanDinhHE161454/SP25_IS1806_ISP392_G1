@@ -80,7 +80,33 @@
                                 </table>
                             </div>
                         </div>
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <!-- Previous Button -->
+                                    <c:if test="${currentPage > 1}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="RiceController?page=${currentPage - 1}&riceName=${riceName}&description=${description}&price=${price}">Previous</a>
+                                        </li>
+                                    </c:if>
 
+                                    <!-- Page Numbers -->
+                                    <c:forEach var="page" begin="1" end="${totalPages}">
+                                        <li class="page-item ${page == currentPage ? 'active' : ''}">
+                                            <a class="page-link" href="RiceController?page=${page}&riceName=${riceName}&description=${description}&price=${price}">${page}</a>
+                                        </li>
+                                    </c:forEach>
+
+                                    <!-- Next Button -->
+                                    <c:if test="${currentPage < totalPages}">
+                                        <li class="page-item">
+                                            <a class="page-link" href="RiceController?page=${currentPage + 1}&riceName=${riceName}&description=${description}&price=${price}">Next</a>
+                                        </li>
+                                    </c:if>
+                                </ul>
+                            </nav>
+                        </div>
 
 
                     </div>
