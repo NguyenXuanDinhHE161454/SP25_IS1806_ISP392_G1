@@ -21,7 +21,8 @@ public class AuthFilter implements Filter {
             "/about.jsp",
             "/contact.jsp",
             "/home",
-            "/login"
+            "/login",
+            "/createOwner"
     );
 
     // Danh sách các quyền truy cập dựa trên role
@@ -33,7 +34,7 @@ public class AuthFilter implements Filter {
                 "/manageUsers",
                 "/admin",
                 "/reports",
-                "/dashboard"));
+                "/dashboard", "/home", "/admin.jsp", "/editUser"));
 
         roleAccessMap.put("Owner", List.of(
                 "/owner",
@@ -42,7 +43,8 @@ public class AuthFilter implements Filter {
                 "/staff", "/home","/owner", "/owner/", "/owner/manageBusiness", "/owner/finance", "/customer", "/owner/owner",
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController"));
+                "/DebtController", "/PaymentController", "/editStaff", "/createStaff.jsp", "/createStaff",
+                "/editCustomer", "/export_rice.jsp", "/import_rice.jsp", "/rice.jsp"));
 
         roleAccessMap.put("Staff", List.of(
                 "/staff",
@@ -51,7 +53,7 @@ public class AuthFilter implements Filter {
                 "/inventory", "/staff/", "/staff/tasks", "/customer", "/owner/owner",
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController"));
+                "/DebtController", "/PaymentController", "/editCustomer", "/export_rice.jsp", "import_rice.jsp"));
     }
 
     @Override
