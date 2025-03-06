@@ -129,7 +129,7 @@ public class LoginServlet extends HttpServlet {
             // Điều hướng theo role
             switch (user.getRole()) {
                 case "Admin":
-                    response.sendRedirect("admin.jsp");
+                    response.sendRedirect("admin");
                     break;
                 case "Owner":
                 case "Staff":
