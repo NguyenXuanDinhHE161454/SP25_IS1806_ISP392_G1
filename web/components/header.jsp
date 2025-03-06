@@ -54,7 +54,7 @@
                             <i class="fas fa-dollar-sign me-1"></i> Finance
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="DebtController">Debt</a></li>
+                            <li><a class="dropdown-item" href="DebtController?action=viewAllCustomers">Debt</a></li>
                             <li><a class="dropdown-item" href="PaymentController">Transaction History</a></li>
                         </ul>
                     </li>
