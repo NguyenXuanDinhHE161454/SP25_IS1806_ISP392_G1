@@ -177,8 +177,10 @@ public class DebtDAO extends GenericDAO<Debt> {
     public Map<Integer, Double> getTotalDebtByCustomer() {
         Map<Integer, Double> debtTotals = new HashMap<>();
 
-        // Truy vấn lấy tổng số nợ của mỗi khách hàng từ bảng debts
-        String sql = "SELECT d.CustomerID, COALESCE(SUM(d.Amount), 0) AS totalDebt "
+        // Truy vấn lấy tổng số nợ của mỗi khách hàng, tính toán dựa vào DebtType
+        String sql = "SELECT d.CustomerID, "
+                + "COALESCE(SUM(CASE WHEN d.DebtType = '+' THEN d.Amount "
+                + "WHEN d.DebtType = '-' THEN -d.Amount ELSE 0 END), 0) AS totalDebt "
                 + "FROM debts d "
                 + "GROUP BY d.CustomerID";
 

@@ -46,8 +46,8 @@
                             <div class="mb-3">
                                 <label for="debtType">Debt Type:</label>
                                 <select class="form-control" id="debtType" name="debtType">
-                                    <option value="+">Customer Owes Owner (+)</option>
-                                    <option value="-">Owner Owes Customer (-)</option>
+                                    <option value="+">Owner Owes (+)</option>
+                                    <option value="-">Customer Owes (-)</option>
                                 </select>
                             </div>
 
@@ -101,6 +101,7 @@
                 window.location.href = "createCustomer.jsp"; 
             }
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     </body>
 </html>
 
