@@ -96,4 +96,84 @@ public class DebtController extends HttpServlet {
 
         request.getRequestDispatcher("manage_debt.jsp").forward(request, response);
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+
+        try {
+            if ("add".equals(action)) {
+                int customerId = Integer.parseInt(request.getParameter("customerId"));
+                String debtType = request.getParameter("debtType");
+                double amount = Double.parseDouble(request.getParameter("amount"));
+                String note = request.getParameter("note");
+
+                // Lấy số điện thoại của khách hàng để redirect sau khi thêm
+                Customer customer = customerDAO.getCustomerById(customerId);
+                String customerPhone = (customer != null) ? customer.getPhoneNumber() : "";
+
+                Debt debt = new Debt();
+                debt.setCustomerId(customerId);
+                debt.setDebtType(debtType);
+                debt.setAmount(amount);
+                debt.setNote(note);
+                debt.setDebtDate(new java.util.Date());
+
+                boolean success = debtDAO.insertDebt(debt);
+                if (success) {
+                    response.sendRedirect("DebtController?phoneNumber=" + customerPhone);
+                } else {
+                    request.setAttribute("error", "Failed to add debt.");
+                    request.getRequestDispatcher("add_debt.jsp").forward(request, response);
+                }
+                return;
+            }
+
+            if ("edit".equals(action)) {
+                int debtId = Integer.parseInt(request.getParameter("debtId"));
+                int customerId = Integer.parseInt(request.getParameter("customerId"));
+                String debtType = request.getParameter("debtType");
+                double amount = Double.parseDouble(request.getParameter("amount"));
+                String note = request.getParameter("note");
+
+                Debt debt = new Debt();
+                debt.setDebtId(debtId);
+                debt.setCustomerId(customerId);
+                debt.setDebtType(debtType);
+                debt.setAmount(amount);
+                debt.setNote(note);
+                debt.setDebtDate(new java.util.Date());
+
+                boolean success = debtDAO.updateDebt(debt);
+                if (success) {
+                    response.sendRedirect("DebtController?success=Debt updated successfully");
+                } else {
+                    request.setAttribute("error", "Failed to update debt.");
+                    request.getRequestDispatcher("edit_debt.jsp").forward(request, response);
+                }
+                return;
+            }
+
+            if ("delete".equals(action)) {
+                int debtId = Integer.parseInt(request.getParameter("debtId"));
+                boolean success = debtDAO.deleteDebt(debtId);
+
+                if (success) {
+                    response.sendRedirect("DebtController?success=Debt deleted successfully");
+                } else {
+                    response.sendRedirect("DebtController?error=Failed to delete debt");
+                }
+                return;
+            }
+
+        } catch (NumberFormatException e) {
+            request.setAttribute("error", "Invalid data format.");
+        } catch (Exception e) {
+            request.setAttribute("error", "An error occurred: " + e.getMessage());
+        }
+
+        request.getRequestDispatcher("manage_debt.jsp").forward(request, response);
+    }
 }
