@@ -107,7 +107,7 @@ public class CreateOwnerServlet extends HttpServlet {
             response.sendRedirect("login");
         } else {
             request.setAttribute("errorMessage", "Failed to create user.");
-            request.getRequestDispatcher("createUser.jsp").forward(request, response);
+            request.getRequestDispatcher("createOwner.jsp").forward(request, response);
         }
     }
 
