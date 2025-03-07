@@ -39,7 +39,8 @@
                             <input type="hidden" name="debtDate" value="${debtDate}">
                         </form>
 
-                        
+                        <!-- Add Debt Button -->
+                        <a href="add_debt.jsp" class="btn btn-success mb-3">Add Debt</a>
 
                         <!-- Debt List -->
                         <div class="card mb-4">

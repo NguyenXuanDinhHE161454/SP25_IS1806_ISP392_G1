@@ -46,8 +46,8 @@
                             <div class="mb-3">
                                 <label for="debtType">Debt Type:</label>
                                 <select class="form-control" id="debtType" name="debtType">
-                                    <option value="+">Owner Owes (+)</option>
-                                    <option value="-">Customer Owes (-)</option>
+                                    <option value="+">(+)</option>
+                                    <option value="-">(-)</option>
                                 </select>
                             </div>
 

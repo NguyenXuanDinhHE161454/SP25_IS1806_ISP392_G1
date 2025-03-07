@@ -22,7 +22,7 @@
                                 <input type="text" name="phoneNumber" value="${phoneNumber}" class="form-control" placeholder="Search by Phone Number">
                             </div>
                             <div class="col-md-3">
-                                <input type="text" name="customerName" value="${customerName}" class="form-control">
+                                <input type="text" name="customerName" value="${customerName}" class="form-control" placeholder="Search by Customer Name">
                             </div>
                             <div class="col-md-3">
                                 <button type="submit" class="btn btn-primary w-100">Search</button>
