@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.Customer;
 
 public class DebtDAO extends GenericDAO<Debt> {
 
@@ -152,26 +153,7 @@ public class DebtDAO extends GenericDAO<Debt> {
                 debt.getCustomerId(), debt.getDebtType(), debt.getAmount(), debt.getNote(), debt.getDebtDate());
     }
 
-    // Xóa công nợ theo ID
-    public boolean deleteDebt(int debtId) {
-        return executeUpdate("DELETE FROM Debts WHERE DebtID = ?", debtId);
-    }
-
-    public boolean updateDebt(Debt debt) {
-        String query = """
-                UPDATE Debts 
-                SET DebtType = ?, Amount = ?, Note = ?, DebtDate = ? 
-                WHERE DebtID = ?
-            """;
-
-        return executeUpdate(query,
-                debt.getDebtType(),
-                debt.getAmount(),
-                debt.getNote(),
-                new java.sql.Timestamp(debt.getDebtDate().getTime()),
-                debt.getDebtId()
-        );
-    }
+    
 
     //Tính tổng nợ của 1 khách hàng
     public Map<Integer, Double> getTotalDebtByCustomer() {

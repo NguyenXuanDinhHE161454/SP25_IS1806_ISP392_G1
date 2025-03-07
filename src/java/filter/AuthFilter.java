@@ -43,7 +43,8 @@ public class AuthFilter implements Filter {
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
                 "/DebtController", "/PaymentController", "/editStaff", "/createStaff.jsp", "/createStaff",
-                "/editCustomer", "/export_rice.jsp", "/import_rice.jsp", "/rice.jsp"));
+                "/editCustomer", "/export_rice.jsp", "/import_rice.jsp", "/rice.jsp", "/DebtController2",
+                "/manage_debt2.jsp"));
 
         roleAccessMap.put("Staff", List.of(
                 "/staff",
@@ -52,7 +53,8 @@ public class AuthFilter implements Filter {
                 "/inventory", "/staff/", "/staff/tasks", "/customer", "/owner/owner",
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController", "/editCustomer", "/export_rice.jsp", "import_rice.jsp"));
+                "/DebtController", "/PaymentController", "/editCustomer", "/export_rice.jsp",
+                "import_rice.jsp", "/DebtController2", "/manage_debt2.jsp"));
     }
 
     @Override

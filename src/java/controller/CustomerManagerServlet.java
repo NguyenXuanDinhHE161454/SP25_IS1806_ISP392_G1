@@ -82,6 +82,8 @@ public class CustomerManagerServlet extends HttpServlet {
         String action = request.getParameter("action");
         CustomerDAO customerDAO = new CustomerDAO();
 
+        
+        
         if ("create".equals(action)) {
             // Lấy thông tin từ form
             String fullName = request.getParameter("fullName");

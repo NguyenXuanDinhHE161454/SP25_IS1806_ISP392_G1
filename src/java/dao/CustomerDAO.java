@@ -3,6 +3,7 @@ package dao;
 import DBContext.DatabaseConnection;
 import model.Customer;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerDAO extends GenericDAO<Customer> {
@@ -84,6 +85,41 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return customerId; // Trả về ID của khách hàng vừa thêm
     }
 
+    public List<Customer> searchCustomers(String name, String phoneNumber) {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT * FROM Customers WHERE 1=1";
+
+        if (name != null && !name.trim().isEmpty()) {
+            sql += " AND fullName LIKE ?";
+        }
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            sql += " AND phoneNumber LIKE ?";
+        }
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            int paramIndex = 1;
+            if (name != null && !name.trim().isEmpty()) {
+                stmt.setString(paramIndex++, "%" + name + "%");
+            }
+            if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+                stmt.setString(paramIndex++, "%" + phoneNumber + "%");
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setCustomerId(rs.getInt("customerId"));
+                customer.setFullName(rs.getString("fullName"));
+                customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
     // Method to delete customer by ID
     public boolean deleteCustomer(int customerId) {
         // Start a transaction
@@ -151,6 +187,5 @@ public class CustomerDAO extends GenericDAO<Customer> {
                 .findFirst()
                 .orElse(null);
     }
-    
-    
+
 }

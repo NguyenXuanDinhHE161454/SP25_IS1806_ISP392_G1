@@ -43,36 +43,8 @@ public class TransactionDAO extends GenericDAO<Transaction> {
         }
         return total;
     }
-
-    // Xây dựng truy vấn động với tham số
-    private PreparedStatement buildQueryWithParams(StringBuilder query, String customerName, String phoneNumber, String transactionDate, Connection conn) throws SQLException {
-        if (customerName != null && !customerName.trim().isEmpty()) {
-            query.append(" AND c.FullName LIKE ?");
-        }
-        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            query.append(" AND c.PhoneNumber = ?");
-        }
-        if (transactionDate != null && !transactionDate.trim().isEmpty()) {
-            query.append(" AND CAST(t.TransactionDate AS DATE) = ?");
-        }
-
-        PreparedStatement stmt = conn.prepareStatement(query.toString());
-
-        int index = 1;
-        if (customerName != null && !customerName.trim().isEmpty()) {
-            stmt.setString(index++, "%" + customerName.trim() + "%");
-        }
-        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-            stmt.setString(index++, phoneNumber.trim());
-        }
-        if (transactionDate != null && !transactionDate.trim().isEmpty()) {
-            stmt.setString(index, transactionDate.trim());
-        }
-
-        return stmt;
-    }
-
-    // Lấy danh sách tất cả giao dịch có phân trang
+    
+        // Lấy danh sách tất cả giao dịch có phân trang
     public List<TransactionDTO> searchTransactions(String customerName, String phoneNumber, String date, int page, int pageSize) {
         List<TransactionDTO> transactions = new ArrayList<>();
 
@@ -134,6 +106,35 @@ public class TransactionDAO extends GenericDAO<Transaction> {
         }
         return transactions;
     }
+
+    // Xây dựng truy vấn động với tham số
+    private PreparedStatement buildQueryWithParams(StringBuilder query, String customerName, String phoneNumber, String transactionDate, Connection conn) throws SQLException {
+        if (customerName != null && !customerName.trim().isEmpty()) {
+            query.append(" AND c.FullName LIKE ?");
+        }
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            query.append(" AND c.PhoneNumber = ?");
+        }
+        if (transactionDate != null && !transactionDate.trim().isEmpty()) {
+            query.append(" AND CAST(t.TransactionDate AS DATE) = ?");
+        }
+
+        PreparedStatement stmt = conn.prepareStatement(query.toString());
+
+        int index = 1;
+        if (customerName != null && !customerName.trim().isEmpty()) {
+            stmt.setString(index++, "%" + customerName.trim() + "%");
+        }
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            stmt.setString(index++, phoneNumber.trim());
+        }
+        if (transactionDate != null && !transactionDate.trim().isEmpty()) {
+            stmt.setString(index, transactionDate.trim());
+        }
+
+        return stmt;
+    }
+    
 
     // Thêm giao dịch mới
     public boolean insertTransaction(Transaction transaction) {
