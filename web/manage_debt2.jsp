@@ -28,11 +28,11 @@
                                 <button type="submit" class="btn btn-primary w-100">Search</button>
                             </div>
                         </form>
-                         
-                            <!-- Add Debt Button -->
+
+                        <!-- Add Debt Button -->
                         <a href="add_debt.jsp" class="btn btn-success mb-3">Add Debt</a>
 
-                        
+
                         <form method="get" action="DebtController2" class="mb-3">
                             <input type="hidden" name="pageSize" value="10">
                             <input type="hidden" name="phoneNumber" value="${phoneNumber}">
@@ -66,6 +66,8 @@
                             </tbody>
                         </table>
 
+                        
+
                         <a href="home.jsp" class="btn btn-secondary mt-3">Back to Home</a>
                     </div>
                 </main>
@@ -73,6 +75,6 @@
                 <%@include file="/components/footer.jsp"%>
             </div>
         </div>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     </body>
 </html>

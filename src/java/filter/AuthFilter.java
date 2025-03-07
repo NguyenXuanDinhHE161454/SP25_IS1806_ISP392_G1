@@ -21,6 +21,7 @@ public class AuthFilter implements Filter {
             "/about.jsp",
             "/contact.jsp",
             "/home",
+            "/home.jsp",
             "/login",
             "/createOwner"
     );
