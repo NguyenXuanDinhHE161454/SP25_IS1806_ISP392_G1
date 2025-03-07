@@ -63,24 +63,29 @@ public class OwnerServlet extends HttpServlet {
             throws ServletException, IOException {
         StaffDAO staffDAO = new StaffDAO();
 
-        // Fetch all staff members from the database
-        List<Staff> staffList = staffDAO.getAllStaff();
+        // Nhận tham số tìm kiếm từ request
+        String staffName = request.getParameter("staffName");
+        String phoneNumber = request.getParameter("phoneNumber");
 
-        // Set the staff list as a request attribute to be accessed in the JSP
+        List<Staff> staffList;
+
+        // Nếu có giá trị tìm kiếm, thực hiện lọc
+        if ((phoneNumber != null && !phoneNumber.trim().isEmpty())
+                || (staffName != null && !staffName.trim().isEmpty())) {
+            staffList = staffDAO.searchStaff(staffName, phoneNumber);
+        } else {
+            staffList = staffDAO.getAllStaff();
+        }
+
+        // Đặt danh sách nhân viên vào request để hiển thị trên JSP
         request.setAttribute("staffList", staffList);
+        request.setAttribute("staffName", staffName);
+        request.setAttribute("phoneNumber", phoneNumber);
 
-        // Forward the request to the JSP page for rendering
+        // Chuyển hướng sang owner.jsp
         request.getRequestDispatcher("owner.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

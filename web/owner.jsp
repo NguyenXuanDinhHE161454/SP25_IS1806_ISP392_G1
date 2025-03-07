@@ -25,7 +25,7 @@
 
         <div id="layoutSidenav">
 
-            
+
 
             <div id="layoutSidenav_content">
                 <main>
@@ -37,6 +37,21 @@
                                 <i class="fas fa-table me-1"></i>
                                 Staff Management
                             </div>
+
+                            <!-- Search Form -->
+                            <form method="get" action="owner" class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <input type="text" name="staffName" value="${staffName}" class="form-control" placeholder="Search by Staff Name">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="phoneNumber" value="${phoneNumber}" class="form-control" placeholder="Search by Phone Number">
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                                </div>
+                            </form>
+
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -44,6 +59,7 @@
                                             <th>Staff ID</th>
                                             <th>Full Name</th>
                                             <th>Phone Number</th>
+                                            <th>Address</th>
                                             <th>Username</th>
                                             <th>Actions</th>
                                         </tr>
@@ -53,6 +69,7 @@
                                             <th>Staff ID</th>
                                             <th>Full Name</th>
                                             <th>Phone Number</th>
+                                            <th>Address</th>
                                             <th>Username</th>
                                             <th>Actions</th>
                                         </tr>
@@ -63,6 +80,7 @@
                                                 <td>${staff.staffId}</td>
                                                 <td>${staff.fullName}</td>
                                                 <td>${staff.phoneNumber}</td>
+                                                <td>${staff.address}</td> 
                                                 <td>${staff.username}</td>
                                                 <td>
                                                     <a href="editStaff?staffId=${staff.staffId}" class="btn btn-primary btn-sm">Edit</a>
@@ -73,14 +91,15 @@
                                                 </td>
                                             </tr>
                                         </c:forEach>
-                                            <script>
-                                                                document.addEventListener("DOMContentLoaded", function () {
-                                                                    new simpleDatatables.DataTable("#datatablesSimple", {
-                                                                        perPage: 5, // Đặt số dòng mặc định là 5
-                                                                        perPageSelect: false, // Ẩn menu chọn số entries
-                                                                        labels: { info: "" }
-                                                                    });
-                                                                });
+                                    <script>
+                                        document.addEventListener("DOMContentLoaded", function () {
+                                            new simpleDatatables.DataTable("#datatablesSimple", {
+                                                perPage: 5,
+                                                perPageSelect: false,
+                                                searchable: false,
+                                                labels: {info: ""}
+                                            });
+                                        });
                                     </script>
                                     </tbody>
                                 </table>

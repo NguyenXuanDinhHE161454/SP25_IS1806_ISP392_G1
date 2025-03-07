@@ -64,7 +64,7 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Section Name</th>
+                                            <th>Zone Name</th>
                                             <th>Rice Type</th>
                                             <th>Load Capacity</th>
                                             <th>Actions</th>
@@ -73,7 +73,7 @@
                                     <tfoot>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Section Name</th>
+                                            <th>Zone Name</th>
                                             <th>Rice Type</th>
                                             <th>Load Capacity</th>
                                             <th>Actions</th>

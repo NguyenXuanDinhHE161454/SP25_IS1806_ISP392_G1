@@ -85,9 +85,43 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return customerId; // Trả về ID của khách hàng vừa thêm
     }
 
+//    public List<Customer> searchCustomers(String name, String phoneNumber) {
+//        List<Customer> customers = new ArrayList<>();
+//        String sql = "SELECT * FROM Customers WHERE 1=1";
+//
+//        if (name != null && !name.trim().isEmpty()) {
+//            sql += " AND fullName LIKE ?";
+//        }
+//        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+//            sql += " AND phoneNumber LIKE ?";
+//        }
+//
+//        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+//
+//            int paramIndex = 1;
+//            if (name != null && !name.trim().isEmpty()) {
+//                stmt.setString(paramIndex++, "%" + name + "%");
+//            }
+//            if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+//                stmt.setString(paramIndex++, "%" + phoneNumber + "%");
+//            }
+//
+//            ResultSet rs = stmt.executeQuery();
+//            while (rs.next()) {
+//                Customer customer = new Customer();
+//                customer.setCustomerId(rs.getInt("customerId"));
+//                customer.setFullName(rs.getString("fullName"));
+//                customer.setPhoneNumber(rs.getString("phoneNumber"));
+//                customers.add(customer);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return customers;
+//    }
     public List<Customer> searchCustomers(String name, String phoneNumber) {
         List<Customer> customers = new ArrayList<>();
-        String sql = "SELECT * FROM Customers WHERE 1=1";
+        String sql = "SELECT customerId, fullName, phoneNumber, gender, age, address FROM Customers WHERE 1=1";
 
         if (name != null && !name.trim().isEmpty()) {
             sql += " AND fullName LIKE ?";
@@ -112,6 +146,9 @@ public class CustomerDAO extends GenericDAO<Customer> {
                 customer.setCustomerId(rs.getInt("customerId"));
                 customer.setFullName(rs.getString("fullName"));
                 customer.setPhoneNumber(rs.getString("phoneNumber"));
+                customer.setGender(rs.getString("gender"));
+                customer.setAge(rs.getInt("age"));
+                customer.setAddress(rs.getString("address"));
                 customers.add(customer);
             }
         } catch (SQLException e) {

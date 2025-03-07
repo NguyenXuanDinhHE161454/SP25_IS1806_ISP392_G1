@@ -18,7 +18,7 @@
         <%@include file="/components/header.jsp"%>
 
         <div id="layoutSidenav">
-            
+
 
             <div id="layoutSidenav_content">
                 <main>
@@ -31,6 +31,20 @@
                                 <i class="fas fa-table me-1"></i>
                                 Customer Management
                             </div>
+                            
+                            <!-- Search Form -->
+                            <form method="get" action="customer" class="row g-3 mb-4">
+                                <div class="col-md-3">
+                                    <input type="text" name="phoneNumber" value="${phoneNumber}" class="form-control" placeholder="Search by Customer Name">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="customerName" value="${customerName}" class="form-control" placeholder="Search by Phone Number">
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" class="btn btn-primary w-100">Search</button>
+                                </div>
+                            </form>
+                                
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -123,15 +137,16 @@
 
         </script>
         <script>
-                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                            new simpleDatatables.DataTable("#datatablesSimple", {
-                                                                perPage: 5, 
-                                                                perPageSelect: false, 
-                                                                labels: {info: ""}
-                                                            });
-                                                        });
+            document.addEventListener("DOMContentLoaded", function () {
+                new simpleDatatables.DataTable("#datatablesSimple", {
+                    perPage: 5,
+                    perPageSelect: false,
+                    searchable: false,
+                    labels: {info: ""}
+                });
+            });
         </script>
-        
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     </body>
 </html>

@@ -5,6 +5,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,12 +61,24 @@ public class CustomerManagerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String phoneNumber = request.getParameter("phoneNumber");
+        String customerName = request.getParameter("customerName");
+
         CustomerDAO customerDAO = new CustomerDAO();
-        List<Customer> customers = customerDAO.getAllCustomers();
+        List<Customer> customers;
+
+        if ((phoneNumber != null && !phoneNumber.isEmpty()) || (customerName != null && !customerName.isEmpty())) {
+            customers = customerDAO.searchCustomers(phoneNumber, customerName);
+        } else {
+            customers = customerDAO.getAllCustomers();
+        }
 
         request.setAttribute("customers", customers);
-
-        request.getRequestDispatcher("customer.jsp").forward(request, response);
+        request.setAttribute("phoneNumber", phoneNumber);
+        request.setAttribute("customerName", customerName);
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("customer.jsp");
+        dispatcher.forward(request, response);
     }
 
     /**
