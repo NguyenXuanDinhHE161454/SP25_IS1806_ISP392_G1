@@ -10,16 +10,14 @@ import dao.DebtDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author dinhx
- */
+
 public class DebtController2 extends HttpServlet {
 
     private final DebtDAO debtDAO = new DebtDAO();
@@ -79,6 +77,7 @@ public class DebtController2 extends HttpServlet {
         request.setAttribute("phoneNumber", phoneNumber);
 
         request.getRequestDispatcher("manage_debt2.jsp").forward(request, response);
+    
     }
 
     

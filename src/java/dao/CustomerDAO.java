@@ -85,40 +85,92 @@ public class CustomerDAO extends GenericDAO<Customer> {
         return customerId; // Trả về ID của khách hàng vừa thêm
     }
 
-//    public List<Customer> searchCustomers(String name, String phoneNumber) {
-//        List<Customer> customers = new ArrayList<>();
-//        String sql = "SELECT * FROM Customers WHERE 1=1";
-//
-//        if (name != null && !name.trim().isEmpty()) {
-//            sql += " AND fullName LIKE ?";
-//        }
-//        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-//            sql += " AND phoneNumber LIKE ?";
-//        }
-//
-//        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-//
-//            int paramIndex = 1;
-//            if (name != null && !name.trim().isEmpty()) {
-//                stmt.setString(paramIndex++, "%" + name + "%");
-//            }
-//            if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
-//                stmt.setString(paramIndex++, "%" + phoneNumber + "%");
-//            }
-//
-//            ResultSet rs = stmt.executeQuery();
-//            while (rs.next()) {
-//                Customer customer = new Customer();
-//                customer.setCustomerId(rs.getInt("customerId"));
-//                customer.setFullName(rs.getString("fullName"));
-//                customer.setPhoneNumber(rs.getString("phoneNumber"));
-//                customers.add(customer);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return customers;
-//    }
+
+    // Lấy tổng số khách hàng theo điều kiện tìm kiếm
+    public int getTotalCustomerCount(String customerName, String phoneNumber) {
+        String sql = "SELECT COUNT(*) FROM Customers WHERE 1=1";
+        int count = 0;
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            StringBuilder query = new StringBuilder(sql);
+            List<String> params = new ArrayList<>();
+
+            if (customerName != null && !customerName.trim().isEmpty()) {
+                query.append(" AND full_name LIKE ?");
+                params.add("%" + customerName + "%");
+            }
+            if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+                query.append(" AND phone_number LIKE ?");
+                params.add("%" + phoneNumber + "%");
+            }
+
+            try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+                for (int i = 0; i < params.size(); i++) {
+                    ps.setString(i + 1, params.get(i));
+                }
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        count = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    // Lấy danh sách khách hàng theo điều kiện tìm kiếm và phân trang
+    public List<Customer> searchCustomersPaginated(String customerName, String phoneNumber, int page, int pageSize) {
+        return getCustomers("SELECT * FROM Customers WHERE 1=1", customerName, phoneNumber, page, pageSize);
+    }
+
+    // Lấy toàn bộ danh sách khách hàng có phân trang
+    public List<Customer> getAllCustomersPaginated(int page, int pageSize) {
+        return getCustomers("SELECT * FROM Customers", null, null, page, pageSize);
+    }
+
+    // Hàm chung để truy vấn danh sách khách hàng
+    private List<Customer> getCustomers(String sql, String customerName, String phoneNumber, int page, int pageSize) {
+        List<Customer> customers = new ArrayList<>();
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            StringBuilder query = new StringBuilder(sql);
+            List<String> params = new ArrayList<>();
+
+            if (customerName != null && !customerName.trim().isEmpty()) {
+                query.append(" AND full_name LIKE ?");
+                params.add("%" + customerName + "%");
+            }
+            if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+                query.append(" AND phone_number LIKE ?");
+                params.add("%" + phoneNumber + "%");
+            }
+
+            query.append(" LIMIT ? OFFSET ?");
+
+            try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+                for (int i = 0; i < params.size(); i++) {
+                    ps.setString(i + 1, params.get(i));
+                }
+                ps.setInt(params.size() + 1, pageSize);
+                ps.setInt(params.size() + 2, (page - 1) * pageSize);
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Customer customer = new Customer();
+                        customer.setCustomerId(rs.getInt("customer_id"));
+                        customer.setFullName(rs.getString("full_name"));
+                        customer.setPhoneNumber(rs.getString("phone_number"));
+                        customers.add(customer);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+    
     public List<Customer> searchCustomers(String name, String phoneNumber) {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT customerId, fullName, phoneNumber, gender, age, address FROM Customers WHERE 1=1";
