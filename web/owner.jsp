@@ -30,7 +30,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Owner Dashboard</h1>
+                        <h1 class="mt-4">Staff list</h1>
                         <a href="createStaff.jsp" class="btn btn-primary btn-info mb-4">Create Staff</a>
                         <div class="card mb-4">
                             <div class="card-header">

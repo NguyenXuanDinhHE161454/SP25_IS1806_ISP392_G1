@@ -41,20 +41,7 @@ public class DebtController extends HttpServlet {
             return;
         }
 
-//        if ("viewAllCustomers".equals(action)) {
-//            // Lấy danh sách tất cả khách hàng
-//            List<Customer> customers = customerDAO.getAllCustomers();
-//            // Lấy tổng số nợ của từng khách hàng
-//            Map<Integer, Double> customerDebtTotals = debtDAO.getTotalDebtByCustomer();
-//
-//            // Đưa dữ liệu lên request
-//            request.setAttribute("customerList", customers);
-//            request.setAttribute("customerDebtTotals", customerDebtTotals);
-//
-//            // Chuyển hướng đến manage_debt2.jsp
-//            request.getRequestDispatcher("manage_debt2.jsp").forward(request, response);
-//            return;
-//        }
+
         if ("viewAllCustomers".equals(action)) {
             List<Customer> customers = customerDAO.getAllCustomers();
             Map<Integer, Double> customerDebtTotals = debtDAO.getTotalDebtByCustomer();
@@ -131,42 +118,7 @@ public class DebtController extends HttpServlet {
                 return;
             }
 
-            if ("edit".equals(action)) {
-                int debtId = Integer.parseInt(request.getParameter("debtId"));
-                int customerId = Integer.parseInt(request.getParameter("customerId"));
-                String debtType = request.getParameter("debtType");
-                double amount = Double.parseDouble(request.getParameter("amount"));
-                String note = request.getParameter("note");
-
-                Debt debt = new Debt();
-                debt.setDebtId(debtId);
-                debt.setCustomerId(customerId);
-                debt.setDebtType(debtType);
-                debt.setAmount(amount);
-                debt.setNote(note);
-                debt.setDebtDate(new java.util.Date());
-
-                boolean success = debtDAO.updateDebt(debt);
-                if (success) {
-                    response.sendRedirect("DebtController?success=Debt updated successfully");
-                } else {
-                    request.setAttribute("error", "Failed to update debt.");
-                    request.getRequestDispatcher("edit_debt.jsp").forward(request, response);
-                }
-                return;
-            }
-
-            if ("delete".equals(action)) {
-                int debtId = Integer.parseInt(request.getParameter("debtId"));
-                boolean success = debtDAO.deleteDebt(debtId);
-
-                if (success) {
-                    response.sendRedirect("DebtController?success=Debt deleted successfully");
-                } else {
-                    response.sendRedirect("DebtController?error=Failed to delete debt");
-                }
-                return;
-            }
+            
 
         } catch (NumberFormatException e) {
             request.setAttribute("error", "Invalid data format.");

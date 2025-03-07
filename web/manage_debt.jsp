@@ -32,25 +32,14 @@
                             </div>
                         </form>
 
-                        <!-- Dropdown chọn số bản ghi trên mỗi trang -->
-                        <!--                        <form method="get" action="DebtController" class="mb-3">
-                                                    <label for="pageSize">Records per page:</label>
-                                                    <select name="pageSize" id="pageSize" class="form-select w-auto d-inline" onchange="this.form.submit()">
-                                                        <option value="5" ${pageSize == 5 ? 'selected' : ''}>5</option>
-                                                        <option value="10" ${pageSize == 10 ? 'selected' : ''}>10</option>
-                                                        <option value="20" ${pageSize == 20 ? 'selected' : ''}>20</option>
-                                                    </select>
-                                                    <input type="hidden" name="phoneNumber" value="${phoneNumber}">
-                                                    <input type="hidden" name="debtDate" value="${debtDate}">
-                                                </form>-->
+                        
                         <form method="get" action="DebtController" class="mb-3">
                             <input type="hidden" name="pageSize" value="10">
                             <input type="hidden" name="phoneNumber" value="${phoneNumber}">
                             <input type="hidden" name="debtDate" value="${debtDate}">
                         </form>
 
-                        <!-- Add Debt Button -->
-                        <a href="add_debt.jsp" class="btn btn-success mb-3">Add Debt</a>
+                        
 
                         <!-- Debt List -->
                         <div class="card mb-4">

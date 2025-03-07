@@ -16,14 +16,36 @@
                 <main>
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Customer Debt List</h1>
+                        <!-- Search Form -->
+                        <form method="get" action="DebtController2" class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <input type="text" name="phoneNumber" value="${phoneNumber}" class="form-control" placeholder="Search by Phone Number">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" name="customerName" value="${customerName}" class="form-control">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                            </div>
+                        </form>
+                         
+                            <!-- Add Debt Button -->
+                        <a href="add_debt.jsp" class="btn btn-success mb-3">Add Debt</a>
+
+                        
+                        <form method="get" action="DebtController2" class="mb-3">
+                            <input type="hidden" name="pageSize" value="10">
+                            <input type="hidden" name="phoneNumber" value="${phoneNumber}">
+                            <input type="hidden" name="debtDate" value="${debtDate}">
+                        </form>
 
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Customer ID</th>
                                     <th>Customer Name</th>
-                                    <th>Total Debt</th>
-                                    <th>Action</th>
+                                    <th>Phone</th>
+                                    <th>Total debt</th>
                                 </tr>
                             </thead>
                             <tbody>
