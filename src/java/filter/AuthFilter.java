@@ -54,7 +54,7 @@ public class AuthFilter implements Filter {
                 "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
                 "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
                 "/DebtController", "/PaymentController", "/editCustomer", "/export_rice.jsp",
-                "import_rice.jsp", "/DebtController2", "/manage_debt2.jsp"));
+                "import_rice.jsp", "/DebtController2", "/manage_debt2.jsp", "/login.jsp", "/login"));
     }
 
     @Override

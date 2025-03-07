@@ -3,6 +3,7 @@ package dao;
 import DBContext.DatabaseConnection;
 import model.Staff;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StaffDAO extends GenericDAO<Staff> {
@@ -24,19 +25,7 @@ public class StaffDAO extends GenericDAO<Staff> {
         return getAll("SELECT * FROM Staff");
     }
 
-//    public boolean checkUsernameExists(String username) {
-//        String query = "SELECT COUNT(*) FROM Staff WHERE Username = ?";
-//        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-//            stmt.setString(1, username);
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                return rs.getInt(1) > 0;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
+
     public boolean checkUsernameExists(String username) {
         String query = "SELECT COUNT(*) FROM ( "
                 + "SELECT Username FROM Staff WHERE Username = ? "
@@ -57,6 +46,8 @@ public class StaffDAO extends GenericDAO<Staff> {
         }
         return false;
     }
+    
+    
 
     public boolean insertStaff(Staff staff) {
         return executeUpdate("INSERT INTO Staff (OwnerID, FullName, PhoneNumber, Address, Username, PasswordHash) VALUES (?, ?, ?, ?, ?, ?)",
@@ -86,19 +77,44 @@ public class StaffDAO extends GenericDAO<Staff> {
         return null;
     }
 
-//    public boolean checkPhoneNumberExists(String phoneNumber) {
-//        String query = "SELECT COUNT(*) FROM Staff WHERE phoneNumber = ?";
-//        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
-//            stmt.setString(1, phoneNumber);
-//            ResultSet rs = stmt.executeQuery();
-//            if (rs.next()) {
-//                return rs.getInt(1) > 0; // Trả về true nếu có số điện thoại tồn tại
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return false;
-//    }
+
+    public List<Staff> searchStaff(String name, String phoneNumber) {
+    List<Staff> staffList = new ArrayList<>();
+    String sql = "SELECT * FROM Staff WHERE 1=1";
+
+    if (name != null && !name.trim().isEmpty()) {
+        sql += " AND fullName LIKE ?";
+    }
+    if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+        sql += " AND phoneNumber LIKE ?";
+    }
+
+    try (Connection conn = DatabaseConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        int paramIndex = 1;
+        if (name != null && !name.trim().isEmpty()) {
+            stmt.setString(paramIndex++, "%" + name + "%");
+        }
+        if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
+            stmt.setString(paramIndex++, "%" + phoneNumber + "%");
+        }
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Staff staff = new Staff();
+            staff.setStaffId(rs.getInt("staffId"));
+            staff.setFullName(rs.getString("fullName"));
+            staff.setPhoneNumber(rs.getString("phoneNumber"));
+            staff.setAddress(rs.getString("address")); // Đảm bảo lấy Address
+            staffList.add(staff);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return staffList;
+}
+    
     public boolean checkPhoneNumberExists(String phoneNumber) {
         String query = "SELECT COUNT(*) FROM ( "
                 + "SELECT PhoneNumber FROM Staff WHERE PhoneNumber = ? "

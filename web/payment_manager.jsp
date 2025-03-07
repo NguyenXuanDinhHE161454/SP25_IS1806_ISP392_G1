@@ -18,7 +18,7 @@
         <div id="layoutSidenav_content">
             <main>
                 <div class="container-fluid px-4">
-                    <h1 class="mt-4">Transaction Management</h1>
+                    <h1 class="mt-4">Transaction History</h1>
 
                     <!-- Search Form -->
                     <form method="get" action="PaymentController" class="row g-3 mb-4">
