@@ -5,23 +5,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Debt {
-    private int debtId;
-    private int customerId;
-    private int debtType;
-    private BigDecimal amount;
-    private String note;
-    private LocalDateTime debtDate;
-    private String description;
-    private String evident;
-    private String payload;
+public class Zone {
+    private int id;
+    private String name;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
+    private Integer updatedBy;
+    private Short status;
     private Integer createdBy;
     private LocalDateTime createdAt;
     private Boolean isDeleted;
