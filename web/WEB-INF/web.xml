@@ -20,6 +20,10 @@
         <servlet-name>CustomerDebtSummaryController</servlet-name>
         <servlet-class>controller.CustomerDebtSummaryController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DebtController2</servlet-name>
+        <servlet-class>controller.DebtController2</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>NewServlet</servlet-name>
         <url-pattern>/NewServlet</url-pattern>
@@ -39,5 +43,9 @@
     <servlet-mapping>
         <servlet-name>CustomerDebtSummaryController</servlet-name>
         <url-pattern>/CustomerDebtSummary</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DebtController2</servlet-name>
+        <url-pattern>/DebtController2</url-pattern>
     </servlet-mapping>
 </web-app>
