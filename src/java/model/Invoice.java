@@ -12,16 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Debt {
-    private int debtId;
-    private int customerId;
-    private int debtType;
-    private BigDecimal amount;
-    private String note;
-    private LocalDateTime debtDate;
-    private String description;
-    private String evident;
-    private String payload;
+public class Invoice {
+    private int id;
+    private LocalDateTime createDate;
+    private BigDecimal payment;
+    private Integer customerId;
+    private Integer userId;
+    private Integer type;
     private Integer createdBy;
     private LocalDateTime createdAt;
     private Boolean isDeleted;
