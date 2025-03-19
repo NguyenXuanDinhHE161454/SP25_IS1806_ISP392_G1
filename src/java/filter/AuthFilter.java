@@ -11,51 +11,16 @@ import java.util.Map;
 import java.util.HashMap;
 import model.User;
 
-@WebFilter("/*") // Áp dụng filter cho tất cả request
+@WebFilter("/*")
 public class AuthFilter implements Filter {
 
-    // Danh sách các trang công khai (không yêu cầu đăng nhập)
-    private static final List<String> publicPages = List.of(
-            "/login.jsp",
-            "/register.jsp",
-            "/about.jsp",
-            "/contact.jsp",
-            "/home",
-            "/home.jsp",
-            "/login",
-            "/createOwner"
-    );
-
-    // Danh sách các quyền truy cập dựa trên role
     private static final Map<String, List<String>> roleAccessMap = new HashMap<>();
 
     static {
-        roleAccessMap.put("Admin", List.of(
-                "/manageUsers",
-                "/admin",
-                "/reports",
-                "/dashboard", "/home", "/admin.jsp", "/editUser"));
-
-        roleAccessMap.put("Owner", List.of(
-                "/owner",
-                "/manageBusiness",
-                "/finance",
-                "/staff", "/home","/owner", "/owner/", "/owner/manageBusiness", "/owner/finance", "/customer", "/owner/owner",
-                "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
-                "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController", "/editStaff", "/createStaff.jsp", "/createStaff",
-                "/editCustomer", "/export_rice.jsp", "/import_rice.jsp", "/rice.jsp", "/DebtController2",
-                "/manage_debt2.jsp"));
-
-        roleAccessMap.put("Staff", List.of(
-                "/staff",
-                "/tasks",
-                "/customerSupport",
-                "/inventory", "/staff/", "/staff/tasks", "/customer", "/owner/owner",
-                "/createCustomer.jsp", "/warehouserice", "/ExportRiceController", "/ImportRiceController",
-                "/detailWarehouseRice", "/RiceController", "/add_rice.jsp", "/add_debt.jsp",
-                "/DebtController", "/PaymentController", "/editCustomer", "/export_rice.jsp",
-                "import_rice.jsp", "/DebtController2", "/manage_debt2.jsp", "/login.jsp", "/login"));
+        roleAccessMap.put("Admin", List.of("/InvoiceController", "/manageUsers", "/admin", "/reports", "/dashboard","home", 
+                "login","logout","/ProductController","/reset-password","/StaffController",
+                "/verify-otp","/forgot-password","/dashboard"));
+        roleAccessMap.put("Staff", List.of("/InvoiceController", "/tasks", "/customerSupport", "/dashboard"));
     }
 
     @Override
@@ -64,50 +29,40 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-
-        // Lấy đường dẫn yêu cầu
         String path = req.getServletPath();
 
-        // Bỏ qua các tài nguyên tĩnh
-        if (path.matches(".*(\\.css|\\.js|\\.png|\\.jpg|\\.jpeg|\\.gif|\\.ico|\\.woff|\\.woff2|\\.ttf|\\.svg)$")) {
+        if (isStaticResource(path) || isPublicPage(path)) {
             chain.doFilter(request, response);
             return;
         }
 
-        // Kiểm tra xem trang có thuộc danh sách công khai không
-        if (publicPages.contains(path)) {
-            chain.doFilter(request, response);
+        if (session == null || session.getAttribute("user") == null) {
+            res.sendRedirect(req.getContextPath() + "/401.jsp");
             return;
         }
 
-        // Kiểm tra session có tồn tại không
-        if (session == null) {
-            res.sendRedirect(req.getContextPath() + "/login.jsp");
+        User user = (User) session.getAttribute("user");
+        if (requiresAuthorization(path) && !isAuthorized(user.getRole(), path)) {
+            res.sendRedirect(req.getContextPath() + "/401.jsp");
             return;
         }
 
-        // Lấy user từ session
-        User userCheck = (User) session.getAttribute("user");
-        if (userCheck == null) {
-            res.sendRedirect(req.getContextPath() + "/login.jsp");
-            return;
-        }
-
-        // Lấy role của user
-        String role = userCheck.getRole();
-
-        // Kiểm tra quyền truy cập theo role
-        if (!isAuthorized(role, path)) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Bạn không có quyền truy cập!");
-            return;
-        }
-
-        // Nếu hợp lệ, tiếp tục request
         chain.doFilter(request, response);
     }
 
+    private boolean isStaticResource(String path) {
+        return path.matches(".*(\\.css|\\.js|\\.png|\\.jpg|\\.jpeg|\\.gif|\\.ico|\\.woff|\\.woff2|\\.ttf|\\.svg)$");
+    }
+
+    private boolean isPublicPage(String path) {
+        return roleAccessMap.values().stream().noneMatch(list -> list.contains(path));
+    }
+
+    private boolean requiresAuthorization(String path) {
+        return roleAccessMap.values().stream().anyMatch(list -> list.contains(path));
+    }
+
     private boolean isAuthorized(String role, String path) {
-        List<String> allowedPaths = roleAccessMap.get(role);
-        return allowedPaths != null && allowedPaths.contains(path);
+        return roleAccessMap.getOrDefault(role, List.of()).contains(path);
     }
 }
