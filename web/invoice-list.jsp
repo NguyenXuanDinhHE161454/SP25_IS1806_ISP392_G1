@@ -55,9 +55,6 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i> Invoice List
-                                <a href="create-invoice.jsp" class="btn btn-success btn-sm float-end">
-                                    <i class="fas fa-plus"></i> New Invoice
-                                </a>
                             </div>
                             <div class="card-body">
                                 <table class="table table-striped">
@@ -68,7 +65,6 @@
                                             <th>Customer</th>
                                             <th>User</th>
                                             <th>Payment</th>
-                                            <th>Type</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -88,18 +84,10 @@
                                                 <td>${invoice.userName} (#${invoice.userId})</td>
                                                 <td>${invoice.payment}</td>
                                                 <td>
-                                                    ${EnumHelper.getInvoiceStatusDescription(invoice.type)}</td>
-                                                </td>
-                                                <td>
                                                     <a href="InvoiceDetailController?invoiceId=${invoice.id}" class="btn btn-primary btn-sm">
                                                         <i class="fas fa-eye"></i>
                                                     </a>
-                                                    <a href="invoice-edit.jsp?id=${invoice.id}" class="btn btn-warning btn-sm">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <button onclick="confirmDelete(${invoice.id})" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
+
                                                 </td>
                                             </tr>
                                         </c:forEach>

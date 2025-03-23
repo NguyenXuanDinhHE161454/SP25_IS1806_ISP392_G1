@@ -14,12 +14,14 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class InvoiceDetailDTO {
+
     private int id;
     private InvoiceStatus status;
     private LocalDateTime createDate;
     private Integer userId;
     private String userName;
     private Integer customerId;
+    private Integer amountPerKg;
     private String customerName;
     private Integer totalQuantity;
     private BigDecimal totalAmount;
@@ -29,18 +31,5 @@ public class InvoiceDetailDTO {
 
     public boolean isCompleted() {
         return debtAmount != null && debtAmount.compareTo(BigDecimal.ZERO) <= 0;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class ProductItemDTO {
-        private int productId;
-        private String productName;
-        private Integer quantity;
-        private BigDecimal unitPrice;
-        private BigDecimal totalPrice;
-        private String description;
     }
 }
