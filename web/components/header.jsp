@@ -15,70 +15,68 @@
 
     </head>
     <body>
-        <nav class="sb-topnav navbar navbar-expand navbar-dark">
-            
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
+            </button>
             <a class="navbar-brand ps-3" href="home">
-                <i class="fas fa-warehouse me-2"></i>Warehouse Rice
+                <i class="fas fa-warehouse me-2"></i>Kho Gạo
             </a>
 
-            <!-- Menu phân loại -->
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <!-- Nhóm Quản lý Nhân sự -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-users me-1"></i> Personnel
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="admin">Owner Manage</a></li>
-                            <li><a class="dropdown-item" href="owner">Staff Manage</a></li>
-                            <li><a class="dropdown-item" href="customer">Customer Manage</a></li>
-                            <li><a class="dropdown-item" href="index.html">Porter Manage</a></li>
-                        </ul>
-                    </li>
-                    <!-- Nhóm Quản lý Kho -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-box me-1"></i> Warehouse
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="warehouserice">Warehouse Rice</a></li>
-                            <li><a class="dropdown-item" href="RiceController">Rice</a></li>
-                        </ul>
-                    </li>
-                    <!-- Nhóm Giao dịch Tài chính -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle ps-5" href="#" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-dollar-sign me-1"></i> Finance
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="DebtController?action=viewAllCustomers">Debt</a></li>
-                            <li><a class="dropdown-item" href="PaymentController">Transaction History</a></li>
-                        </ul>
-                    </li>
-                </ul>
 
-                <!-- User Dropdown -->
-                <ul class="navbar-nav ms-auto me-3 me-lg-4">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user fa-fw"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <c:choose>
-                                <c:when test="${not empty sessionScope.user}">
-                                    <li><a class="dropdown-item" href="#!">Welcome, ${sessionScope.user.fullName}</a></li>
-                                    <li><a class="dropdown-item" href="login">Logout</a></li>
-                                    </c:when>
-                                    <c:otherwise>
-                                    <li><a class="dropdown-item" href="login">Login</a></li>
-                                    </c:otherwise>
-                                </c:choose>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+
+            <!-- Hiển thị thông tin người dùng -->
+            <ul class="navbar-nav ms-auto me-3 me-lg-4">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.user}">
+                                <!-- Navbar Links -->
+
+                                <li class="dropdown-item text-center">
+                                    <ul class="navbar-nav ms-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="dashboard">
+                                                <i ></i> Bảng điều khiển
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                
+                                <li class="dropdown-item text-center">
+                                    <ul class="navbar-nav ms-auto">
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="about">
+                                                <i ></i> Tên tài khoản
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <strong>${sessionScope.user.fullName}</strong><br>
+                                    <small class="text-muted">${sessionScope.user.role}</small>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="ProfileController">
+                                        <i class="fas fa-user-cog me-2"></i> Cài đặt tài khoản</a>
+                                </li>
+                                <li><a class="dropdown-item" href="logout">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a>
+                                </li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><a class="dropdown-item" href="login">
+                                        <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a>
+                                </li>
+                            </c:otherwise>
+                        </c:choose>
+                    </ul>
+                </li>
+            </ul>
         </nav>
+
+
 
         <style>
             .sb-topnav {
@@ -128,6 +126,5 @@
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
-        
     </body>
 </html>

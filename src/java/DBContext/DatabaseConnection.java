@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     private static final String SERVER_NAME = "localhost";
-    private static final String DB_NAME = "RiceWareHouse_2";
+    private static final String DB_NAME = "RiceWarehouse";
     private static final String PORT_NUMBER = "1433";
     private static final String USER_ID = "sa";
     private static final String PASSWORD = "123";
@@ -26,5 +26,28 @@ public class DatabaseConnection {
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER_ID, PASSWORD);
     }
-    
+
+    public static void beginTransaction(Connection conn) throws SQLException {
+        if (conn != null) {
+            conn.setAutoCommit(false);
+        }
+    }
+
+    public static void commitTransaction(Connection conn) throws SQLException {
+        if (conn != null) {
+            conn.commit();
+            conn.setAutoCommit(true);
+        }
+    }
+
+    public static void rollbackTransaction(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.rollback();
+                conn.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

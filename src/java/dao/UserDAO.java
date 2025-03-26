@@ -273,4 +273,18 @@ public class UserDAO extends GenericDAO<User> {
         return 0;
     }
 
+    public boolean checkPhoneNumberExists(String phoneNumber) {
+        String query = "SELECT COUNT(*) FROM Users WHERE PhoneNumber = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, phoneNumber);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Trả về true nếu có ít nhất 1 bản ghi trùng
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false; // Trả về false nếu không có lỗi nhưng không tìm thấy trùng
+    }
+
 }

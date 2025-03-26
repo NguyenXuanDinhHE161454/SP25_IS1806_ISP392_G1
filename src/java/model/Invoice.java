@@ -16,6 +16,7 @@ public class Invoice {
     private int id;
     private LocalDateTime createDate;
     private BigDecimal payment;
+    private BigDecimal paidAmount;
     private Integer customerId;
     private Integer userId;
     private Integer type;
@@ -24,4 +25,5 @@ public class Invoice {
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
     private Integer deletedBy;
+    private String description;
 }

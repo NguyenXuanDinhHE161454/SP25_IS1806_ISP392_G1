@@ -5,10 +5,10 @@
 package enums;
 
 public enum EnumDebtType {
-    CUSTOMER_BORROW(1, "Customer Borrow"),
-    CUSTOMER_PAY(2, "Customer Pay"),
-    STORE_OWE(3, "Store Owe"),
-    STORE_PAY(4, "Store Pay");
+    CUSTOMER_BORROW(1, "Khách vay nợ"),
+    CUSTOMER_PAY(2, "Khách trả nợ"),
+    STORE_PAY(3, "Cửa hàng trả nợ"),
+    STORE_OWE(4, "Cửa hàng vay nợ");
 
     private final int code;
     private final String description;
