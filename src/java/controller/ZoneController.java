@@ -39,7 +39,7 @@ public class ZoneController extends HttpServlet {
             int zoneId = Integer.parseInt(request.getParameter("id"));
             boolean success = zoneDAO.softDeleteZone(zoneId, currentUser.getUserId());
             if (success) {
-                session.setAttribute("message", "Xóa thành công!");
+                session.setAttribute("message", "Zone deleted successfully!");
                 session.setAttribute("messageType", "success");
             } else {
                 session.setAttribute("message", "Failed to delete zone.");
@@ -110,18 +110,17 @@ public class ZoneController extends HttpServlet {
 
                 // Gọi hàm updateZone từ ZoneDAO
                 boolean success = zoneDAO.updateZone(zone);
-                boolean suces = productDAO.updateProduct(product);
                 boolean suc = productDAO.updateProductByZoneId(product, zoneId);
 
-                if (success && suc && suces) {
-                    session.setAttribute("message", "Cập nhật thành công!");
+                if (success && suc) {
+                    session.setAttribute("message", "Zone and product updated successfully!");
                     session.setAttribute("messageType", "success");
                 } else {
-                    session.setAttribute("message", "Cập nhật thất bại");
+                    session.setAttribute("message", "Failed to update zone or product association.");
                     session.setAttribute("messageType", "danger");
                 }
             } catch (NumberFormatException e) {
-                session.setAttribute("message", "Thông tin không hợp lệ.");
+                session.setAttribute("message", "Invalid input format.");
                 session.setAttribute("messageType", "danger");
             }
             response.sendRedirect("ZoneController?action=detail&id=" + request.getParameter("id"));
@@ -131,7 +130,7 @@ public class ZoneController extends HttpServlet {
         if ("createZone".equals(action)) {
             try {
                 String name = request.getParameter("name");
-                Short status = Short.parseShort(request.getParameter("status"));
+                Short status = 1;
 
                 Zone zone = Zone.builder()
                         .name(name)
@@ -143,14 +142,14 @@ public class ZoneController extends HttpServlet {
 
                 boolean success = zoneDAO.addZone(zone);
                 if (success) {
-                    session.setAttribute("message", "Tạo khu vực mới thành công!");
+                    session.setAttribute("message", "Zone created successfully!");
                     session.setAttribute("messageType", "success");
                 } else {
-                    session.setAttribute("message", "Tạo khu vực không thành công.");
+                    session.setAttribute("message", "Failed to create zone.");
                     session.setAttribute("messageType", "danger");
                 }
             } catch (NumberFormatException e) {
-                session.setAttribute("message", "Thông tin không hợp lệ.");
+                session.setAttribute("message", "Invalid input format.");
                 session.setAttribute("messageType", "danger");
             }
             response.sendRedirect("ZoneController");
