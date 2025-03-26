@@ -34,7 +34,7 @@
 
                         <!-- Form tạo sản phẩm mới -->
                         <div class="card mb-4 col-lg-4">
-                            <a href="ProductAddServlet" class="btn btn-primary">Tạo sản phẩm mới</a>
+                            <a href="ProductAddServlet" class="btn btn-primary">Tạo mới</a>
                         </div>
 
                         <!-- Search form -->
@@ -43,11 +43,11 @@
                             <div class="card-body">
                                 <form action="ProductController" method="get" class="row g-3">
                                     <div class="col-md-9">
-                                        <label for="keyword" class="form-label">Tìm kiếm</label>
-                                        <input type="text" name="keyword" id="keyword" class="form-control" value="${requestScope.keyword}" placeholder="Nhập tên gạo hoặc mô tả">
+                                        <label for="keyword" class="form-label">Tìm (Tên, Mô tả)</label>
+                                        <input type="text" name="keyword" id="keyword" class="form-control" value="${requestScope.keyword}" placeholder="Enter Name or Description">
                                     </div>
                                     <div class="col-md-3 d-flex align-items-end">
-                                        <button type="submit" class="btn btn-primary me-2">Tìm kiếm</button>
+                                        <button type="submit" class="btn btn-primary me-2">Tìm</button>
                                         <a href="ProductController" class="btn btn-secondary">Xóa</a>
                                     </div>
                                 </form>
@@ -60,7 +60,7 @@
                                             <th>Tên gạo</th>
                                             <th>Giá</th>
                                             <th>Mô tả</th>
-                                            <th>Trạng thái</th>
+                                            <th>Tồn kho</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -71,11 +71,7 @@
                                                 <td>${product.name}</td>
                                                 <td>${product.amount}</td>
                                                 <td>${product.description}</td>
-                                                <td>
-                                                    <span style="color: ${product.status == 1 ? 'green' : 'red'}">
-                                                        ${product.status == 1 ? 'Đang kinh doanh' : 'Ngừng kinh doanh'}
-                                                    </span>
-                                                </td>
+                                                <td>${product.quantity}</td>
                                                 <td>
                                                     <a href="ProductController?action=detail&id=${product.id}" class="btn btn-sm btn-primary">Chi tiết</a>
                                                 </td>
