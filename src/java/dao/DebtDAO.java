@@ -222,6 +222,6 @@ public class DebtDAO extends GenericDAO<Debt> {
     public static void main(String[] args) {
         DebtDAO debtDAO = new DebtDAO();
         
-        System.out.println(debtDAO.getCustomerDebtSummary(31));
+        System.out.println(debtDAO.getDebtByInvoiceId(125));
     }
 }
