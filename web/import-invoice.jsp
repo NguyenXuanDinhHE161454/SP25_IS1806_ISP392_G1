@@ -31,21 +31,20 @@
                     <!-- Bảng tìm kiếm sản phẩm -->
                     <div class="col-md-7">
                         <div class="search-container">
-                            <input type="text" id="productSearch" class="search-box form-control" placeholder="🔍 Tìm sản phẩm...">
+                            <input type="text" id="productSearch" class="search-box form-control" placeholder="Tìm sản phẩm...">
                             <div id="searchResults" class="search-results"></div>
                         </div>
 
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Tên Sản Phẩm</th>
-                                    <th>Đóng Bao (kg)</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá bán Bao</th>
-                                    <th>Giá nhập Bao(/kg)</th>
-                                    <th>Tổng khối lượng</th>
-                                    <th>Tổng Tiền</th>
-                                    <th>Xóa</th>
+                                    <th>Tên Sản Phẩm  </th>
+                                    <th>Đóng Bao  </th>
+                                    <th>Số lượng  </th>
+                                    <th>Giá nhập  </th>
+                                    <th>Tổng khối lượng  </th>
+                                    <th>Tổng Tiền  </th>
+                                    <th>Xóa  </th>
                                 </tr>
                             </thead>
                             <tbody id="productTable"></tbody>
@@ -70,7 +69,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Tìm nhà cung cấp:</label>
-                            <input type="text" id="customerSearch" class="search-box form-control" placeholder="🔍 Nhập ...">
+                            <input type="text" id="customerSearch" class="search-box form-control" placeholder="Nhập ...">
                             <select id="customerList" class="form-control mt-2">
                                 <option value="">Chọn nhà cung cấp</option>
                                 <option value="new">➕ Thêm nhà cung cấp mới</option>
@@ -105,11 +104,6 @@
                     </div>
                 </div>
 
-                <!-- Ghi chú đơn hàng -->
-                <div class="mt-4">
-                    <label class="fw-bold">Ghi Chú Đơn Hàng:</label>
-                    <textarea name="description" class="form-control" rows="3" placeholder="✏️ Nhập ghi chú..."></textarea>
-                </div>
             </form>
         </div>
 

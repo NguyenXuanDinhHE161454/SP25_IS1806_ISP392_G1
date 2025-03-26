@@ -247,7 +247,7 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             stmt.setBigDecimal(2, invoice.getPayment());
             stmt.setInt(3, invoice.getCustomerId());
             stmt.setInt(4, invoice.getUserId());
-            stmt.setObject(5, invoice.getType(), Types.INTEGER);
+            stmt.setInt(5, invoice.getType());
             stmt.setInt(6, invoice.getCreatedBy());
             stmt.setTimestamp(7, Timestamp.valueOf(invoice.getCreatedAt() != null ? invoice.getCreatedAt() : LocalDateTime.now()));
             stmt.setBoolean(8, invoice.getIsDeleted() != null ? invoice.getIsDeleted() : false);

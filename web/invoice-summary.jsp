@@ -63,14 +63,20 @@
             <div class="invoice-details">
                 <p><strong>Mã Hóa Đơn:</strong> ${invoice.id}</p>
                 <p><strong>Ngày Tạo:</strong> ${invoice.createDate}</p>
-                <p><strong>Người Tạo:</strong> ${invoice.userName} (ID: ${invoice.createById})</p>
-                <p><strong>Khách Hàng:</strong> ${invoice.customerName} (ID: ${invoice.customerId})</p>
-                <p><strong>Tổng Số Lượng:</strong> ${totalLoad} KG</p>
+                <p><strong>Người Tạo:</strong> ${invoice.userName != null ? invoice.userName : "Không xác định"} (ID: ${invoice.createById})</p>
+                <p><strong>Khách Hàng:</strong> ${invoice.customerName != null ? invoice.customerName : "Không xác định"} (ID: ${invoice.customerId})</p>
+                <p><strong>Tổng Khối Lượng:</strong> 
+                    <c:set var="totalWeight" value="${0}"/>
+                    <c:forEach var="product" items="${invoice.products}">
+                        <c:set var="totalWeight" value="${totalWeight + (product.quantity * product.amountPerKg)}"/>
+                    </c:forEach>
+                    ${totalWeight} KG
+                </p>
                 <p><strong>Tổng Thanh Toán:</strong> <fmt:formatNumber value="${invoice.payment}" type="currency" currencySymbol="VND"/></p>
                 <p><strong>Đã Thanh Toán:</strong> <fmt:formatNumber value="${invoice.paidAmount}" type="currency" currencySymbol="VND"/></p>
                 <p><strong>Công Nợ Còn Lại:</strong> <fmt:formatNumber value="${invoice.debtAmount}" type="currency" currencySymbol="VND"/></p>
-                <p><strong>Mô Tả:</strong> ${invoice.description}</p>
-                <p><strong>Loại hóa đơn:</strong> ${invoice.type == 1 ? "Nhập hàng" : "Xuất hàng"}</p>
+                <p><strong>Mô Tả:</strong> ${invoice.description != null && !invoice.description.isEmpty() ? invoice.description : "Không có"}</p>
+                <p><strong>Loại Hóa Đơn:</strong> ${invoice.type == 1 ? "Nhập hàng" : "Xuất hàng"}</p>
             </div>
         </div>
 
@@ -79,8 +85,10 @@
             <thead class="table-dark">
                 <tr>
                     <th>Mã Sản Phẩm</th>
-                    <th>Số Lượng (KG)</th>
-                    <th>Đơn Giá (VND)</th>
+                    <th>Số Lượng (Bao)</th>
+                    <th>Khối Lượng/Bao (KG)</th>
+                    <th>Tổng Khối Lượng (KG)</th>
+                    <th>Đơn Giá/Bao (VND)</th>
                     <th>Thành Tiền (VND)</th>
                 </tr>
             </thead>
@@ -88,9 +96,11 @@
                 <c:forEach var="product" items="${invoice.products}">
                     <tr>
                         <td>${product.productId}</td>
-                        <td>${product.quantity * product.amountPerKg} (${product.amountPerKg}Kg/Bao)</td>
+                        <td>${product.quantity / product.amountPerKg}</td>
+                        <td>${product.amountPerKg}</td>
+                        <td>${product.quantity }</td>
                         <td><fmt:formatNumber value="${product.unitPrice}" type="currency" currencySymbol="VND"/></td>
-                        <td><fmt:formatNumber value="${product.unitPrice * product.quantity * product.amountPerKg}" type="currency" currencySymbol="VND"/></td>
+                        <td><fmt:formatNumber value="${product.totalPrice}" type="currency" currencySymbol="VND"/></td>
                     </tr>
                 </c:forEach>
             </tbody>

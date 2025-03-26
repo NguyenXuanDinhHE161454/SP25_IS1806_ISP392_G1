@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Invoice Detail - Warehouse Rice Dashboard</title>
+        <title>Chi Tiết Hóa Đơn - Bảng Điều Khiển Kho Gạo</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet">
@@ -55,6 +55,9 @@
                 font-weight: 600;
                 color: #28a745;
             }
+            .debt-info {
+                color: #dc3545; /* Màu đỏ cho thông tin nợ */
+            }
         </style>
     </head>
     <body class="sb-nav-fixed">
@@ -67,9 +70,9 @@
                 <main>
                     <div class="container-fluid px-4">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h1 class="mt-4 fw-bold text-primary"><i class="bi bi-receipt me-2"></i>Invoice Details</h1>
+                            <h1 class="mt-4 fw-bold text-primary"><i class="bi bi-receipt me-2"></i>Chi Tiết Hóa Đơn</h1>
                             <a href="InvoiceController" class="btn btn-back">
-                                <i class="bi bi-arrow-left me-2"></i>Back to Invoices
+                                <i class="bi bi-arrow-left me-2"></i>Quay Lại Danh Sách Hóa Đơn
                             </a>
                         </div>
 
@@ -85,7 +88,7 @@
                                 <div class="invoice-header">
                                     <h4 class="mb-0 fw-bold">
                                         <i class="bi bi-file-earmark-text me-2"></i>
-                                        Invoice #${invoiceDetail.id}
+                                        Hóa Đơn #${invoiceDetail.id}
                                     </h4>
                                     <span class="badge ${invoiceDetail.completed ? 'status-badge completed' : 'status-badge pending'}">
                                         ${invoiceDetail.status}
@@ -94,64 +97,77 @@
                                 <div class="invoice-details">
                                     <div class="row mb-4">
                                         <div class="col-md-6">
-                                            <h5 class="fw-bold mb-3">Invoice Information</h5>
+                                            <h5 class="fw-bold mb-3">Thông Tin Hóa Đơn</h5>
                                             <ul class="list-unstyled">
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Created On:</span>
+                                                    <span class="fw-semibold">Ngày Tạo:</span>
                                                     <c:choose>
                                                         <c:when test="${invoiceDetail.createDate != null}">
                                                             ${invoiceDetail.createDate}
                                                         </c:when>
-                                                        <c:otherwise>N/A</c:otherwise>
+                                                        <c:otherwise>Không Có</c:otherwise>
                                                     </c:choose>
                                                 </li>
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Customer:</span>
+                                                    <span class="fw-semibold">Khách Hàng:</span>
                                                     ${invoiceDetail.customerName} (#${invoiceDetail.customerId})
                                                 </li>
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Processed By:</span>
+                                                    <span class="fw-semibold">Xử Lý Bởi:</span>
                                                     ${invoiceDetail.userName} (#${invoiceDetail.userId})
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <h5 class="fw-bold mb-3">Payment Summary</h5>
+                                            <h5 class="fw-bold mb-3">Tóm Tắt Thanh Toán</h5>
                                             <ul class="list-unstyled">
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Total Quantity:</span>
+                                                    <span class="fw-semibold">Tổng Số Lượng:</span>
                                                     <span id="totalQuantity">${invoiceDetail.totalQuantity}</span>
                                                 </li>
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Total Amount:</span>
+                                                    <span class="fw-semibold">Tổng Số Tiền:</span>
                                                     <span class="total-amount" id="formatVND">${invoiceDetail.totalAmount}</span>
                                                 </li>
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Paid Amount:</span>
+                                                    <span class="fw-semibold">Số Tiền Đã Thanh Toán:</span>
                                                     <span id="formatVND">${invoiceDetail.paidAmount}</span>
                                                 </li>
                                                 <li class="mb-2">
-                                                    <span class="fw-semibold">Debt Amount:</span>
+                                                    <span class="fw-semibold">Số Tiền Nợ:</span>
                                                     <span id="formatVND">${invoiceDetail.debtAmount}</span>
                                                 </li>
+                                                <c:if test="${not empty invoiceDetail.debt}">
+                                                    <c:if test="${not empty invoiceDetail.debt}">
+<!--                                                        <li class="mb-2 debt-info">
+                                                            <span class="fw-semibold">Loại Nợ:</span>
+                                                            <c:if test="${invoiceDetail.debt.debtType == 1}">Khách Hàng Nợ</c:if>
+                                                            <c:if test="${invoiceDetail.debt.debtType == 2}">Khách Hàng Thanh Toán</c:if>
+                                                            <c:if test="${invoiceDetail.debt.debtType == 3}">Cửa Hàng Nợ</c:if>
+                                                            <c:if test="${invoiceDetail.debt.debtType == 4}">Cửa Hàng Thanh Toán</c:if>
+                                                            <c:if test="${invoiceDetail.debt.debtType != 1 && invoiceDetail.debt.debtType != 2 && invoiceDetail.debt.debtType != 3 && invoiceDetail.debt.debtType != 4}">
+                                                                Không Xác Định
+                                                            </c:if>
+                                                        </li>-->
+
+                                                    </c:if>
+
+                                                </c:if>
                                             </ul>
                                         </div>
-
-
-
                                     </div>
 
-                                    <h5 class="fw-bold mb-3">Products</h5>
+                                    <h5 class="fw-bold mb-3">Sản Phẩm</h5>
                                     <div class="table-responsive">
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Product ID</th>
-                                                    <th>Product Name</th>
-                                                    <th>Quantity</th>
-                                                    <th>Unit Price</th>
-                                                    <th>Total Price</th>
-                                                    <th>Description</th>
+                                                    <th>Mã Sản Phẩm</th>
+                                                    <th>Tên Sản Phẩm</th>
+                                                    <th>Số Lượng</th>
+                                                    <th>Đơn Giá</th>
+                                                    <th>Tổng Giá</th>
+                                                    <th>Mô Tả</th>
                                                 </tr>
                                             </thead>
                                             <tbody>

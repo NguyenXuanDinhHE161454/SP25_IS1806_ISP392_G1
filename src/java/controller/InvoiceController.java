@@ -6,6 +6,7 @@ import dao.DebtDAO;
 import dao.InvoiceDAO;
 import dao.InvoiceDetailDAO;
 import dao.ProductDAO;
+import dao.UserDAO;
 import dto.InvoiceCreateDTO;
 import dto.InvoiceDTO;
 import dto.ProductItemDTO;
@@ -48,6 +49,7 @@ public class InvoiceController extends HttpServlet {
     private final ProductDAO productDAO = new ProductDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
+    private final UserDAO userDAO = new UserDAO();
     DebtDAO debtDAO = new DebtDAO();
 
     private static final Logger LOGGER = Logger.getLogger(InvoiceController.class.getName());
@@ -160,11 +162,16 @@ public class InvoiceController extends HttpServlet {
             InvoiceDTO invoice = createInvoiceFromRequest(request, user);
             invoice.setCreateById(user.getUserId());
             invoice.setStatus(InvoiceStatus.COMPLETED);
-            invoice.setType(enums.EnumInvoiceType.IMPORT.getCode());
             ProductDAO productDAO = new ProductDAO();
 
             // Thêm Invoice vào cơ sở dữ liệu
             InvoiceDAO invoiceDAO = new InvoiceDAO();
+            if (invoice.getPaidAmount().compareTo(invoice.getPayment()) > 0) {
+                invoice.setType(enums.EnumDebtType.STORE_PAY.getCode());
+            } else {
+                invoice.setType(enums.EnumDebtType.STORE_OWE.getCode());
+            }
+            invoice.setType(enums.EnumInvoiceType.IMPORT.getCode());
             int invoiceId = invoiceDAO.addInvoiceReturnNewId(convertToInvoiceEntity(invoice, user.getUserId()));
             if (invoiceId <= 0) {
                 throw new RuntimeException("Failed to create invoice in database");
@@ -184,9 +191,10 @@ public class InvoiceController extends HttpServlet {
             for (ProductItemDTO product : invoice.getProducts()) {
                 totalLoad += product.getQuantity() * product.getAmountPerKg();
                 int temp = product.getQuantity() * product.getAmountPerKg();
+                product.setQuantity(temp);
                 Integer updatedProductId = productDAO.updateProductQuantity(
                         product.getProductId(),
-                        temp,
+                        product.getQuantity(),
                         true
                 );
                 if (updatedProductId == -1) {
@@ -209,10 +217,13 @@ public class InvoiceController extends HttpServlet {
                 debtDAO.addDebt(debt);
             }
             request.setAttribute("totalLoad", totalLoad);
+            invoice.setCustomerName(customerDAO.getCustomerById(invoice.getCustomerId()).getFullName());
+            invoice.setUserName(userDAO.getUserById(invoice.getCreateById()).getFullName());
             forwardToSummary(request, response, invoice);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error exporting invoice", e);
-            forwardWithError(request, response, "Error exporting invoice: " + e.getMessage());
+            request.setAttribute("mess", e.getMessage());
+            request.getRequestDispatcher("import-invoice.jsp").forward(request, response);
         }
     }
 
@@ -222,20 +233,24 @@ public class InvoiceController extends HttpServlet {
             // Tạo InvoiceDTO từ request
             InvoiceDTO invoice = createInvoiceFromRequest(request, user);
             invoice.setCreateById(user.getUserId());
-            invoice.setType(enums.EnumInvoiceType.EXPORT.getCode());
             invoice.setStatus(InvoiceStatus.COMPLETED);
             ProductDAO productDAO = new ProductDAO();
 
             // Kiểm tra số lượng trong kho trước khi thực hiện
             for (ProductItemDTO product : invoice.getProducts()) {
                 int currentQuantity = productDAO.getProductById(product.getProductId()).getQuantity();
-                if (currentQuantity < product.getQuantity() * product.getAmountPerKg()) {
+                if (currentQuantity < product.getQuantity()) {
                     throw new IllegalStateException("Insufficient quantity for product ID: " + product.getProductId());
                 }
             }
-
+            if (invoice.getPaidAmount().compareTo(invoice.getPayment()) > 0) {
+                invoice.setType(enums.EnumDebtType.CUSTOMER_PAY.getCode());
+            } else {
+                invoice.setType(enums.EnumDebtType.CUSTOMER_BORROW.getCode());
+            }
             // Thêm Invoice vào cơ sở dữ liệu
             InvoiceDAO invoiceDAO = new InvoiceDAO();
+            invoice.setType(enums.EnumInvoiceType.EXPORT.getCode());
             int invoiceId = invoiceDAO.addInvoiceReturnNewId(convertToInvoiceEntity(invoice, user.getUserId()));
             if (invoiceId <= 0) {
                 throw new RuntimeException("Failed to create invoice in database");
@@ -249,12 +264,13 @@ public class InvoiceController extends HttpServlet {
             if (detailIds.size() != details.size()) {
                 throw new RuntimeException("Failed to add all invoice details");
             }
-            
+
             int totalLoad = 0;
             // Cập nhật số lượng sản phẩm trong kho (giảm đi)
             for (ProductItemDTO product : invoice.getProducts()) {
                 totalLoad += product.getQuantity() * product.getAmountPerKg();
                 int temp = product.getQuantity() * product.getAmountPerKg();
+                product.setQuantity(temp);
                 Integer updatedProductId = productDAO.updateProductQuantity(
                         product.getProductId(),
                         product.getQuantity(),
@@ -279,6 +295,8 @@ public class InvoiceController extends HttpServlet {
                         .build();
                 debtDAO.addDebt(debt);
             }
+            invoice.setCustomerName(customerDAO.getCustomerById(invoice.getCustomerId()).getFullName());
+            invoice.setUserName(userDAO.getUserById(invoice.getCreateById()).getFullName());
             forwardToSummary(request, response, invoice);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Error exporting invoice", e);
@@ -294,7 +312,7 @@ public class InvoiceController extends HttpServlet {
                 .payment(dto.getPayment())
                 .customerId(dto.getCustomerId())
                 .userId(userId)
-                .type(enums.EnumDebtType.CUSTOMER_BORROW.getCode()) // Giả định loại hóa đơn là EXPORT
+                .type(dto.getType())
                 .paidAmount(dto.getPaidAmount())
                 .description(dto.getDescription())
                 .createdBy(userId)
@@ -344,6 +362,7 @@ public class InvoiceController extends HttpServlet {
     private InvoiceDTO createInvoiceFromRequest(HttpServletRequest request, User user) {
         return InvoiceDTO.builder()
                 .customerId(getCustomerId(request, user))
+                .totalAmount(toBigDecimal(request.getParameter("totalAmount")))
                 .payment(toBigDecimal(request.getParameter("totalAmount")))
                 .paidAmount(toBigDecimal(request.getParameter("paidAmount")))
                 .debtAmount(toBigDecimal(request.getParameter("debtAmount")))
@@ -377,19 +396,28 @@ public class InvoiceController extends HttpServlet {
         String[] perKgs = requireArray(request.getParameterValues(perKgParam), "PerKgs"); // Sửa lỗi tham số sai
 
         validateArrayLengths(ids, quantities, prices, perKgs);
+        if (perKgs == null) {
+            System.out.println("perKgs is null");
+        } else if (perKgs.length == 0) {
+            System.out.println("perKgs is empty");
+        } else {
+            System.out.println("perKgs[0] = " + perKgs[0]);
+        }
 
         return IntStream.range(0, ids.length)
                 .mapToObj(i -> {
                     int quantity = toInt(quantities[i]);
                     BigDecimal unitPrice = toBigDecimal(prices[i]);
-                    BigDecimal totalPrice = unitPrice.multiply(BigDecimal.valueOf(quantity));
+                    int amountPerKg = toInt(perKgs[i]);
+                    BigDecimal totalWeight = BigDecimal.valueOf(quantity * amountPerKg); // Tổng khối lượng
+                    BigDecimal totalPrice = unitPrice.multiply(totalWeight); // Tổng giá trị
 
                     return ProductItemDTO.builder()
                             .productId(toInt(ids[i]))
                             .quantity(quantity)
                             .unitPrice(unitPrice)
-                            .amountPerKg(toInt(perKgs[i]))
-                            .totalPrice(totalPrice) // Đặt giá trị sau khi tính toán
+                            .amountPerKg(amountPerKg)
+                            .totalPrice(totalPrice)
                             .build();
                 })
                 .peek(this::validateProduct)

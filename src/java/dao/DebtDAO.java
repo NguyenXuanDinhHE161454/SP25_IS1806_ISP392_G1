@@ -70,11 +70,11 @@ public class DebtDAO extends GenericDAO<Debt> {
                     description = EnumDebtType.CUSTOMER_PAY.getDescription(); // "Customer Pay"
                     break;
                 case 3: // EnumDebtType.STORE_OWE
-                    dbDebtType = 0; // Borrowing (Vay nợ)
+                    dbDebtType = 1; // Borrowing (Vay nợ)
                     description = EnumDebtType.STORE_OWE.getDescription(); // "Store Owe"
                     break;
                 case 4: // EnumDebtType.STORE_PAY
-                    dbDebtType = 1; // Paying (Trả nợ)
+                    dbDebtType = 0; // Paying (Trả nợ)
                     description = EnumDebtType.STORE_PAY.getDescription(); // "Store Pay"
                     break;
                 default:
@@ -190,13 +190,38 @@ public class DebtDAO extends GenericDAO<Debt> {
 
         return debts;
     }
+    public Debt getDebtByInvoiceId(int invoiceId) {
+        String sql = "SELECT * FROM Debts WHERE Payload LIKE ? AND (isDeleted IS NULL OR isDeleted = 0)";
+        Debt debt = null;
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            // Tìm invoiceId trong Payload bằng LIKE (giả định Payload là JSON chứa "id": invoiceId)
+            stmt.setString(1, "%\"id\":" + invoiceId + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    debt = mapResultSetToEntity(rs);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.severe("Error fetching debt for invoice ID " + invoiceId + ": " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            LOGGER.severe("Unexpected error for invoice ID " + invoiceId + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        if (debt == null) {
+            LOGGER.info("No debt found for invoice ID: " + invoiceId);
+        } else {
+            LOGGER.info("Debt found for invoice ID: " + invoiceId + " with debt ID: " + debt.getDebtId());
+        }
+
+        return debt;
+    }
 
     public static void main(String[] args) {
         DebtDAO debtDAO = new DebtDAO();
-        int customerId = 1;
-        List<Debt> d = debtDAO.getAllDebtsByCustomerId(customerId);
-        for (Debt debt : d) {
-            System.out.println(debt.getAmount());
-        }
+        
+        System.out.println(debtDAO.getCustomerDebtSummary(31));
     }
 }
