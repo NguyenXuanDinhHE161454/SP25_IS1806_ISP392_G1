@@ -58,8 +58,7 @@
 
                                     <div class="form-group associated-products">
                                         <label for="productId">Rice Type:</label>
-                                        <select class="form-control" id="productId" name="productId" 
-                                                ${associatedProduct != null && associatedProduct.quantity > 0 ? 'disabled' : ''}>
+                                        <select class="form-control" id="productId" name="productId">
                                             <option value="" ${associatedProduct == null ? 'selected' : ''}>-- Select Rice Type --</option>
                                             <c:forEach var="product" items="${listProducts}">
                                                 <option value="${product.id}" ${associatedProduct != null && associatedProduct.id == product.id ? 'selected' : ''}>
@@ -69,11 +68,8 @@
                                         </select>
                                     </div>
 
-                                    <div class="form-group">
-                                        <label for="stock">Stock:</label>
-                                        <input type="number" class="form-control" id="stock" name="stock" 
-                                               value="${associatedProduct != null ? associatedProduct.quantity : 0}" min="0" readonly="">
-                                    </div>
+                                    <input type="hidden" class="form-control" id="stock" name="stock" 
+                                           value="${associatedProduct != null ? associatedProduct.quantity : 0}" min="0" required>
 
                                     <div class="form-group">
                                         <label for="status">Status:</label>

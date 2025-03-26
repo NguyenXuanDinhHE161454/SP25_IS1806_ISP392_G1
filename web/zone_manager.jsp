@@ -44,7 +44,7 @@
                                         <input type="text" class="form-control" name="warehouseName" value="${warehouseName}" placeholder="Tên khu vực">
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                                        <button type="submit" class="btn btn-primary">Tìm</button>
                                     </div>
                                 </form>
                             </div>
@@ -52,11 +52,10 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Tên khu vực</th>
+                                            <th>Id</th>
+                                            <th>Tên khu</th>
                                             <th>ID gạo</th>
                                             <th>Tên gạo</th>
-                                            <th>Tồn kho</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -67,12 +66,11 @@
                                                 <td>${zone.zoneName}</td>
                                                 <td>${zone.productId != 0 ? zone.productId : "None"}</td>
                                                 <td>${zone.productName != null ? zone.productName : 'No products'}</td>
-                                                <td>${zone.stock}</td>
                                                 <td>
                                                     <a href="ZoneController?action=detail&id=${zone.zoneId}" class="btn btn-sm btn-primary">Chi tiết</a>
                                                     <c:choose>
                                                         <c:when test="${zone.stock <= 0}">
-                                                            <a href="ZoneController?action=delete&id=${zone.zoneId}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa không')">Xóa</a>
+                                                            <a href="ZoneController?action=delete&id=${zone.zoneId}" class="btn btn-sm btn-danger" onclick="return confirm('Chắc không?')">Xóa</a>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <a href="#" class="btn btn-sm btn-danger disabled" aria-disabled="true">Xóa</a>
@@ -110,15 +108,9 @@
                                             <div class="row g-3">
                                                 <div class="col-md-6">
                                                     <label for="name" class="form-label">Tên khu vực</label>
-                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên khu vực " required>
+                                                    <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên khu vực" required>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <label for="status" class="form-label">Trạng thái</label>
-                                                    <select class="form-control" id="status" name="status" required>
-                                                        <option value="1">Đang hoạt động</option>
-                                                        <option value="0">Ngừng hoạt động</option>
-                                                    </select>
-                                                </div>
+
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-success">Tạo</button>
                                                 </div>
