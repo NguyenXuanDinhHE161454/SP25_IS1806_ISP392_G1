@@ -40,25 +40,17 @@
                                     <ul class="navbar-nav ms-auto">
                                         <li class="nav-item">
                                             <a class="nav-link" href="dashboard">
-                                                <i class="fas fa-chart-line me-1"></i> Trang Quản Lý
+                                                <i ></i> Bảng điều khiển
                                             </a>
                                         </li>
                                     </ul>
                                 </li>
+                                
                                 <li class="dropdown-item text-center">
                                     <ul class="navbar-nav ms-auto">
                                         <li class="nav-item">
                                             <a class="nav-link" href="about">
-                                                <i class="fas fa-info-circle me-1"></i> Giới thiệu
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-item text-center">
-                                    <ul class="navbar-nav ms-auto">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="about">
-                                                <i class="fas fa-info-circle me-1"></i> Tên tài khoản
+                                                <i ></i> Tên tài khoản
                                             </a>
                                         </li>
                                     </ul>
@@ -66,7 +58,7 @@
                                     <small class="text-muted">${sessionScope.user.role}</small>
                                 </li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="account-settings">
+                                <li><a class="dropdown-item" href="ProfileController">
                                         <i class="fas fa-user-cog me-2"></i> Cài đặt tài khoản</a>
                                 </li>
                                 <li><a class="dropdown-item" href="logout">

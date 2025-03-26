@@ -18,7 +18,7 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">Product Manager</h1>
+                        <h1 class="mt-4">Quản lí sản phẩm</h1>
 
                         <!-- Display messages -->
                         <c:if test="${not empty sessionScope.message}">
@@ -33,64 +33,22 @@
                         </c:if>
 
                         <!-- Form tạo sản phẩm mới -->
-                        <div class="card mb-4">
-                            <div class="card-header">Create New Product</div>
-                            <div class="card-body">
-                                <form action="ProductController" method="post" class="row g-3">
-                                    <input type="hidden" name="action" value="createProduct">
-                                    <div class="col-md-6">
-                                        <label for="name" class="form-label">Rice Name</label>
-                                        <input type="text" name="name" id="name" class="form-control" value="${requestScope.name}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="amount" class="form-label">Price</label>
-                                        <input type="number" step="0.01" name="amount" id="amount" class="form-control" value="${requestScope.amount}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="description" class="form-label">Description</label>
-                                        <input type="text" name="description" id="description" class="form-control" value="${requestScope.description}">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="quantity" class="form-label">Inventory</label>
-                                        <input type="number" name="quantity" id="quantity" class="form-control" value="${requestScope.quantity}" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="zoneId" class="form-label">Zone ID</label>
-                                        <select name="zoneId" id="zoneId" class="form-control">
-                                            <c:forEach var="zone" items="${listZone}">
-                                                <option value="${zone.id}" ${requestScope.zoneId == zone.id ? 'selected' : ''}>
-                                                    ${zone.name} (ID: ${zone.id})
-                                                </option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="status" class="form-label">Status</label>
-                                        <select name="status" id="status" class="form-select" required>
-                                            <option value="1" ${requestScope.status == 1 ? 'selected' : ''}>In business</option>
-                                            <option value="0" ${requestScope.status == 0 ? 'selected' : ''}>Out of business</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-12">
-                                        <button type="submit" class="btn btn-primary">Create Product</button>
-                                        <a href="ProductController" class="btn btn-secondary ms-2">Cancel</a>
-                                    </div>
-                                </form>
-                            </div>
+                        <div class="card mb-4 col-lg-4">
+                            <a href="ProductAddServlet" class="btn btn-primary">Tạo mới</a>
                         </div>
 
                         <!-- Search form -->
                         <div class="card mb-4">
-                            <div class="card-header">Product List</div>
+                            <div class="card-header">Danh sách sản phẩm</div>
                             <div class="card-body">
                                 <form action="ProductController" method="get" class="row g-3">
                                     <div class="col-md-9">
-                                        <label for="keyword" class="form-label">Search (Name, Description)</label>
+                                        <label for="keyword" class="form-label">Tìm (Tên, Mô tả)</label>
                                         <input type="text" name="keyword" id="keyword" class="form-control" value="${requestScope.keyword}" placeholder="Enter Name or Description">
                                     </div>
                                     <div class="col-md-3 d-flex align-items-end">
-                                        <button type="submit" class="btn btn-primary me-2">Search</button>
-                                        <a href="ProductController" class="btn btn-secondary">Clear</a>
+                                        <button type="submit" class="btn btn-primary me-2">Tìm</button>
+                                        <a href="ProductController" class="btn btn-secondary">Xóa</a>
                                     </div>
                                 </form>
                             </div>
@@ -99,13 +57,11 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Rice Name</th>
-                                            <th>Price</th>
-                                            <th>Description</th>
-                                            <th>Inventory</th>
-                                            <th>Status</th>
-                                            <th>Is Deleted</th>
-                                            <th>Actions</th>
+                                            <th>Tên gạo</th>
+                                            <th>Giá</th>
+                                            <th>Mô tả</th>
+                                            <th>Tồn kho</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -116,10 +72,8 @@
                                                 <td>${product.amount}</td>
                                                 <td>${product.description}</td>
                                                 <td>${product.quantity}</td>
-                                                <td>${product.status == 1 ? 'In business' : 'Out of business'}</td>
-                                                <td>${product.isDeleted ? 'Yes' : 'None'}</td>
                                                 <td>
-                                                    <a href="ProductController?action=detail&id=${product.id}" class="btn btn-sm btn-primary">Detail</a>
+                                                    <a href="ProductController?action=detail&id=${product.id}" class="btn btn-sm btn-primary">Chi tiết</a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -130,7 +84,7 @@
                                 <nav aria-label="Page navigation">
                                     <ul class="pagination justify-content-center">
                                         <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                            <a class="page-link" href="ProductController?page=${currentPage - 1}&keyword=${keyword}">Previous</a>
+                                            <a class="page-link" href="ProductController?page=${currentPage - 1}&keyword=${keyword}">Trước</a>
                                         </li>
                                         <c:forEach begin="1" end="${totalPages}" var="i">
                                             <li class="page-item ${currentPage == i ? 'active' : ''}">
@@ -138,7 +92,7 @@
                                             </li>
                                         </c:forEach>
                                         <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                            <a class="page-link" href="ProductController?page=${currentPage + 1}&keyword=${keyword}">Next</a>
+                                            <a class="page-link" href="ProductController?page=${currentPage + 1}&keyword=${keyword}">Sau</a>
                                         </li>
                                     </ul>
                                 </nav>

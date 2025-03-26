@@ -40,3 +40,4 @@ src/java/DBContext/DatabaseConnection.java
 src/java/DBContext/DatabaseConnection.java
 nbproject/project.properties
 /build/
+/nbproject/private/

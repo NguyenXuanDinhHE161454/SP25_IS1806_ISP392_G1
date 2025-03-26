@@ -1,9 +1,3 @@
-<%-- 
-    Document   : sidebar
-    Created on : Feb 23, 2025, 9:21:04 AM
-    Author     : Admin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div id="layoutSidenav_nav">
@@ -15,106 +9,25 @@
         <div class="sb-sidenav-menu">
             <div class="nav">
 
-               
+                <!-- DASHBOARD -->
+                <div class="sb-sidenav-menu-heading text-white">Bảng điều khiển</div>
+                
+                        <a class="nav-link" href="InvoiceController">Quản lý Hóa đơn</a>
+                        <a class="nav-link" href="InvoiceController?action=export-invoice">Bán hàng</a>
+                        <a class="nav-link" href="InvoiceController?action=import-invoice">Nhập hàng</a>
 
-                <!-- QUẢN LÝ HÓA ĐƠN & KHO HÀNG -->
-                <div class="sb-sidenav-menu-heading">Invoice & Inventory</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#invoiceCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-file-invoice"></i></div>
-                    Quản lý Hóa đơn
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="invoiceCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="InvoiceController">Danh sách hóa đơn</a>
-                        <a class="nav-link" href="#">Tạo hóa đơn bán hàng</a>
-                        <a class="nav-link" href="#">Tạo hóa đơn nhập hàng</a>
-                        <a class="nav-link" href="#">Chi tiết hóa đơn</a>
-                    </nav>
-                </div>
 
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#inventoryCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-warehouse"></i></div>
-                    Quản lý Kho hàng
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="inventoryCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Tạo phiếu xuất kho</a>
-                        <a class="nav-link" href="#">Tạo phiếu nhập kho</a>
-                        <a class="nav-link" href="#">Kiểm kho</a>
-                        <a class="nav-link" href="#">Chi tiết phiếu xuất/nhập kho</a>
-                    </nav>
-                </div>
+                        <a class="nav-link" href="ProductController">Quản lí sản phẩm</a>
 
-                <!-- QUẢN LÝ SẢN PHẨM & KHU VỰC -->
-                <div class="sb-sidenav-menu-heading">Product & Zone Management</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#productCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-boxes"></i></div>
-                    Quản lý Sản phẩm
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="productCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="ProductController">Danh sách sản phẩm</a>
-                        <a class="nav-link" href="#">Chi tiết sản phẩm</a>
-                        <a class="nav-link" href="#">Cập nhật sản phẩm (Admin)</a>
-                    </nav>
-                </div>
+                        <a class="nav-link" href="ZoneController">Quản lí khu vực</a>
 
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#zoneCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-map-marked-alt"></i></div>
-                    Quản lý Khu vực
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="zoneCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Danh sách khu vực</a>
-                        <a class="nav-link" href="#">Cập nhật thông tin khu vực</a>
-                    </nav>
-                </div>
+                        <a class="nav-link" href="CustomerDebtController">Danh sách khách hàng</a>
 
-                <!-- QUẢN LÝ KHÁCH HÀNG & CÔNG NỢ -->
-                <div class="sb-sidenav-menu-heading">Customer & Debt Management</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#customerCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
-                    Quản lý Khách hàng
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="customerCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Danh sách khách hàng</a>
-                        <a class="nav-link" href="#">Thêm mới khách hàng</a>
-                        <a class="nav-link" href="#">Cập nhật thông tin khách hàng</a>
-                    </nav>
-                </div>
+                        <a class="nav-link" href="DebtCustomerController">Quản lí công nợ</a>
 
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#debtCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-hand-holding-usd"></i></div>
-                    Quản lý Công nợ
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="debtCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Danh sách công nợ</a>
-                        <a class="nav-link" href="#">Chi tiết công nợ</a>
-                        <a class="nav-link" href="#">Thêm đơn nợ mới</a>
-                    </nav>
-                </div>
 
-                <!-- QUẢN LÝ NHÂN SỰ & TÀI KHOẢN -->
-                <div class="sb-sidenav-menu-heading">User & Account Settings</div>
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#accountCollapse" aria-expanded="false">
-                    <div class="sb-nav-link-icon"><i class="fas fa-user-cog"></i></div>
-                    Cài đặt tài khoản
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="accountCollapse" data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="#">Cập nhật thông tin tài khoản</a>
-                        <a class="nav-link" href="#">Đổi mật khẩu</a>
-                    </nav>
-                </div>
+
+                        <a class="nav-link" href="ProfileController">Cài đặt tài khoản</a>
 
                 <a class="nav-link" href="StaffController">Quản lý Nhân viên</a>
             </div>

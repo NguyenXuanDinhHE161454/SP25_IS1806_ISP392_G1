@@ -42,10 +42,9 @@ public class ForgotPasswordController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("otp", otp);
             session.setAttribute("otp_email", email);
-            session.setAttribute("otp_expiry", System.currentTimeMillis() + (5 * 60 * 1000)); // Hết hạn sau 5 phút
+            session.setAttribute("otp_expiry", System.currentTimeMillis() + (5 * 60 * 1000));
 
-            EmailSender.sendEmail(email, "Password Reset OTP",
-                    "Your OTP for password reset is: " + otp + "\nThis OTP is valid for 5 minutes.");
+            EmailSender.sendEmail(email, "Reset Password OTP", EmailSender.getResetPasswordTemplate(otp), true);
 
             request.setAttribute("message", "OTP has been sent to your email. Please enter it below.");
             response.sendRedirect("forgot-password");

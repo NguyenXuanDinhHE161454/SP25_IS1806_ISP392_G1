@@ -133,21 +133,24 @@ public class StaffController extends HttpServlet {
                 request.setAttribute("email", email);
                 request.setAttribute("isBanned", isBanned);
 
-                String pageStr = request.getParameter("page");
-                String keyword = request.getParameter("keyword");
-                int page = pageStr != null && !pageStr.isEmpty() ? parseInt(pageStr, 1) : 1;
-                int offset = (page - 1) * PAGE_SIZE;
+                request.getRequestDispatcher("/staff_add.jsp").forward(request, response);
+                return;
+            }
 
-                List<User> listUser = userDAO.getUsersByPage(keyword, offset, PAGE_SIZE);
-                int totalRecords = userDAO.countUsers(keyword);
-                int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
+            if (userDAO.checkPhoneNumberExists(phoneNumber)) {
+                session.setAttribute("message", "Phone number '" + phoneNumber + "' already exists. Please choose another one.");
+                session.setAttribute("messageType", "danger");
 
-                request.setAttribute("listUser", listUser);
-                request.setAttribute("currentPage", page);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("keyword", keyword);
+                request.setAttribute("fullName", fullName);
+                request.setAttribute("phoneNumber", phoneNumber);
+                request.setAttribute("address", address);
+                request.setAttribute("username", username);
+                request.setAttribute("passwordHash", passwordHash);
+                request.setAttribute("role", role);
+                request.setAttribute("email", email);
+                request.setAttribute("isBanned", isBanned);
 
-                request.getRequestDispatcher("/staff_manager.jsp").forward(request, response);
+                request.getRequestDispatcher("/staff_add.jsp").forward(request, response);
                 return;
             }
 
@@ -181,21 +184,7 @@ public class StaffController extends HttpServlet {
                 request.setAttribute("email", email);
                 request.setAttribute("isBanned", isBanned);
 
-                String pageStr = request.getParameter("page");
-                String keyword = request.getParameter("keyword");
-                int page = pageStr != null && !pageStr.isEmpty() ? parseInt(pageStr, 1) : 1;
-                int offset = (page - 1) * PAGE_SIZE;
-
-                List<User> listUser = userDAO.getUsersByPage(keyword, offset, PAGE_SIZE);
-                int totalRecords = userDAO.countUsers(keyword);
-                int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
-
-                request.setAttribute("listUser", listUser);
-                request.setAttribute("currentPage", page);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("keyword", keyword);
-
-                request.getRequestDispatcher("/staff_manager.jsp").forward(request, response);
+                request.getRequestDispatcher("/staff_add.jsp").forward(request, response);
                 return;
             }
             response.sendRedirect("StaffController");

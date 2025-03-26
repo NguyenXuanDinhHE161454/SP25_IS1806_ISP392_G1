@@ -44,6 +44,7 @@ public class VerifyOTPController extends HttpServlet {
         }
 
         if (sessionOTP != null && sessionOTP.equals(enteredOTP)) {
+            session.setAttribute("pass", "next");
             response.sendRedirect("reset-password");
         } else {
             request.setAttribute("error", "Invalid OTP. Please try again.");

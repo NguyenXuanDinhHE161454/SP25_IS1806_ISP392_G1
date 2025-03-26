@@ -81,20 +81,19 @@ public class LoginServlet extends HttpServlet {
         User user = userDAO.login(username, password);
 
         if (user != null) {
-            HttpSession session = request.getSession(); 
-            session.setAttribute("user", user); 
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+            session.setAttribute("userId", user.getUserId());
             if ("Admin".equals(user.getRole())) {
-                response.sendRedirect("StaffController"); 
+                response.sendRedirect("StaffController");
             } else {
-                response.sendRedirect("home"); 
+                response.sendRedirect("home");
             }
         } else {
             request.setAttribute("error", "Invalid username or password");
             request.setAttribute("username", username);
-            request.getRequestDispatcher("/login.jsp").forward(request, response); 
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
-
-        
 
     }
 

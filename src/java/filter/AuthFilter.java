@@ -17,10 +17,24 @@ public class AuthFilter implements Filter {
     private static final Map<String, List<String>> roleAccessMap = new HashMap<>();
 
     static {
-        roleAccessMap.put("Admin", List.of("/InvoiceController", "/manageUsers", "/admin", "/reports", "/dashboard","home", 
-                "login","logout","/ProductController","/reset-password","/StaffController",
-                "/verify-otp","/forgot-password","/dashboard"));
-        roleAccessMap.put("Staff", List.of("/InvoiceController", "/tasks", "/customerSupport", "/dashboard"));
+        roleAccessMap.put("Admin", List.of(
+                "/InvoiceController", "/InvoiceController?action=export-invoice", "/ProductController",
+                "/InvoiceController?action=import-invoice","/ZoneController", "/CustomerDebtController",
+                "/DebtCustomerController","/ProfileController","/StaffController",
+                "/manageUsers", 
+                "/admin", 
+                "/reports", 
+                "/dashboard"));
+        roleAccessMap.put("Staff", List.of(
+                "/InvoiceController", 
+                "/InvoiceController?action=export-invoice", "/ProductController",
+                "/InvoiceController?action=import-invoice","/ZoneController", "/CustomerDebtController",
+                "/DebtCustomerController","/ProfileController",
+                "/tasks", 
+                "/customerSupport", 
+                "/dashboard", 
+                "/InvoiceController", 
+                "/DebtCustomerController"));
     }
 
     @Override

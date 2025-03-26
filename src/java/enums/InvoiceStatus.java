@@ -1,16 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package enums;
 
-/**
- *
- * @author Admin
- */
 public enum InvoiceStatus {
-    PENDING(0),  // Maps to 0 in the database
-    COMPLETED(1); // Maps to 1 in the database
+    PENDING(0),  
+    COMPLETED(1), 
+    NA(-1); // Giá trị mặc định nếu không khớp
 
     private final int value;
 
@@ -28,6 +21,6 @@ public enum InvoiceStatus {
                 return status;
             }
         }
-        throw new IllegalArgumentException("Invalid InvoiceStatus value: " + value);
+        return NA; // Trả về N/A nếu không tìm thấy giá trị
     }
 }

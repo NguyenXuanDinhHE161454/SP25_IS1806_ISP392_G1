@@ -130,9 +130,8 @@
             <img src="assets/img/banner.png" alt="Warehouse Rice Banner" />
             <div class="banner-overlay">
                 <div>
-                    <h1>Welcome to Warehouse Rice</h1>
-                    <p>Streamline your rice warehouse operations with our cutting-edge management system.</p>
-                    <a href="#features" class="cta-button">Discover Features</a>
+                    <h1>Quản lí kho gạo</h1>
+                    <p>Chất lượng số 1.</p>
                 </div>
             </div>
         </div>
@@ -140,14 +139,14 @@
         <!-- Features Section -->
         <main class="container">
             <section class="features-section">
-                <h2 class="text-center mb-5">Why Choose Warehouse Rice?</h2>
+                <h2 class="text-center mb-5">Tại sao chọn chúng tôi?</h2>
                 <div class="row">
                     <!-- Quản lý Nhân sự -->
                     <div class="col-md-4">
                         <div class="feature-card">
                             <i class="fas fa-users feature-icon"></i>
                             <h3>Employee Management</h3>
-                            <p>Effortlessly manage your staff and porters with our advanced tools. Access employee details and optimize workforce efficiency via our <a href="AdminServlet">Admin</a> and <a href="index.html">Porter</a> features.</p>
+                            <p>Effortlessly manage your staff and porters with our advanced tools. Access employee details and optimize workforce efficiency via our Admin and Porter features.</p>
                         </div>
                     </div>
                     <!-- Quản lý Kho -->
@@ -155,7 +154,7 @@
                         <div class="feature-card">
                             <i class="fas fa-box feature-icon"></i>
                             <h3>Warehouse Management</h3>
-                            <p>Track rice inventory, monitor warehouse status, and streamline operations with our <a href="WarehouseRiceServlet">Warehouse Rice</a> and <a href="index.html">Rice</a> modules.</p>
+                            <p>Track rice inventory, monitor warehouse status, and streamline operations with our Warehouse Rice and Rice modules.</p>
                         </div>
                     </div>
                     <!-- Quản lý Tài chính -->
@@ -163,7 +162,7 @@
                         <div class="feature-card">
                             <i class="fas fa-dollar-sign feature-icon"></i>
                             <h3>Financial Management</h3>
-                            <p>Handle debts, payments, and transactions seamlessly with our <a href="DebtController">Debt</a> and <a href="PaymentController">Transaction History</a> controllers.</p>
+                            <p>Handle debts, payments, and transactions seamlessly with our Debt and Transaction History controllers.</p>
                         </div>
                     </div>
                 </div>
@@ -172,8 +171,8 @@
             <!-- Call to Action Section -->
             <section class="cta-section">
                 <h2>Ready to Optimize Your Warehouse?</h2>
-                <p>Sign up today and experience the power of Warehouse Rice management system!</p>
-                <a href="LoginServlet" class="cta-button">Get Started Now</a>
+                <p>Login today and experience the power of Warehouse Rice management system!</p>
+                <a href="login.jsp" class="cta-button">Băt đầu</a>
             </section>
         </main>
 

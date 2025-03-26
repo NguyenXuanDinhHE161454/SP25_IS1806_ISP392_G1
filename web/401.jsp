@@ -58,7 +58,7 @@
         <p class="error-message">
             Sorry, you don't have permission to access this page. Please log in with the correct credentials or contact the administrator.
         </p>
-        <a href="/RiceWareHouse/home" class="btn btn-home text-white">Return to Homepage</a>
+        <a href="/RiceWareHouse2/home" class="btn btn-home text-white">Return to Homepage</a>
     </div>
 
     <!-- Bootstrap JS (Optional, only if you need Bootstrap JS features) -->

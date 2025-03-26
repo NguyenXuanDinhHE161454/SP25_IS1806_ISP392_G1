@@ -60,14 +60,11 @@ public class ProductController extends HttpServlet {
                     return;
                 }
 
-                List<Zone> zones = zoneDAO.getAllZones();
-                if (zones == null || zones.isEmpty()) {
-                    request.getSession().setAttribute("message", "No zones available for selection.");
-                    request.getSession().setAttribute("messageType", "warning");
-                }
+                List<Zone> emptyZones = zoneDAO.getEmptyZones();
 
                 request.setAttribute("product", product);
-                request.setAttribute("listZone", zones);
+                request.setAttribute("availableZones", emptyZones);
+                request.setAttribute("currentZoneId", product.getZoneId());
                 request.getRequestDispatcher("/product_detail.jsp").forward(request, response);
             } catch (NumberFormatException e) {
                 request.getSession().setAttribute("message", "Invalid product ID format.");
@@ -84,52 +81,76 @@ public class ProductController extends HttpServlet {
         if ("updateProduct".equals(action)) {
             try {
                 int productId = Integer.parseInt(request.getParameter("id"));
-                String name = request.getParameter("name");
+                String name = request.getParameter("name").trim();
                 String amountStr = request.getParameter("amount");
-                String description = request.getParameter("description");
+                String description = request.getParameter("description") != null
+                        ? request.getParameter("description").trim() : "";
                 String quantityStr = request.getParameter("quantity");
-                String zoneIdStr = request.getParameter("zoneId");
-                String statusStr = request.getParameter("status");
 
-                // Validate input
-                if (name == null || name.trim().isEmpty() || amountStr == null || quantityStr == null || statusStr == null) {
-                    request.getSession().setAttribute("message", "Please fill in all required fields.");
-                    request.getSession().setAttribute("messageType", "danger");
+                String newZoneIdStr = request.getParameter("newZoneId");
+                Integer currentZoneId = (request.getParameter("currentZoneId") != null
+                        && !request.getParameter("currentZoneId").isEmpty())
+                        ? Integer.parseInt(request.getParameter("currentZoneId")) : null;
+
+                if (name.isEmpty() || amountStr == null || amountStr.isEmpty()
+                        || quantityStr == null || quantityStr.isEmpty()) {
+                    setErrorMessage(request, "Please fill in all required fields");
                     response.sendRedirect("ProductController?action=detail&id=" + productId);
                     return;
                 }
 
                 BigDecimal amount = new BigDecimal(amountStr);
-                Integer quantity = Integer.parseInt(quantityStr);
-                Integer zoneId = zoneIdStr != null && !zoneIdStr.trim().isEmpty() ? Integer.parseInt(zoneIdStr) : null;
-                Short status = Short.parseShort(statusStr);
+                int quantity = Integer.parseInt(quantityStr);
 
-                // Tạo đối tượng Product với thông tin cập nhật
-                Product product = Product.builder()
+                Product originalProduct = productDAO.getProductById(productId);
+                Integer zoneIdToUpdate = null; 
+
+                if (newZoneIdStr != null) {
+                    if (newZoneIdStr.equals("keep")) {
+                        zoneIdToUpdate = currentZoneId;
+                    } else if (newZoneIdStr.equals("null")) {
+                        zoneIdToUpdate = null;
+                    } else if (!newZoneIdStr.isEmpty()) {
+                        zoneIdToUpdate = Integer.valueOf(newZoneIdStr);
+
+                        Product productInZone = productDAO.getProductByZoneId(zoneIdToUpdate);
+                        if (productInZone != null && productInZone.getId() != productId) {
+                            setErrorMessage(request, "Selected zone is already occupied");
+                            response.sendRedirect("ProductController?action=detail&id=" + productId);
+                            return;
+                        }
+                    }
+                } else {
+                    zoneIdToUpdate = currentZoneId;
+                }
+
+                Product updatedProduct = Product.builder()
                         .id(productId)
                         .name(name)
                         .amount(amount)
                         .description(description)
                         .quantity(quantity)
-                        .zoneId(zoneId)
-                        .status(status)
+                        .zoneId(zoneIdToUpdate)
                         .updatedDate(LocalDateTime.now())
                         .createdBy(currentUser.getUserId())
+                        .status(originalProduct.getStatus())
+                        .isDeleted(originalProduct.getIsDeleted())
                         .build();
 
-                boolean success = productDAO.updateProduct(product);
+                boolean success = productDAO.updateProduct(updatedProduct);
+
                 if (success) {
-                    request.getSession().setAttribute("message", "Product updated successfully!");
-                    request.getSession().setAttribute("messageType", "success");
+                    setSuccessMessage(request, "Product updated successfully!");
                 } else {
-                    request.getSession().setAttribute("message", "Failed to update product.");
-                    request.getSession().setAttribute("messageType", "danger");
+                    setErrorMessage(request, "Failed to update product");
                 }
+
             } catch (NumberFormatException e) {
-                request.getSession().setAttribute("message", "Invalid number format for price, inventory, or zone ID.");
-                request.getSession().setAttribute("messageType", "danger");
+                setErrorMessage(request, "Invalid number format");
+            } catch (Exception e) {
+                setErrorMessage(request, "Error updating product: " + e.getMessage());
             }
-            response.sendRedirect("ProductController");
+            response.sendRedirect("ProductController?action=detail&id=" + request.getParameter("id"));
             return;
         }
 
@@ -138,12 +159,9 @@ public class ProductController extends HttpServlet {
                 String name = request.getParameter("name");
                 String amountStr = request.getParameter("amount");
                 String description = request.getParameter("description");
-                String quantityStr = request.getParameter("quantity");
-                String zoneIdStr = request.getParameter("zoneId");
-                String statusStr = request.getParameter("status");
 
                 // Validate input
-                if (name == null || name.trim().isEmpty() || amountStr == null || quantityStr == null || statusStr == null) {
+                if (name == null || name.trim().isEmpty() || amountStr == null) {
                     request.getSession().setAttribute("message", "Please fill in all required fields.");
                     request.getSession().setAttribute("messageType", "danger");
                     response.sendRedirect("ProductController");
@@ -151,17 +169,13 @@ public class ProductController extends HttpServlet {
                 }
 
                 BigDecimal amount = new BigDecimal(amountStr);
-                Integer quantity = Integer.parseInt(quantityStr);
-                Integer zoneId = zoneIdStr != null && !zoneIdStr.trim().isEmpty() ? Integer.parseInt(zoneIdStr) : null;
-                Short status = Short.parseShort(statusStr);
+                Short status = 1;
 
-                // Tạo sản phẩm mới
+                // Tạo sản phẩm mớif 
                 Product product = Product.builder()
                         .name(name)
                         .amount(amount)
                         .description(description)
-                        .quantity(quantity)
-                        .zoneId(zoneId)
                         .status(status)
                         .createdDate(LocalDateTime.now())
                         .createdBy(currentUser.getUserId())
@@ -192,7 +206,7 @@ public class ProductController extends HttpServlet {
 
         // Fetch products with pagination
         List<Product> products = productDAO.getProductsByPage(keyword, offset, pageSize);
-        int totalProducts = productDAO.countProducts(keyword != null ? keyword : "");
+        int totalProducts = productDAO.countProducts(keyword);
         int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
 
         // Fetch all zones for the dropdown
@@ -218,6 +232,16 @@ public class ProductController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+    }
+
+    private void setErrorMessage(HttpServletRequest request, String message) {
+        request.getSession().setAttribute("message", message);
+        request.getSession().setAttribute("messageType", "danger");
+    }
+
+    private void setSuccessMessage(HttpServletRequest request, String message) {
+        request.getSession().setAttribute("message", message);
+        request.getSession().setAttribute("messageType", "success");
     }
 
     @Override

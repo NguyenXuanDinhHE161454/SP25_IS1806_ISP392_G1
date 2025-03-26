@@ -20,11 +20,12 @@ public class ResetPasswordController extends HttpServlet {
 
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("otp_email");
-
-        if (email != null) {
+        String checkPass = (String) session.getAttribute("pass");
+        
+        if (email != null && checkPass != null) {
             request.getRequestDispatcher("reset_password.jsp").forward(request, response);
         } else {
-            response.sendRedirect("forgot_password.jsp");
+            response.sendRedirect("forgot_password.jsp");   
         }
     }
 

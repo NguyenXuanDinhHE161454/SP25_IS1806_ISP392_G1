@@ -16,6 +16,7 @@ import utils.LocalDateTimeAdapter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "InvoiceAPIController", urlPatterns = {"/api/invoice"})
 public class InvoiceAPIController extends HttpServlet {
@@ -55,7 +56,11 @@ public class InvoiceAPIController extends HttpServlet {
         }
 
         try {
-            List<Product> products = productDAO.searchProducts(keyword);
+            List<Product> products = productDAO.searchProducts(keyword)
+                .stream()
+                .filter(p -> p.getQuantity() >= 10)
+                .collect(Collectors.toList());
+
             response.getWriter().write(gson.toJson(products));
         } catch (Exception e) {
             e.printStackTrace();
