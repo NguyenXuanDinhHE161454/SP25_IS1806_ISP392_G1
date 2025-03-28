@@ -68,7 +68,7 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
     }
 
     public List<InvoiceDTO> getByPage(String keyword, String customerIdStr, String userIdStr,
-            LocalDateTime fromDate, LocalDateTime toDate, int offset, int limit) {
+            LocalDateTime fromDate, LocalDateTime toDate, Integer type, int offset, int limit) {
         StringBuilder query = new StringBuilder(
                 "SELECT i.Id, i.CreateDate, i.Payment, i.CustomerId, c.FullName AS CustomerName, "
                 + "i.UserId, u.FullName AS UserName, i.Type, i.PaidAmount, i.Description "
@@ -81,7 +81,7 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
         List<Object> params = new ArrayList<>();
 
         if (keyword != null && !keyword.trim().isEmpty()) {
-            query.append(" AND (CAST(i.Id AS NVARCHAR) LIKE ? OR c.FullName LIKE ? OR u.FullName LIKE ?)");
+            query.append(" AND (c.FullName LIKE ? OR CAST(i.Id AS NVARCHAR) LIKE ? OR u.FullName LIKE ? OR i.Description LIKE ?)");
             String likePattern = "%" + keyword.trim() + "%";
             params.add(likePattern);
             params.add(likePattern);
@@ -118,6 +118,10 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             params.add(Timestamp.valueOf(toDate));
         }
 
+        if (type != null) {
+            query.append(" AND i.Type = ?");
+            params.add(type);
+        }
         query.append(" ORDER BY i.CreateDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
         params.add(offset);
         params.add(limit);
@@ -142,7 +146,7 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
     }
 
     public int countInvoices(String keyword, String customerIdStr, String userIdStr,
-            LocalDateTime fromDate, LocalDateTime toDate) {
+            LocalDateTime fromDate, LocalDateTime toDate, Integer type) {
         StringBuilder query = new StringBuilder(
                 "SELECT COUNT(*) FROM Invoices i "
                 + "LEFT JOIN Customers c ON i.CustomerId = c.CustomerID "
@@ -153,7 +157,7 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
         List<Object> params = new ArrayList<>();
 
         if (keyword != null && !keyword.trim().isEmpty()) {
-            query.append(" AND (CAST(i.Id AS NVARCHAR) LIKE ? OR c.FullName LIKE ? OR u.FullName LIKE ?)");
+            query.append(" AND (c.FullName LIKE ? OR CAST(i.Id AS NVARCHAR) LIKE ? OR u.FullName LIKE ? OR i.Description LIKE ?)");
             String likePattern = "%" + keyword.trim() + "%";
             params.add(likePattern);
             params.add(likePattern);
@@ -190,6 +194,10 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             params.add(Timestamp.valueOf(toDate));
         }
 
+        if (type != null) {
+            query.append(" AND i.Type = ?");
+            params.add(type);
+        }
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
@@ -302,6 +310,5 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
                 + "IsDeleted, DeletedAt, DeletedBy, PaidAmount, Description "
                 + "FROM Invoices WHERE IsDeleted = 0");
     }
-    
-    
+
 }

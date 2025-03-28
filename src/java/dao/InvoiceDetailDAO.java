@@ -98,9 +98,7 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
                 id);
     }
 
-    public boolean deleteInvoiceDetail(int id) {
-        return executeUpdate("DELETE FROM InvoiceDetails WHERE Id = ?", id);
-    }
+
 
     public List<InvoiceDetail> getAllInvoiceDetails() {
         return getAll("SELECT * FROM InvoiceDetails WHERE IsDeleted = 0");
@@ -108,17 +106,17 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
 
     public InvoiceDetailDTO getInvoiceDetailByInvoiceId(int invoiceId) {
         String query = "SELECT i.Id, i.Type, i.CreateDate, i.UserId, u.FullName AS UserName, "
-                + "i.CustomerId, c.FullName AS CustomerName, i.Payment AS PaidAmount, "
+                + "i.CustomerId, c.FullName AS CustomerName, i.PaidAmount AS PaidAmount, "
                 + "SUM(id.Quantity) AS TotalQuantity, "
-                + "SUM(id.Quantity * id.UnitPrice) AS TotalAmount, "
-                + "(SUM(id.Quantity * id.UnitPrice) - i.Payment) AS DebtAmount "
+                + "i.Payment AS TotalAmount, "
+                + "(SUM(id.Quantity * id.UnitPrice) - i.PaidAmount) AS DebtAmount "
                 + "FROM Invoices i "
                 + "LEFT JOIN Users u ON i.UserId = u.UserID "
                 + "LEFT JOIN Customers c ON i.CustomerId = c.CustomerID "
                 + "LEFT JOIN InvoiceDetails id ON i.Id = id.InvoiceId "
                 + "WHERE i.Id = ? AND i.IsDeleted = 0 "
-                + "GROUP BY i.Id, i.Type, i.CreateDate, i.UserId, u.FullName, "
-                + "i.CustomerId, c.FullName, i.Payment";
+                + "GROUP BY i.Id, i.Payment, i.Type, i.CreateDate, i.UserId, u.FullName, "
+                + "i.CustomerId, c.FullName, i.PaidAmount";
 
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, invoiceId);
@@ -156,7 +154,7 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
 
     private List<ProductItemDTO> getProductItems(int invoiceId) {
         String query = "SELECT id.ProductId AS ProductId, p.Name AS ProductName, "
-                + "id.Quantity, id.UnitPrice, (id.Quantity * id.UnitPrice) AS TotalPrice, "
+                + "p.Quantity, p.Amount AS UnitPrice, (id.Quantity * id.UnitPrice) AS TotalPrice, "
                 + "id.AmountPerKg, id.Description "
                 + "FROM InvoiceDetails id "
                 + "JOIN Product p ON id.ProductId = p.Id "
@@ -209,44 +207,45 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
     public static void testAddInvoiceDetails() {
         InvoiceDetailDAO invoiceDetailDAO = new InvoiceDetailDAO();
 
-        // Tạo danh sách chi tiết hóa đơn giả lập
-        List<InvoiceDetail> details = new ArrayList<>();
-
-        // Tạo InvoiceDetail thứ nhất
-        InvoiceDetail detail1 = new InvoiceDetail();
-        detail1.setInvoiceId(1);
-        detail1.setProductId(1);
-        detail1.setUnitPrice(new BigDecimal("50000"));
-        detail1.setQuantity(2);
-        detail1.setAmountPerKg(10);
-        detail1.setDescription("Mô tả sản phẩm 1");
-        detail1.setCreatedBy(1);
-        detail1.setCreatedAt(LocalDateTime.now());
-
-        // Tạo InvoiceDetail thứ hai
-        InvoiceDetail detail2 = new InvoiceDetail();
-        detail2.setInvoiceId(1);
-        detail2.setProductId(1);
-        detail2.setUnitPrice(new BigDecimal("75000"));
-        detail2.setQuantity(3);
-        detail2.setAmountPerKg(15);
-        detail2.setDescription("Mô tả sản phẩm 2");
-        detail2.setCreatedBy(1);
-        detail2.setCreatedAt(LocalDateTime.now());
-
-        // Thêm vào danh sách
-        details.add(detail1);
-        details.add(detail2);
-
-        // Gọi hàm addInvoiceDetails
-        List<Integer> insertedIds = invoiceDetailDAO.addInvoiceDetails(details);
-
-        // Kiểm tra kết quả
-        if (insertedIds.isEmpty()) {
-            System.out.println("❌ Thêm InvoiceDetails thất bại!");
-        } else {
-            System.out.println("✅ Thêm thành công các InvoiceDetail có ID: " + insertedIds);
-        }
+//        // Tạo danh sách chi tiết hóa đơn giả lập
+//        List<InvoiceDetail> details = new ArrayList<>();
+//
+//        // Tạo InvoiceDetail thứ nhất
+//        InvoiceDetail detail1 = new InvoiceDetail();
+//        detail1.setInvoiceId(1);
+//        detail1.setProductId(1);
+//        detail1.setUnitPrice(new BigDecimal("50000"));
+//        detail1.setQuantity(2);
+//        detail1.setAmountPerKg(10);
+//        detail1.setDescription("Mô tả sản phẩm 1");
+//        detail1.setCreatedBy(1);
+//        detail1.setCreatedAt(LocalDateTime.now());
+//
+//        // Tạo InvoiceDetail thứ hai
+//        InvoiceDetail detail2 = new InvoiceDetail();
+//        detail2.setInvoiceId(1);
+//        detail2.setProductId(1);
+//        detail2.setUnitPrice(new BigDecimal("75000"));
+//        detail2.setQuantity(3);
+//        detail2.setAmountPerKg(15);
+//        detail2.setDescription("Mô tả sản phẩm 2");
+//        detail2.setCreatedBy(1);
+//        detail2.setCreatedAt(LocalDateTime.now());
+//
+//        // Thêm vào danh sách
+//        details.add(detail1);
+//        details.add(detail2);
+//
+//        // Gọi hàm addInvoiceDetails
+//        List<Integer> insertedIds = invoiceDetailDAO.addInvoiceDetails(details);
+//
+//        // Kiểm tra kết quả
+//        if (insertedIds.isEmpty()) {
+//            System.out.println("❌ Thêm InvoiceDetails thất bại!");
+//        } else {
+//            System.out.println("✅ Thêm thành công các InvoiceDetail có ID: " + insertedIds);
+//        }
+        System.out.println(invoiceDetailDAO.getProductItems(125));
     }
 
 }

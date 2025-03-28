@@ -55,32 +55,39 @@ $(function () {
     });
 
     $("#productSearch").on("input", function () {
-        let keyword = $(this).val().trim();
-        if (keyword.length < 2) {
-            $("#searchResults").hide();
-            return;
-        }
+    let keyword = $(this).val().trim();
+    if (keyword.length < 1) {
+    $("#searchResults").hide();
+    return;
+    }
 
-        $.get("api/invoice?action=searchProduct&keyword=" + encodeURIComponent(keyword), function (data) {
-            let resultBox = $("#searchResults");
-            resultBox.empty();
-            if (data.length > 0) {
-                data.forEach(product => {
-                    resultBox.append(`
-                        <div class="search-item" data-id="${product.id}" data-name="${product.name}" data-price-per-kg="${product.amount}" data-stock="${product.quantity}">
-                            <strong>${product.name}</strong> - ${product.amount} VND/kg (Còn: ${product.quantity} kg)
-                            <span class="btn btn-sm btn-success addProduct">+</span>
-                        </div>
-                    `);
-                });
-                resultBox.slideDown(200);
-            } else {
-                resultBox.slideUp(200);
-            }
-        }, "json").fail(function () {
-            console.error("Error fetching products");
-        });
+    // Nếu không có từ khóa, ẩn kết quả và không gửi request
+    if (keyword.length === 0) {
+        $("#searchResults").hide();
+        return;
+    }
+
+    $.get("api/invoice?action=searchProduct&keyword=" + encodeURIComponent(keyword), function (data) {
+        let resultBox = $("#searchResults");
+        resultBox.empty();
+        if (data.length > 0) {
+            data.forEach(product => {
+                resultBox.append(`
+                    <div class="search-item" data-id="${product.id}" data-name="${product.name}" data-price-per-kg="${product.amount}" data-stock="${product.quantity}">
+                        <strong>${product.name}</strong> - ${product.amount} VND/kg (Còn: ${product.quantity} kg)
+                        <span class="btn btn-sm btn-success addProduct">+</span>
+                    </div>
+                `);
+            });
+            resultBox.slideDown(200);
+        } else {
+            resultBox.slideUp(200);
+        }
+    }, "json").fail(function () {
+        console.error("Error fetching products");
     });
+});
+
 
     $(document).on("click", ".addProduct", function () {
         let item = $(this).closest(".search-item");
@@ -160,7 +167,7 @@ $(function () {
         let maxQuantity = Math.floor(stock / packageWeight);
 
         if (totalWeight > stock) {
-            alert(`⚠️ Số lượng vượt quá kho! Tối đa có thể mua: ${maxQuantity} bao (${stock} kg).`);
+            alert(`Số lượng vượt quá kho! Tối đa có thể mua: ${maxQuantity} bao (${stock} kg).`);
             quantity = maxQuantity;
             totalWeight = packageWeight * maxQuantity;
             row.find(".quantity").val(maxQuantity);
@@ -236,17 +243,17 @@ $(function () {
             let newCustomerPhone = $("#newCustomerPhone").val().trim();
 
             if (!customerId && addNew === "false") {
-                alert("⚠️ Vui lòng chọn khách hàng hoặc thêm khách hàng mới.");
+                alert("Vui lòng chọn khách hàng hoặc thêm khách hàng mới.");
                 return;
             }
 
             if (addNew === "true" && (!newCustomerName || !newCustomerPhone)) {
-                alert("⚠️ Vui lòng nhập đầy đủ Tên và Số điện thoại khách hàng mới.");
+                alert("Vui lòng nhập đầy đủ Tên và Số điện thoại khách hàng mới.");
                 return;
             }
 
             if ($("#productTable tr").length === 0) {
-                alert("⚠️ Vui lòng thêm ít nhất một sản phẩm vào hóa đơn.");
+                alert("Vui lòng thêm ít nhất một sản phẩm vào hóa đơn.");
                 return;
             }
 

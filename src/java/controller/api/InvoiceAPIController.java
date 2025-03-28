@@ -58,7 +58,7 @@ public class InvoiceAPIController extends HttpServlet {
         try {
             List<Product> products = productDAO.searchProducts(keyword)
                 .stream()
-                .filter(p -> p.getQuantity() >= 10)
+                .filter(p -> p.getQuantity() >= 0)
                 .collect(Collectors.toList());
 
             response.getWriter().write(gson.toJson(products));
