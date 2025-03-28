@@ -65,7 +65,7 @@
                                             <option value="1">Khách vay nợ</option>
                                             <option value="2">Khách trả nợ</option>
                                             <option value="3">Cửa hàng trả nợ</option>
-                                            <option value="4">Cửa hàng vay trả</option>
+                                            <option value="4">Cửa hàng vay nợ</option>
                                         </select>
                                     </div>
                                     <div class="col-md-6">

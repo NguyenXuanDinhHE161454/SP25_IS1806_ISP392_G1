@@ -63,6 +63,7 @@
                                             <th>Tên khách hàng</th>
                                             <th>Số điện thoại</th>
                                             <th>Địa chỉ</th>
+                                           
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -72,7 +73,7 @@
                                                 <td>${dto.fullName}</td>
                                                 <td>${dto.phoneNumber != null ? dto.phoneNumber : ''}</td>
                                                 <td>${dto.address != null ? dto.address : ''}</td>
-                                                
+                                               
                                                 <td>
                                                     <a href="CustomerDebtController?action=updateCustomer&customerId=${dto.customerId}" class="btn btn-sm btn-primary">Cập nhật</a>
                                                     <a href="CustomerDebtController?action=deleteCustomer&customerId=${dto.customerId}" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa khách hàng này không?')">Xóa</a>
@@ -120,7 +121,6 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-success">Thêm khách hàng</button>
-                                                    <a href="dashboard" class="btn btn-secondary">Trở về</a>
                                                 </div>
                                             </div>
                                         </form>
