@@ -3,7 +3,9 @@ package dao;
 import DBContext.DatabaseConnection;
 import model.InvoiceDetail;
 import dto.InvoiceDetailDTO;
+import dto.ProductItemDTO;
 import enums.InvoiceStatus;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
+
     private static final Logger LOGGER = Logger.getLogger(InvoiceDetailDAO.class.getName());
 
     @Override
@@ -30,92 +33,92 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
                 .quantity(quantity)
                 .description(rs.getString("Description"))
                 .createdBy(createdBy)
-                .createdAt(rs.getTimestamp("CreatedAt") != null ? 
-                    rs.getTimestamp("CreatedAt").toLocalDateTime() : null)
+                .createdAt(rs.getTimestamp("CreatedAt") != null
+                        ? rs.getTimestamp("CreatedAt").toLocalDateTime() : null)
                 .isDeleted(rs.getBoolean("IsDeleted"))
-                .deletedAt(rs.getTimestamp("DeletedAt") != null ? 
-                    rs.getTimestamp("DeletedAt").toLocalDateTime() : null)
+                .deletedAt(rs.getTimestamp("DeletedAt") != null
+                        ? rs.getTimestamp("DeletedAt").toLocalDateTime() : null)
                 .deletedBy(deletedBy)
                 .build();
     }
 
-    // CRUD Operations
-    public boolean addInvoiceDetail(InvoiceDetail detail) {
-        String query = "INSERT INTO InvoiceDetails (InvoiceId, ProductId, UnitPrice, Quantity, " +
-                      "Description, CreatedBy, CreatedAt, IsDeleted) " +
-                      "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setObject(1, detail.getInvoiceId());
-            stmt.setObject(2, detail.getProductId());
-            stmt.setBigDecimal(3, detail.getUnitPrice());
-            stmt.setObject(4, detail.getQuantity());
-            stmt.setString(5, detail.getDescription());
-            stmt.setObject(6, detail.getCreatedBy());
-            stmt.setTimestamp(7, Timestamp.valueOf(detail.getCreatedAt() != null ? 
-                detail.getCreatedAt() : LocalDateTime.now()));
-            stmt.setBoolean(8, detail.getIsDeleted() != null ? detail.getIsDeleted() : false);
+    public List<Integer> addInvoiceDetails(List<InvoiceDetail> details) {
+        String query = "INSERT INTO InvoiceDetails (InvoiceId, ProductId, UnitPrice, Quantity, AmountPerKg, Description, CreatedBy, CreatedAt, IsDeleted) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        List<Integer> insertedIds = new ArrayList<>();
 
-            int rowsAffected = stmt.executeUpdate();
-            if (rowsAffected > 0) {
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        detail.setId(rs.getInt(1));
-                        return true;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            for (InvoiceDetail detail : details) {
+                stmt.setInt(1, detail.getInvoiceId());
+                stmt.setInt(2, detail.getProductId());
+                stmt.setBigDecimal(3, detail.getUnitPrice());
+                stmt.setInt(4, detail.getQuantity());
+                stmt.setInt(5, detail.getAmountPerKg());
+                stmt.setString(6, detail.getDescription());
+                stmt.setInt(7, detail.getCreatedBy());
+                stmt.setTimestamp(8, Timestamp.valueOf(LocalDateTime.now()));
+                stmt.setBoolean(9, false);
+
+                // Thực thi từng câu lệnh thay vì batch
+                int affectedRows = stmt.executeUpdate();
+
+                if (affectedRows > 0) {
+                    try (ResultSet rs = stmt.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            insertedIds.add(rs.getInt(1)); // Lấy ID tự động tăng
+                        }
                     }
                 }
             }
-            return false;
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Error adding invoice detail", e);
-            return false;
+            LOGGER.log(Level.SEVERE, "Error adding invoice details", e);
         }
+
+        return insertedIds;
     }
 
     public boolean updateInvoiceDetail(InvoiceDetail detail) {
-        String query = "UPDATE InvoiceDetails SET InvoiceId = ?, ProductId = ?, UnitPrice = ?, " +
-                      "Quantity = ?, Description = ? WHERE Id = ? AND IsDeleted = 0";
+        String query = "UPDATE InvoiceDetails SET InvoiceId = ?, ProductId = ?, UnitPrice = ?, "
+                + "Quantity = ?, Description = ? WHERE Id = ? AND IsDeleted = 0";
         return executeUpdate(query,
-            detail.getInvoiceId(),
-            detail.getProductId(),
-            detail.getUnitPrice(),
-            detail.getQuantity(),
-            detail.getDescription(),
-            detail.getId());
+                detail.getInvoiceId(),
+                detail.getProductId(),
+                detail.getUnitPrice(),
+                detail.getQuantity(),
+                detail.getDescription(),
+                detail.getId());
     }
 
     public boolean softDeleteInvoiceDetail(int id, int deletedBy) {
         String query = "UPDATE InvoiceDetails SET IsDeleted = 1, DeletedAt = ?, DeletedBy = ? WHERE Id = ?";
         return executeUpdate(query,
-            Timestamp.valueOf(LocalDateTime.now()),
-            deletedBy,
-            id);
+                Timestamp.valueOf(LocalDateTime.now()),
+                deletedBy,
+                id);
     }
 
-    public boolean deleteInvoiceDetail(int id) {
-        return executeUpdate("DELETE FROM InvoiceDetails WHERE Id = ?", id);
-    }
+
 
     public List<InvoiceDetail> getAllInvoiceDetails() {
         return getAll("SELECT * FROM InvoiceDetails WHERE IsDeleted = 0");
     }
 
     public InvoiceDetailDTO getInvoiceDetailByInvoiceId(int invoiceId) {
-        String query = "SELECT i.Id, i.Type, i.CreateDate, i.UserId, u.FullName AS UserName, " +
-                      "i.CustomerId, c.FullName AS CustomerName, i.Payment AS PaidAmount, " +
-                      "SUM(id.Quantity) AS TotalQuantity, " +
-                      "SUM(id.Quantity * id.UnitPrice) AS TotalAmount, " +
-                      "(SUM(id.Quantity * id.UnitPrice) - i.Payment) AS DebtAmount " +
-                      "FROM Invoices i " +
-                      "LEFT JOIN Users u ON i.UserId = u.UserID " +
-                      "LEFT JOIN Customers c ON i.CustomerId = c.CustomerID " +
-                      "LEFT JOIN InvoiceDetails id ON i.Id = id.InvoiceId " +
-                      "WHERE i.Id = ? AND i.IsDeleted = 0 " +
-                      "GROUP BY i.Id, i.Type, i.CreateDate, i.UserId, u.FullName, " +
-                      "i.CustomerId, c.FullName, i.Payment";
+        String query = "SELECT i.Id, i.Type, i.CreateDate, i.UserId, u.FullName AS UserName, "
+                + "i.CustomerId, c.FullName AS CustomerName, i.PaidAmount AS PaidAmount, "
+                + "SUM(id.Quantity) AS TotalQuantity, "
+                + "i.Payment AS TotalAmount, "
+                + "(SUM(id.Quantity * id.UnitPrice) - i.PaidAmount) AS DebtAmount "
+                + "FROM Invoices i "
+                + "LEFT JOIN Users u ON i.UserId = u.UserID "
+                + "LEFT JOIN Customers c ON i.CustomerId = c.CustomerID "
+                + "LEFT JOIN InvoiceDetails id ON i.Id = id.InvoiceId "
+                + "WHERE i.Id = ? AND i.IsDeleted = 0 "
+                + "GROUP BY i.Id, i.Payment, i.Type, i.CreateDate, i.UserId, u.FullName, "
+                + "i.CustomerId, c.FullName, i.PaidAmount";
 
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, invoiceId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -123,21 +126,21 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
                     Integer userId = rs.getObject("UserId") != null ? rs.getInt("UserId") : null;
 
                     InvoiceDetailDTO dto = InvoiceDetailDTO.builder()
-                        .id(rs.getInt("Id"))
-                        .status(InvoiceStatus.fromValue(rs.getInt("Type")))
-                        .createDate(rs.getTimestamp("CreateDate") != null ? 
-                            rs.getTimestamp("CreateDate").toLocalDateTime() : null)
-                        .userId(userId)
-                        .userName(rs.getString("UserName"))
-                        .customerId(customerId)
-                        .customerName(rs.getString("CustomerName"))
-                        .totalQuantity(rs.getInt("TotalQuantity"))
-                        .totalAmount(rs.getBigDecimal("TotalAmount"))
-                        .paidAmount(rs.getBigDecimal("PaidAmount"))
-                        .debtAmount(rs.getBigDecimal("DebtAmount"))
-                        .build();
+                            .id(rs.getInt("Id"))
+                            .status(InvoiceStatus.fromValue(rs.getInt("Type")))
+                            .createDate(rs.getTimestamp("CreateDate") != null
+                                    ? rs.getTimestamp("CreateDate").toLocalDateTime() : null)
+                            .userId(userId)
+                            .userName(rs.getString("UserName"))
+                            .customerId(customerId)
+                            .customerName(rs.getString("CustomerName"))
+                            .totalQuantity(rs.getInt("TotalQuantity"))
+                            .totalAmount(rs.getBigDecimal("TotalAmount"))
+                            .paidAmount(rs.getBigDecimal("PaidAmount"))
+                            .debtAmount(rs.getBigDecimal("DebtAmount"))
+                            .build();
 
-                    List<InvoiceDetailDTO.ProductItemDTO> products = getProductItems(invoiceId);
+                    List<ProductItemDTO> products = getProductItems(invoiceId);
                     dto.setProducts(products);
                     return dto;
                 }
@@ -149,29 +152,28 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
         return null;
     }
 
-    private List<InvoiceDetailDTO.ProductItemDTO> getProductItems(int invoiceId) {
-        String query = "SELECT id.ProductId, p.Name AS ProductName, id.Quantity, " +
-                      "id.UnitPrice, (id.Quantity * id.UnitPrice) AS TotalPrice, " +
-                      "id.Description " +
-                      "FROM InvoiceDetails id " +
-                      "JOIN Product p ON id.ProductId = p.Id " +
-                      "WHERE id.InvoiceId = ? AND id.IsDeleted = 0";
-        
-        List<InvoiceDetailDTO.ProductItemDTO> items = new ArrayList<>();
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+    private List<ProductItemDTO> getProductItems(int invoiceId) {
+        String query = "SELECT id.ProductId AS ProductId, p.Name AS ProductName, "
+                + "p.Quantity, p.Amount AS UnitPrice, (id.Quantity * id.UnitPrice) AS TotalPrice, "
+                + "id.AmountPerKg, id.Description "
+                + "FROM InvoiceDetails id "
+                + "JOIN Product p ON id.ProductId = p.Id "
+                + "WHERE id.InvoiceId = ? AND id.IsDeleted = 0";
+
+        List<ProductItemDTO> items = new ArrayList<>();
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, invoiceId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    Integer quantity = rs.getObject("Quantity") != null ? rs.getInt("Quantity") : null;
-                    items.add(InvoiceDetailDTO.ProductItemDTO.builder()
-                        .productId(rs.getInt("ProductId"))
-                        .productName(rs.getString("ProductName"))
-                        .quantity(quantity != null ? quantity : 0)
-                        .unitPrice(rs.getBigDecimal("UnitPrice"))
-                        .totalPrice(rs.getBigDecimal("TotalPrice"))
-                        .description(rs.getString("Description"))
-                        .build());
+                    items.add(ProductItemDTO.builder()
+                            .productId(rs.getInt("ProductId"))
+                            .productName(rs.getString("ProductName"))
+                            .quantity(rs.getObject("Quantity") != null ? rs.getInt("Quantity") : 0)
+                            .unitPrice(rs.getObject("UnitPrice") != null ? rs.getBigDecimal("UnitPrice") : BigDecimal.ZERO)
+                            .totalPrice(rs.getObject("TotalPrice") != null ? rs.getBigDecimal("TotalPrice") : BigDecimal.ZERO)
+                            .amountPerKg(rs.getObject("AmountPerKg") != null ? rs.getInt("AmountPerKg") : 0)
+                            .description(rs.getString("Description"))
+                            .build());
                 }
             }
         } catch (SQLException e) {
@@ -182,8 +184,7 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
 
     public List<InvoiceDetail> getDetailsByInvoiceId(int invoiceId) {
         String query = "SELECT * FROM InvoiceDetails WHERE InvoiceId = ? AND IsDeleted = 0";
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, invoiceId);
             try (ResultSet rs = stmt.executeQuery()) {
                 List<InvoiceDetail> details = new ArrayList<>();
@@ -199,33 +200,52 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
     }
 
     public static void main(String[] args) {
-        InvoiceDetailDAO dao = new InvoiceDetailDAO();
-        
-        // Test get all invoice details
-        List<InvoiceDetail> details = dao.getAllInvoiceDetails();
-        System.out.println("All Invoice Details:");
-        details.forEach(System.out::println);
+        testAddInvoiceDetails();
 
-        // Test get detailed invoice info
-        int testInvoiceId = 1;
-        InvoiceDetailDTO detailDTO = dao.getInvoiceDetailByInvoiceId(testInvoiceId);
-        if (detailDTO != null) {
-            System.out.println("\nInvoice Detail (ID: " + testInvoiceId + "):");
-            System.out.println("Status: " + detailDTO.getStatus());
-            System.out.println("Create Date: " + detailDTO.getCreateDate());
-            System.out.println("User: " + detailDTO.getUserName());
-            System.out.println("Customer: " + detailDTO.getCustomerName());
-            System.out.println("Products:");
-            detailDTO.getProducts().forEach(p -> 
-                System.out.printf("  %s - Qty: %d - Unit: %s - Total: %s%n",
-                    p.getProductName(), p.getQuantity(), p.getUnitPrice(), p.getTotalPrice()));
-            System.out.println("Total Quantity: " + detailDTO.getTotalQuantity());
-            System.out.println("Total Amount: " + detailDTO.getTotalAmount());
-            System.out.println("Paid Amount: " + detailDTO.getPaidAmount());
-            System.out.println("Debt Amount: " + detailDTO.getDebtAmount());
-            System.out.println("Completed: " + detailDTO.isCompleted());
-        } else {
-            System.out.println("\nNo invoice detail found for ID " + testInvoiceId);
-        }
     }
+
+    public static void testAddInvoiceDetails() {
+        InvoiceDetailDAO invoiceDetailDAO = new InvoiceDetailDAO();
+
+//        // Tạo danh sách chi tiết hóa đơn giả lập
+//        List<InvoiceDetail> details = new ArrayList<>();
+//
+//        // Tạo InvoiceDetail thứ nhất
+//        InvoiceDetail detail1 = new InvoiceDetail();
+//        detail1.setInvoiceId(1);
+//        detail1.setProductId(1);
+//        detail1.setUnitPrice(new BigDecimal("50000"));
+//        detail1.setQuantity(2);
+//        detail1.setAmountPerKg(10);
+//        detail1.setDescription("Mô tả sản phẩm 1");
+//        detail1.setCreatedBy(1);
+//        detail1.setCreatedAt(LocalDateTime.now());
+//
+//        // Tạo InvoiceDetail thứ hai
+//        InvoiceDetail detail2 = new InvoiceDetail();
+//        detail2.setInvoiceId(1);
+//        detail2.setProductId(1);
+//        detail2.setUnitPrice(new BigDecimal("75000"));
+//        detail2.setQuantity(3);
+//        detail2.setAmountPerKg(15);
+//        detail2.setDescription("Mô tả sản phẩm 2");
+//        detail2.setCreatedBy(1);
+//        detail2.setCreatedAt(LocalDateTime.now());
+//
+//        // Thêm vào danh sách
+//        details.add(detail1);
+//        details.add(detail2);
+//
+//        // Gọi hàm addInvoiceDetails
+//        List<Integer> insertedIds = invoiceDetailDAO.addInvoiceDetails(details);
+//
+//        // Kiểm tra kết quả
+//        if (insertedIds.isEmpty()) {
+//            System.out.println("❌ Thêm InvoiceDetails thất bại!");
+//        } else {
+//            System.out.println("✅ Thêm thành công các InvoiceDetail có ID: " + insertedIds);
+//        }
+        System.out.println(invoiceDetailDAO.getProductItems(125));
+    }
+
 }

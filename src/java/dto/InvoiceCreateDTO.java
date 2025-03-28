@@ -23,15 +23,4 @@ public class InvoiceCreateDTO {
     private LocalDateTime createdAt;
     private Integer createdBy;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class ProductItemDTO {
-        private Integer productId;
-        private String productName;
-        private Integer quantity;
-        private BigDecimal unitPrice;
-        private BigDecimal totalPrice;
-    }
 }
