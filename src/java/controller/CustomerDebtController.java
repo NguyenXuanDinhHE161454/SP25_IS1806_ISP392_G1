@@ -74,6 +74,7 @@ public class CustomerDebtController extends HttpServlet {
                     boolean isDeleted = customerDAO.deleteCustomer(customerId, userId);
                     if (isDeleted) {
                         setMessage(request, "Xóa khách hàng thành công!", "success");
+
                     } else {
                         setMessage(request, "Failed to delete customer!", "danger");
                     }
@@ -120,6 +121,7 @@ public class CustomerDebtController extends HttpServlet {
             // Validate input
             if (fullName == null || fullName.trim().isEmpty()) {
                 setMessage(request, "Vui lòng nhập tên khách hàng!", "danger");
+
                 response.sendRedirect("CustomerDebtController?action=updateCustomer&customerId=" + customerId);
                 return;
             }

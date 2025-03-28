@@ -32,7 +32,6 @@
                             <div id="searchResults" class="search-results"></div>
                         </div>
                         
-
                         <table>
                             <thead>
                                 <tr>

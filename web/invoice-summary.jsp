@@ -101,6 +101,7 @@
                         <td>${product.quantity }</td>
                         <td><fmt:formatNumber value="${product.unitPrice}" type="currency" currencySymbol=""/></td>
                         <td><fmt:formatNumber value="${product.totalPrice}" type="currency" currencySymbol=""/></td>
+
                     </tr>
                 </c:forEach>
             </tbody>
