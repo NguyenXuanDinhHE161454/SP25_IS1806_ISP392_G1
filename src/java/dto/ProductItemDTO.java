@@ -17,6 +17,6 @@ public class ProductItemDTO {
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;
-    private Integer amountPerKg;
+        private Integer amountPerKg;
     private String description;
 }

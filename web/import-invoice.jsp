@@ -90,7 +90,7 @@
 
                         <div class="mb-3">
                             <label class="fw-bold">Số tiền đã trả:</label>
-                            <input type="number" name="paidAmount" class="form-control paid-amount" id="paidAmount" value="0" required="" />
+                            <input type="number" name="paidAmount" class="form-control paid-amount" id="paidAmount" value="" required="" />
                         </div>
 
                         <div id="debtInfo" class="debt-info hidden">
@@ -98,8 +98,8 @@
                         </div>
 
                         <div class="mt-4">
-                            <button id="createInvoice" class="btn btn-success w-100 mb-2">✅ Tạo Hóa Đơn</button>
-                            <button class="btn btn-primary w-100">🖨 In Hóa Đơn</button>
+                            <button id="createInvoice" class="btn btn-success w-100 mb-2">Tạo Hóa Đơn</button>
+                            <a href="dashboard" class="btn btn-secondary w-100">Thoát</a>
                         </div>
                     </div>
                 </div>

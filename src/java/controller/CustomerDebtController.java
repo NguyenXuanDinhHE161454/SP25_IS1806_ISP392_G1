@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "CustomerDebtController", urlPatterns = {"/CustomerController"})
+@WebServlet(name = "CustomerDebtController", urlPatterns = {"/CustomerDebtController"})
 public class CustomerDebtController extends HttpServlet {
 
     private static final int PAGE_SIZE = 5; // Number of records per page
@@ -57,7 +57,7 @@ public class CustomerDebtController extends HttpServlet {
                         customerId = Integer.parseInt(customerId_raw);
                     } catch (NumberFormatException e) {
                         setMessage(request, "Invalid customer ID!", "danger");
-                        response.sendRedirect("CustomerController");
+                        response.sendRedirect("CustomerDebtController");
                         return;
                     }
                     Customer customer = customerDAO.getCustomerById(customerId);
@@ -73,11 +73,11 @@ public class CustomerDebtController extends HttpServlet {
                     }
                     boolean isDeleted = customerDAO.deleteCustomer(customerId, userId);
                     if (isDeleted) {
-                        setMessage(request, "Customer deleted successfully!", "success");
+                        setMessage(request, "Xóa khách hàng thành công!", "success");
                     } else {
                         setMessage(request, "Failed to delete customer!", "danger");
                     }
-                    response.sendRedirect("CustomerController");
+                    response.sendRedirect("CustomerDebtController");
                 }
                 default -> {
                     String searchFullName = request.getParameter("fullName");
@@ -119,8 +119,8 @@ public class CustomerDebtController extends HttpServlet {
 
             // Validate input
             if (fullName == null || fullName.trim().isEmpty()) {
-                setMessage(request, "Customer name is required!", "danger");
-                response.sendRedirect("CustomerController?action=updateCustomer&customerId=" + customerId);
+                setMessage(request, "Vui lòng nhập tên khách hàng!", "danger");
+                response.sendRedirect("CustomerDebtController?action=updateCustomer&customerId=" + customerId);
                 return;
             }
 
@@ -128,8 +128,8 @@ public class CustomerDebtController extends HttpServlet {
             if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
                 boolean phoneExists = customerDAO.isPhoneNumberExists(phoneNumber, customerId);
                 if (phoneExists) {
-                    setMessage(request, "Phone number already exists!", "danger");
-                    response.sendRedirect("CustomerController?action=updateCustomer&customerId=" + customerId);
+                    setMessage(request, "Số điện thoại đã được đăng kí!", "danger");
+                    response.sendRedirect("CustomerDebtController?action=updateCustomer&customerId=" + customerId);
                     return;
                 }
             }
@@ -142,11 +142,11 @@ public class CustomerDebtController extends HttpServlet {
 
             boolean isUpdated = customerDAO.updateCustomer(customer);
             if (isUpdated) {
-                setMessage(request, "Customer updated successfully!", "success");
+                setMessage(request, "Cập nhật thành công!", "success");
             } else {
-                setMessage(request, "Failed to update customer!", "danger");
+                setMessage(request, "Cập nhật thất bại!", "danger");
             }
-            response.sendRedirect("CustomerController");
+            response.sendRedirect("CustomerDebtController");
         } else {
             // Handle adding a new customer
             String fullName = request.getParameter("fullName");
@@ -154,8 +154,8 @@ public class CustomerDebtController extends HttpServlet {
             String address = request.getParameter("address");
 
             if (fullName == null || fullName.trim().isEmpty()) {
-                setMessage(request, "Customer name is required!", "danger");
-                response.sendRedirect("CustomerController");
+                setMessage(request, "Vui lòng nhập tên khách hàng!", "danger");
+                response.sendRedirect("CustomerDebtController");
                 return;
             }
 
@@ -163,8 +163,8 @@ public class CustomerDebtController extends HttpServlet {
             if (phoneNumber != null && !phoneNumber.trim().isEmpty()) {
                 boolean phoneExists = customerDAO.isPhoneNumberExists(phoneNumber, null);
                 if (phoneExists) {
-                    setMessage(request, "Phone number already exists!", "danger");
-                    response.sendRedirect("CustomerController");
+                    setMessage(request, "Số điện thoại đã được đăng kí!", "danger");
+                    response.sendRedirect("CustomerDebtController");
                     return;
                 }
             }
@@ -184,11 +184,11 @@ public class CustomerDebtController extends HttpServlet {
 
             boolean isAdded = customerDAO.addCustomer(customer, createdBy);
             if (isAdded) {
-                setMessage(request, "Customer added successfully!", "success");
+                setMessage(request, "Tạo mới khách hàng thành công!", "success");
             } else {
-                setMessage(request, "Failed to add customer!", "danger");
+                setMessage(request, "Tạo mới khách hàng thất bại!", "danger");
             }
-            response.sendRedirect("CustomerController");
+            response.sendRedirect("CustomerDebtController");
         }
     }
 

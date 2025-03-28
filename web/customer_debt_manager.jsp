@@ -120,6 +120,7 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <button type="submit" class="btn btn-success">Thêm khách hàng</button>
+                                                    <a href="dashboard" class="btn btn-secondary">Trở về</a>
                                                 </div>
                                             </div>
                                         </form>

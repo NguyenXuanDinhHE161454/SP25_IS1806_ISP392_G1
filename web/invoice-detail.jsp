@@ -72,7 +72,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h1 class="mt-4 fw-bold text-primary"><i class="bi bi-receipt me-2"></i>Chi Tiết Hóa Đơn</h1>
                             <a href="InvoiceController" class="btn btn-back">
-                                <i class="bi bi-arrow-left me-2"></i>Quay Lại Danh Sách Hóa Đơn
+                                <i class="bi bi-arrow-left me-2"></i>Quay Lại
                             </a>
                         </div>
 
@@ -90,9 +90,7 @@
                                         <i class="bi bi-file-earmark-text me-2"></i>
                                         Hóa Đơn #${invoiceDetail.id}
                                     </h4>
-                                    <span class="badge ${invoiceDetail.completed ? 'status-badge completed' : 'status-badge pending'}">
-                                        ${invoiceDetail.status}
-                                    </span>
+                                    
                                 </div>
                                 <div class="invoice-details">
                                     <div class="row mb-4">
@@ -119,12 +117,9 @@
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <h5 class="fw-bold mb-3">Tóm Tắt Thanh Toán</h5>
+                                            <h5 class="fw-bold mb-3"></h5>
                                             <ul class="list-unstyled">
-                                                <li class="mb-2">
-                                                    <span class="fw-semibold">Tổng Số Lượng:</span>
-                                                    <span id="totalQuantity">${invoiceDetail.totalQuantity}</span>
-                                                </li>
+                                                
                                                 <li class="mb-2">
                                                     <span class="fw-semibold">Tổng Số Tiền:</span>
                                                     <span class="total-amount" id="formatVND">${invoiceDetail.totalAmount}</span>
@@ -135,7 +130,7 @@
                                                 </li>
                                                 <li class="mb-2">
                                                     <span class="fw-semibold">Số Tiền Nợ:</span>
-                                                    <span id="formatVND">${invoiceDetail.debtAmount}</span>
+                                                    <span id="formatVND">${invoiceDetail.getDebt().getAmount()}</span>
                                                 </li>
                                                 <c:if test="${not empty invoiceDetail.debt}">
                                                     <c:if test="${not empty invoiceDetail.debt}">
@@ -164,10 +159,9 @@
                                                 <tr>
                                                     <th>Mã Sản Phẩm</th>
                                                     <th>Tên Sản Phẩm</th>
-                                                    <th>Số Lượng</th>
-                                                    <th>Đơn Giá</th>
-                                                    <th>Tổng Giá</th>
-                                                    <th>Mô Tả</th>
+                                                    <th>Khối Lượng</th>
+                                                    <th>Giá bán</th>
+                                                    
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -177,8 +171,7 @@
                                                         <td>${product.productName}</td>
                                                         <td>${product.quantity}</td>
                                                         <td id="formatVND">${product.unitPrice}</td>
-                                                        <td id="formatVND">${product.totalPrice}</td>
-                                                        <td>${product.description}</td>
+                                                        
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>

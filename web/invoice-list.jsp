@@ -25,7 +25,7 @@
                         <!-- Bộ lọc tìm kiếm -->
                         <form method="get" action="InvoiceController" class="row g-3 mb-3">
                             <div class="col-md-3">
-                                <input type="text" name="keyword" value="${keyword}" class="form-control" placeholder="Tìm kiếm hóa đơn">
+                                <input type="text" name="keyword" value="${keyword}" class="form-control" placeholder="Tìm kiếm Mã, Tên khách, Người tạo...">
                             </div>
                             <div class="col-md-3">
                                 <input type="datetime-local" name="fromDate" value="${fromDate}" class="form-control">
@@ -33,32 +33,36 @@
                             <div class="col-md-3">
                                 <input type="datetime-local" name="toDate" value="${toDate}" class="form-control">
                             </div>
+                            <!-- Bộ lọc loại hóa đơn -->
+                            <div class="mb-3">
+                                <label class="fw-bold">Loại hóa đơn:</label>
+                                <select id="invoiceType" name="invoiceType" class="form-control">
+                                    <option value="" ${not empty type  ? "Selected" : ""}>Tất cả</option>
+                                    <option value="1" ${type == 1 ? "Selected" : ""}>Hóa đơn nhập</option>
+                                    <option value="2" ${type == 2 ? "Selected" : ""}>Hóa đơn xuất</option>
+                                </select>
+                            </div>
                             <div class="col-md-2">
                                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
                             </div>
                         </form>
 
-                        <!-- Chọn số bản ghi trên mỗi trang -->
-                        <form method="get" action="InvoiceController" class="mb-3">
-                            <label for="pageSize">Số bản ghi mỗi trang:</label>
-                            <select name="pageSize" id="pageSize" class="form-select w-auto d-inline" onchange="this.form.submit()">
-                                <option value="5" ${pageSize == 5 ? 'selected' : ''}>5</option>
-                                <option value="10" ${pageSize == 10 ? 'selected' : ''}>10</option>
-                                <option value="20" ${pageSize == 20 ? 'selected' : ''}>20</option>
-                            </select>
-                            <input type="hidden" name="keyword" value="${keyword}">
-                            <input type="hidden" name="fromDate" value="${fromDate}">
-                            <input type="hidden" name="toDate" value="${toDate}">
-                        </form>
+                        <!--                         Chọn số bản ghi trên mỗi trang 
+                                                <form method="get" action="InvoiceController" class="mb-3">
+                                                    <label for="pageSize">Số bản ghi mỗi trang:</label>
+                                                    <select name="pageSize" id="pageSize" class="form-select w-auto d-inline" onchange="this.form.submit()">
+                                                        <option value="5" ${pageSize == 5 ? 'selected' : ''}>5</option>
+                                                        <option value="10" ${pageSize == 10 ? 'selected' : ''}>10</option>
+                                                        <option value="20" ${pageSize == 20 ? 'selected' : ''}>20</option>
+                                                    </select>
+                                                    <input type="hidden" name="keyword" value="${keyword}">
+                                                    <input type="hidden" name="fromDate" value="${fromDate}">
+                                                    <input type="hidden" name="toDate" value="${toDate}">
+                                                </form>-->
 
                         <!-- Danh sách hóa đơn -->
                         <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i> Danh Sách Hóa Đơn
-                                <a href="create-invoice.jsp" class="btn btn-success btn-sm float-end">
-                                    <i class="fas fa-plus"></i> Tạo Hóa Đơn Mới
-                                </a>
-                            </div>
+
                             <div class="card-body">
                                 <table class="table table-striped">
                                     <thead>
@@ -66,8 +70,8 @@
                                             <th>Mã Hóa Đơn</th>
                                             <th>Ngày Tạo</th>
                                             <th>Khách Hàng</th>
-                                            <th>Người Dùng</th>
-                                            <th>Thanh Toán</th>
+                                            <th>Người Tạo</th>
+                                            <th>Số Tiền</th>
                                             <th>Loại</th>
                                             <th>Hành Động</th>
                                         </tr>
@@ -105,25 +109,25 @@
                             <nav>
                                 <ul class="pagination">
                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="InvoiceController?page=1&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}">Đầu</a>
+                                        <a class="page-link" href="InvoiceController?page=1&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}&invoiceType=${type}">Đầu</a>
                                     </li>
 
                                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                                        <a class="page-link" href="InvoiceController?page=${currentPage - 1}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}">Trước</a>
+                                        <a class="page-link" href="InvoiceController?page=${currentPage - 1}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}&invoiceType=${type}">Trước</a>
                                     </li>
 
                                     <c:forEach var="i" begin="1" end="${totalPages}">
                                         <li class="page-item ${currentPage == i ? 'active' : ''}">
-                                            <a class="page-link" href="InvoiceController?page=${i}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}">${i}</a>
+                                            <a class="page-link" href="InvoiceController?page=${i}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}&invoiceType=${type}">${i}</a>
                                         </li>
                                     </c:forEach>
 
                                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="InvoiceController?page=${currentPage + 1}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}">Tiếp</a>
+                                        <a class="page-link" href="InvoiceController?page=${currentPage + 1}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}&invoiceType=${type}">Tiếp</a>
                                     </li>
 
                                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                                        <a class="page-link" href="InvoiceController?page=${totalPages}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}">Cuối</a>
+                                        <a class="page-link" href="InvoiceController?page=${totalPages}&pageSize=${pageSize}&keyword=${keyword}&fromDate=${fromDate}&toDate=${toDate}&invoiceType=${type}">Cuối</a>
                                     </li>
                                 </ul>
                             </nav>

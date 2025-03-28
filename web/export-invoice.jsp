@@ -20,7 +20,7 @@
                 <input type="hidden" id="addNewCustomer" name="addNewCustomer" value="false">
 
                 <div id="productList" style="display: none;">
-                    <!-- Các trường ẩn cho sản phẩm sẽ được thêm vào đây -->
+                   
                 </div>
                 <h2 class="text-center text-dark mb-4">Hóa Đơn Xuất</h2>
 
@@ -31,6 +31,7 @@
                             <input type="text" id="productSearch" class="search-box form-control" placeholder="Tìm sản phẩm...">
                             <div id="searchResults" class="search-results"></div>
                         </div>
+                        
 
                         <table>
                             <thead>
@@ -96,6 +97,7 @@
 
                         <div class="mt-4">
                             <button id="createInvoice" class="btn btn-success w-100 mb-2">Tạo Hóa Đơn</button>
+                            <a href="dashboard" class="btn btn-secondary w-100">Thoát</a>
                         </div>
                     </div>
                 </div>

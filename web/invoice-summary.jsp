@@ -68,14 +68,14 @@
                 <p><strong>Tổng Khối Lượng:</strong> 
                     <c:set var="totalWeight" value="${0}"/>
                     <c:forEach var="product" items="${invoice.products}">
-                        <c:set var="totalWeight" value="${totalWeight + (product.quantity * product.amountPerKg)}"/>
+                        <c:set var="totalWeight" value="${totalWeight + (product.quantity )}"/>
                     </c:forEach>
                     ${totalWeight} KG
                 </p>
-                <p><strong>Tổng Thanh Toán:</strong> <fmt:formatNumber value="${invoice.payment}" type="currency" currencySymbol="VND"/></p>
-                <p><strong>Đã Thanh Toán:</strong> <fmt:formatNumber value="${invoice.paidAmount}" type="currency" currencySymbol="VND"/></p>
-                <p><strong>Công Nợ Còn Lại:</strong> <fmt:formatNumber value="${invoice.debtAmount}" type="currency" currencySymbol="VND"/></p>
-                <p><strong>Mô Tả:</strong> ${invoice.description != null && !invoice.description.isEmpty() ? invoice.description : "Không có"}</p>
+                <p><strong>Tổng Thanh Toán:</strong> <fmt:formatNumber value="${invoice.payment}" type="currency" currencySymbol=""/></p>
+                <p><strong>Đã Thanh Toán:</strong> <fmt:formatNumber value="${invoice.paidAmount}" type="currency" currencySymbol=""/></p>
+                <p><strong>Công Nợ Còn Lại:</strong> <fmt:formatNumber value="${invoice.debtAmount}" type="currency" currencySymbol=""/></p>
+                
                 <p><strong>Loại Hóa Đơn:</strong> ${invoice.type == 1 ? "Nhập hàng" : "Xuất hàng"}</p>
             </div>
         </div>
@@ -88,8 +88,8 @@
                     <th>Số Lượng (Bao)</th>
                     <th>Khối Lượng/Bao (KG)</th>
                     <th>Tổng Khối Lượng (KG)</th>
-                    <th>Đơn Giá/Bao (VND)</th>
-                    <th>Thành Tiền (VND)</th>
+                    <th>Giá</th>
+                    <th>Thành Tiền</th>
                 </tr>
             </thead>
             <tbody>
@@ -99,8 +99,8 @@
                         <td>${product.quantity / product.amountPerKg}</td>
                         <td>${product.amountPerKg}</td>
                         <td>${product.quantity }</td>
-                        <td><fmt:formatNumber value="${product.unitPrice}" type="currency" currencySymbol="VND"/></td>
-                        <td><fmt:formatNumber value="${product.totalPrice}" type="currency" currencySymbol="VND"/></td>
+                        <td><fmt:formatNumber value="${product.unitPrice}" type="currency" currencySymbol=""/></td>
+                        <td><fmt:formatNumber value="${product.totalPrice}" type="currency" currencySymbol=""/></td>
                     </tr>
                 </c:forEach>
             </tbody>

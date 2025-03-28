@@ -98,9 +98,7 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
                 id);
     }
 
-    public boolean deleteInvoiceDetail(int id) {
-        return executeUpdate("DELETE FROM InvoiceDetails WHERE Id = ?", id);
-    }
+
 
     public List<InvoiceDetail> getAllInvoiceDetails() {
         return getAll("SELECT * FROM InvoiceDetails WHERE IsDeleted = 0");
@@ -156,7 +154,7 @@ public class InvoiceDetailDAO extends GenericDAO<InvoiceDetail> {
 
     private List<ProductItemDTO> getProductItems(int invoiceId) {
         String query = "SELECT id.ProductId AS ProductId, p.Name AS ProductName, "
-                + "id.Quantity, p.Amount AS UnitPrice, (id.Quantity * id.UnitPrice) AS TotalPrice, "
+                + "p.Quantity, p.Amount AS UnitPrice, (id.Quantity * id.UnitPrice) AS TotalPrice, "
                 + "id.AmountPerKg, id.Description "
                 + "FROM InvoiceDetails id "
                 + "JOIN Product p ON id.ProductId = p.Id "

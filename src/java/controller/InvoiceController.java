@@ -22,6 +22,7 @@ import utils.ConversionUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -91,6 +92,8 @@ public class InvoiceController extends HttpServlet {
         try {
             // Lấy và xử lý các tham số từ request
             String keyword = trimToNull(request.getParameter("keyword"));
+            String invoiceType = request.getParameter("invoiceType");
+            Integer inType = parseInt(invoiceType);
             Integer customerId = parseInt(request.getParameter("customerId"));
             Integer userId = parseInt(request.getParameter("userId"));
             LocalDateTime fromDate = parseDate(request.getParameter("fromDate"));
@@ -105,6 +108,7 @@ public class InvoiceController extends HttpServlet {
                     userId != null ? String.valueOf(userId) : null,
                     fromDate,
                     toDate,
+                    inType,
                     offset,
                     PAGE_SIZE
             );
@@ -113,7 +117,8 @@ public class InvoiceController extends HttpServlet {
                     customerId != null ? String.valueOf(customerId) : null,
                     userId != null ? String.valueOf(userId) : null,
                     fromDate,
-                    toDate
+                    toDate,
+                    inType
             );
             int totalPages = (int) Math.ceil((double) totalRecords / PAGE_SIZE);
 
@@ -122,7 +127,8 @@ public class InvoiceController extends HttpServlet {
                     "invoiceList", invoices,
                     "currentPage", page,
                     "totalPages", totalPages,
-                    "keyword", keyword == null ? "" : keyword
+                    "keyword", keyword == null ? "" : keyword,
+                    "type", inType == null ? "" : inType
             ));
 
             // Chuyển tiếp đến JSP
@@ -270,7 +276,9 @@ public class InvoiceController extends HttpServlet {
             for (ProductItemDTO product : invoice.getProducts()) {
                 totalLoad += product.getQuantity() * product.getAmountPerKg();
                 int temp = product.getQuantity() * product.getAmountPerKg();
+                product.setUnitPrice(product.getUnitPrice().divide(BigDecimal.valueOf(product.getAmountPerKg()), RoundingMode.HALF_UP));
                 product.setQuantity(temp);
+                product.setTotalPrice( product.getUnitPrice().multiply(toBigDecimal(temp+"")));
                 Integer updatedProductId = productDAO.updateProductQuantity(
                         product.getProductId(),
                         product.getQuantity(),
@@ -414,9 +422,9 @@ public class InvoiceController extends HttpServlet {
 
                     return ProductItemDTO.builder()
                             .productId(toInt(ids[i]))
-                            .quantity(quantity)
+                            .quantity(quantity)// Gán quantity (số bao)
                             .unitPrice(unitPrice)
-                            .amountPerKg(amountPerKg)
+                            .amountPerKg(amountPerKg)// Gán amountPerKg
                             .totalPrice(totalPrice)
                             .build();
                 })

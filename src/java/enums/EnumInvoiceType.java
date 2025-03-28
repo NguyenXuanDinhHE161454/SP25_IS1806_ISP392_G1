@@ -7,6 +7,7 @@ import java.util.List;
  * Enum for Invoice Types: Import (Nhập hàng) and Export (Xuất hàng)
  */
 public enum EnumInvoiceType {
+    N0NE(0, "N/A"),
     IMPORT(1, "Nhập hàng"),
     EXPORT(2, "Xuất hàng");
 
@@ -26,14 +27,14 @@ public enum EnumInvoiceType {
         return description;
     }
 
-    // Lấy enum theo mã code
+    // Lấy enum theo mã code, nếu không có thì trả về N0NE
     public static EnumInvoiceType getByCode(int code) {
         for (EnumInvoiceType type : values()) {
             if (type.code == code) {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Invalid invoice type code: " + code);
+        return N0NE;
     }
 
     // Lấy danh sách tất cả các loại hóa đơn
