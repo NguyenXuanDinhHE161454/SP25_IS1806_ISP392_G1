@@ -59,7 +59,7 @@
                                     <div class="form-group associated-products">
                                         <label for="productId">Rice Type:</label>
                                         <select class="form-control" id="productId" name="productId">
-                                            <option value="" ${associatedProduct == null ? 'selected' : ''}>-- Select Rice Type --</option>
+                                            <option value="" ${associatedProduct == null ? 'selected' : ''}>-- Trống --</option>
                                             <c:forEach var="product" items="${listProducts}">
                                                 <option value="${product.id}" ${associatedProduct != null && associatedProduct.id == product.id ? 'selected' : ''}>
                                                     ${product.name}

@@ -138,8 +138,7 @@
                                                 </li>
                                                 <c:if test="${not empty invoiceDetail.debt}">
                                                     <c:if test="${not empty invoiceDetail.debt}">
-                                                        <!--                                                        <li class="mb-2 debt-info">
-                                                                                                                    <span class="fw-semibold">Loại Nợ:</span>
+                                                        
                                                         <c:if test="${invoiceDetail.debt.debtType == 1}">Khách Hàng Nợ</c:if>
                                                         <c:if test="${invoiceDetail.debt.debtType == 2}">Khách Hàng Thanh Toán</c:if>
                                                         <c:if test="${invoiceDetail.debt.debtType == 3}">Cửa Hàng Nợ</c:if>

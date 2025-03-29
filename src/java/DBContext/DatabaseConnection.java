@@ -8,7 +8,7 @@ public class DatabaseConnection {
 
     private static final String SERVER_NAME = "localhost";
 
-    private static final String DB_NAME = "ISP392";
+    private static final String DB_NAME = "SP25_IS1806_ISP392_G1";
 
 
     private static final String PORT_NUMBER = "1433";

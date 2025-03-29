@@ -244,6 +244,10 @@ public class InvoiceController extends HttpServlet {
 
             // Kiểm tra số lượng trong kho trước khi thực hiện
             for (ProductItemDTO product : invoice.getProducts()) {
+                int temp = product.getQuantity() * product.getAmountPerKg();
+                product.setUnitPrice(product.getUnitPrice().divide(BigDecimal.valueOf(product.getAmountPerKg()), RoundingMode.HALF_UP));
+                product.setQuantity(temp);
+                product.setTotalPrice(product.getUnitPrice().multiply(toBigDecimal(temp + "")));
                 int currentQuantity = productDAO.getProductById(product.getProductId()).getQuantity();
                 if (currentQuantity < product.getQuantity()) {
                     throw new IllegalStateException("Insufficient quantity for product ID: " + product.getProductId());
@@ -275,10 +279,6 @@ public class InvoiceController extends HttpServlet {
             // Cập nhật số lượng sản phẩm trong kho (giảm đi)
             for (ProductItemDTO product : invoice.getProducts()) {
                 totalLoad += product.getQuantity() * product.getAmountPerKg();
-                int temp = product.getQuantity() * product.getAmountPerKg();
-                product.setUnitPrice(product.getUnitPrice().divide(BigDecimal.valueOf(product.getAmountPerKg()), RoundingMode.HALF_UP));
-                product.setQuantity(temp);
-                product.setTotalPrice( product.getUnitPrice().multiply(toBigDecimal(temp+"")));
                 Integer updatedProductId = productDAO.updateProductQuantity(
                         product.getProductId(),
                         product.getQuantity(),

@@ -88,7 +88,6 @@ $(function () {
     });
 });
 
-
     $(document).on("click", ".addProduct", function () {
         let item = $(this).closest(".search-item");
         let productId = item.data("id");

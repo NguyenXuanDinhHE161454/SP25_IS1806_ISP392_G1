@@ -48,6 +48,6 @@ public class InvoiceDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response); // Giữ nguyên xử lý POST giống GET
+        doGet(request, response); 
     }
 }

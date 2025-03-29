@@ -59,7 +59,7 @@
         <p class="error-message">
             Xin lỗi, bạn không có quyền truy cập trang này. Vui lòng đăng nhập bằng tài khoản hợp lệ hoặc liên hệ quản trị viên.
         </p>
-        <a href="/RiceWareHouse2/home" class="btn btn-home text-white">Quay lại trang chủ</a>
+        <a href="home" class="btn btn-home text-white">Quay lại trang chủ</a>
     </div>
 
     <!-- Bootstrap JS (Optional, only if you need Bootstrap JS features) -->
