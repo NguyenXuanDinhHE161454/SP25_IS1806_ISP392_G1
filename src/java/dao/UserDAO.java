@@ -57,7 +57,7 @@ public class UserDAO extends GenericDAO<User> {
             stmt.setString(3, user.getAddress());
             stmt.setString(4, user.getUsername());
             stmt.setString(5, user.getPasswordHash());
-            stmt.setString(6, "owner");
+            stmt.setString(6, user.getRole());
             stmt.setString(7, user.getEmail());
             stmt.setBoolean(8, user.getIsBanned() != null ? user.getIsBanned() : false);
             stmt.setObject(9, user.getCreatedBy());
