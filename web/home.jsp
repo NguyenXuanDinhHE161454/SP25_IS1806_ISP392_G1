@@ -171,7 +171,7 @@
             <!-- Call to Action Section -->
             <section class="cta-section">
                 <h2>Ready to Optimize Your Warehouse?</h2>
-                <p>Login today and experience the power of Warehouse Rice management system!</p>
+                <p>Sign up today and experience the power of Warehouse Rice management system!</p>
                 <a href="login.jsp" class="cta-button">Băt đầu</a>
             </section>
         </main>

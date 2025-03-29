@@ -90,7 +90,7 @@
                                         <i class="bi bi-file-earmark-text me-2"></i>
                                         Hóa Đơn #${invoiceDetail.id}
                                     </h4>
-                                    
+
                                 </div>
                                 <div class="invoice-details">
                                     <div class="row mb-4">
@@ -119,7 +119,11 @@
                                         <div class="col-md-6">
                                             <h5 class="fw-bold mb-3"></h5>
                                             <ul class="list-unstyled">
-                                                
+
+                                                <li class="mb-2">
+                                                    <span class="fw-semibold">Loại hóa đơn</span>
+                                                    <span id="totalQuantity">${invoiceDetail.type == 1 ? "Nhập Hàng" : "Xuất Hàng"}</span>
+                                                </li>
                                                 <li class="mb-2">
                                                     <span class="fw-semibold">Tổng Số Tiền:</span>
                                                     <span class="total-amount" id="formatVND">${invoiceDetail.totalAmount}</span>
@@ -134,16 +138,16 @@
                                                 </li>
                                                 <c:if test="${not empty invoiceDetail.debt}">
                                                     <c:if test="${not empty invoiceDetail.debt}">
-<!--                                                        <li class="mb-2 debt-info">
-                                                            <span class="fw-semibold">Loại Nợ:</span>
-                                                            <c:if test="${invoiceDetail.debt.debtType == 1}">Khách Hàng Nợ</c:if>
-                                                            <c:if test="${invoiceDetail.debt.debtType == 2}">Khách Hàng Thanh Toán</c:if>
-                                                            <c:if test="${invoiceDetail.debt.debtType == 3}">Cửa Hàng Nợ</c:if>
-                                                            <c:if test="${invoiceDetail.debt.debtType == 4}">Cửa Hàng Thanh Toán</c:if>
-                                                            <c:if test="${invoiceDetail.debt.debtType != 1 && invoiceDetail.debt.debtType != 2 && invoiceDetail.debt.debtType != 3 && invoiceDetail.debt.debtType != 4}">
-                                                                Không Xác Định
-                                                            </c:if>
-                                                        </li>-->
+                                                        <!--                                                        <li class="mb-2 debt-info">
+                                                                                                                    <span class="fw-semibold">Loại Nợ:</span>
+                                                        <c:if test="${invoiceDetail.debt.debtType == 1}">Khách Hàng Nợ</c:if>
+                                                        <c:if test="${invoiceDetail.debt.debtType == 2}">Khách Hàng Thanh Toán</c:if>
+                                                        <c:if test="${invoiceDetail.debt.debtType == 3}">Cửa Hàng Nợ</c:if>
+                                                        <c:if test="${invoiceDetail.debt.debtType == 4}">Cửa Hàng Thanh Toán</c:if>
+                                                        <c:if test="${invoiceDetail.debt.debtType != 1 && invoiceDetail.debt.debtType != 2 && invoiceDetail.debt.debtType != 3 && invoiceDetail.debt.debtType != 4}">
+                                                            Không Xác Định
+                                                        </c:if>
+                                                    </li>-->
 
                                                     </c:if>
 
@@ -160,8 +164,8 @@
                                                     <th>Mã Sản Phẩm</th>
                                                     <th>Tên Sản Phẩm</th>
                                                     <th>Khối Lượng</th>
-                                                    <th>Giá bán</th>
-                                                    
+                                                    <th>Giá</th>
+                                                    <th>Tổng Giá</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -169,9 +173,34 @@
                                                     <tr>
                                                         <td>${product.productId}</td>
                                                         <td>${product.productName}</td>
-                                                        <td>${product.quantity}</td>
-                                                        <td id="formatVND">${product.unitPrice}</td>
-                                                        
+                                                        <td>
+                                                            <c:choose>
+                                                                <c:when test="${invoiceDetail.type == 2}">
+                                                                    <!-- Hóa đơn xuất: chỉ hiển thị quantity -->
+                                                                    ${product.quantity}
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <!-- Hóa đơn nhập: hiển thị tổng khối lượng -->
+                                                                    ${product.quantity * product.amountPerKg}
+                                                                </c:otherwise>
+                                                            </c:choose>
+                                                        </td>
+                                                        <c:choose>
+                                                            <c:when test="${invoiceDetail.type == 2}">
+                                                                <c:set var="price" value="${product.unitPrice}" />
+                                                                <c:set var="totalPrice" value="${product.unitPrice * product.quantity }" />
+                                                            </c:when>
+                                                            <c:when test="${invoiceDetail.type == 1}">
+                                                                <c:set var="price" value="${product.unitPrice}" />
+                                                                <c:set var="totalPrice" value="${product.unitPrice * product.quantity * product.amountPerKg}" />
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <c:set var="price" value="${product.unitPrice}" />
+                                                                <c:set var="totalPrice" value="${product.totalPrice}" />
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                        <td id="formatVND">${price}</td>
+                                                        <td id="formatVND">${totalPrice}</td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>
