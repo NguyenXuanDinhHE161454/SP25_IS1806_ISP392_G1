@@ -24,4 +24,5 @@ public class InvoiceDetail {
     private Boolean isDeleted;
     private LocalDateTime deletedAt;
     private Integer deletedBy;
+    private Integer amountPerKg;
 }
