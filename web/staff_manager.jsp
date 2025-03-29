@@ -58,6 +58,7 @@
                                             <th>Họ tên</th>
                                             <th>Số điện thoại</th>
                                             <th>Email</th>
+                                            <th>Trạng thái</th>
                                             <th>Hành động</th>
                                         </tr>
                                     </thead>
@@ -68,14 +69,41 @@
                                                 <td>${user.fullName}</td>
                                                 <td>${user.phoneNumber}</td>
                                                 <td>${user.email}</td>
+                                                <td>${user.isBanned ? 'Ban' : 'Active'}</td>
                                                 <td>
                                                     <c:if test="${user.role != 'Admin'}">
+                                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#updateStatusModal${user.userId}">Cập nhật</button>
                                                         <a href="StaffController?action=delete&id=${user.userId}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
                                                     </c:if>
                                                 </td>
                                             </tr>
-
-       
+                                            
+                                            <!-- Modal để cập nhật trạng thái IsBanned -->
+                                        <div class="modal fade" id="updateStatusModal${user.userId}" tabindex="-1" aria-labelledby="updateStatusModalLabel${user.userId}" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="updateStatusModalLabel${user.userId}">Update Status for User ID: ${user.userId}</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="StaffController" method="post">
+                                                            <input type="hidden" name="action" value="updateStatus">
+                                                            <input type="hidden" name="id" value="${user.userId}">
+                                                            <div class="mb-3">
+                                                                <label for="isBanned${user.userId}" class="form-label">Trạng thái</label>
+                                                                <select name="isBanned" id="isBanned${user.userId}" class="form-select">
+                                                                    <option value="false" ${!user.isBanned ? 'selected' : ''}>Active</option>
+                                                                    <option value="true" ${user.isBanned ? 'selected' : ''}>Ban</option>
+                                                                </select>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-primary">Update</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </c:forEach>
                                     </tbody>
                                 </table>
