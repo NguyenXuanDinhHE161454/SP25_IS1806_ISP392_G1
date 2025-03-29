@@ -86,7 +86,6 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             params.add(likePattern);
             params.add(likePattern);
             params.add(likePattern);
-            params.add(likePattern);
         }
 
         if (customerIdStr != null && !customerIdStr.trim().isEmpty()) {
@@ -123,7 +122,6 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             query.append(" AND i.Type = ?");
             params.add(type);
         }
-
         query.append(" ORDER BY i.CreateDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
         params.add(offset);
         params.add(limit);
@@ -164,7 +162,6 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             params.add(likePattern);
             params.add(likePattern);
             params.add(likePattern);
-            params.add(likePattern);
         }
 
         if (customerIdStr != null && !customerIdStr.trim().isEmpty()) {
@@ -201,7 +198,6 @@ public class InvoiceDAO extends GenericDAO<Invoice> {
             query.append(" AND i.Type = ?");
             params.add(type);
         }
-
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(query.toString())) {
 
             for (int i = 0; i < params.size(); i++) {
